@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/customToolbarContainerContactList"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:background="@color/purple_color">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgBackToolbarContactList"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:padding="@dimen/img_back_toolbar_contact_list_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_arrow_back"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvToolbarContactList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_toolbar_contact_list_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/toolbar_contacts_text_size"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgSearchToolbarContactList"
+        app:layout_constraintStart_toEndOf="@+id/imgBackToolbarContactList"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgSearchToolbarContactList"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:padding="@dimen/toolbar_contacts_img_search_padding"
+        android:src="@drawable/ic_toolbar_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

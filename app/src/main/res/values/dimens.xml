@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    fragment settings parameters  -->
+    <dimen name="constraint_layout_top_min_height">330dp</dimen>
+    <dimen name="constraint_layout_bottom_min_height">330dp</dimen>
+
+    <dimen name="settings_text_size">28sp</dimen>
+    <dimen name="settings_text_margin_start">24dp</dimen>
+    <dimen name="settings_margin_top">24dp</dimen>
+
+    <dimen name="button_logout_margin_end">16dp</dimen>
+    <dimen name="button_logout_horizontal_padding">36dp</dimen>
+
+    <dimen name="image_view_width">115dp</dimen>
+    <dimen name="image_view_height">115dp</dimen>
+
+    <dimen name="fragment_settings_name_profession_container_margin_top">24dp</dimen>
+    <dimen name="fragment_settings_name_text_size">22sp</dimen>
+    <dimen name="fragment_settings_profession_margin_top">8dp</dimen>
+    <dimen name="fragment_settings_profession_text_size">16sp</dimen>
+    <dimen name="fragment_settings_address_container_margin_top">16dp</dimen>
+    <dimen name="fragment_settings_address_width">228dp</dimen>
+    <dimen name="fragment_settings_address_text_size">16sp</dimen>
+    <dimen name="fragment_settings_address_min_height">36dp</dimen>
+
+    <dimen name="my_contacts_button_height">62dp</dimen>
+    <dimen name="my_contacts_button_margin_bottom">16dp</dimen>
+    <dimen name="my_contacts_button_margin_right">8dp</dimen>
+    <dimen name="my_contacts_button_margin_left">8dp</dimen>
+
+    <dimen name="edit_profile_button_text_size">20sp</dimen>
+    <dimen name="edit_profile_button_margin_bot">8dp</dimen>
+
+    <dimen name="bottom_text_message_margin_bot">20dp</dimen>
+    <dimen name="bottom_text_message_text_size">18sp</dimen>
+
+    <!--    fragment contacts list parameters  -->
+    <dimen name="new_contact_container_height">56dp</dimen>
+    <dimen name="tv_toolbar_add_contact_text_size">20sp</dimen>
+
+    <dimen name="tv_add_new_contact_text_margin_start">16dp</dimen>
+    <dimen name="tv_add_new_contact_text_padding">4dp</dimen>
+    <dimen name="tv_add_new_contact_text_size">16sp</dimen>
+
+    <!--    fragment contact profile parameters  -->
+    <dimen name="fragment_profile_avatar_width">115dp</dimen>
+    <dimen name="fragment_profile_avatar_heigth">115dp</dimen>
+    <dimen name="fragment_profile_avatar_margin_top">16dp</dimen>
+    <dimen name="fragment_profile_name_profession_container_margin_top">18dp</dimen>
+    <dimen name="fragment_profile_address_container_margin_bottom">32dp</dimen>
+    <dimen name="fragment_profile_name_text_size">22sp</dimen>
+    <dimen name="fragment_profile_profession_margin_top">6dp</dimen>
+    <dimen name="fragment_profile_profession_text_size">16sp</dimen>
+    <dimen name="fragment_profile_address_container_margin_top">16dp</dimen>
+    <dimen name="fragment_profile_address_min_height">36dp</dimen>
+    <dimen name="fragment_profile_address_width">228dp</dimen>
+    <dimen name="fragment_profile_address_text_size">16sp</dimen>
+    <dimen name="fragment_profile_button_message_height">62dp</dimen>
+    <dimen name="fragment_profile_button_message_horizontal_margin">8dp</dimen>
+    <dimen name="fragment_profile_button_message_margin_bottom">16dp</dimen>
+    <dimen name="fragment_profile_button_message_text_size">16sp</dimen>
+    <dimen name="fragment_profile_icon_container_width">244dp</dimen>
+    <dimen name="fragment_profile_icon_container_margin_top">60dp</dimen>
+    <dimen name="fragment_profile_icon_container_horizontal_margin">32dp</dimen>
+
+    <!--    custom toolbar parameters  -->
+    <dimen name="img_back_toolbar_add_contact_padding">10dp</dimen>
+    <dimen name="img_back_toolbar_contact_list_padding">10dp</dimen>
+
+    <dimen name="toolbar_contacts_text_size">24sp</dimen>
+    <dimen name="toolbar_contacts_img_search_padding">10dp</dimen>
+
+    <!--    custom dialog window parameters  -->
+    <dimen name="dialog_add_contact_image_container_height">152dp</dimen>
+    <dimen name="dialog_add_contact_avatar_width">113dp</dimen>
+    <dimen name="dialog_add_contact_avatar_height">113dp</dimen>
+
+    <dimen name="dialog_add_contact_icon_add_new_image_width">55dp</dimen>
+    <dimen name="dialog_add_contact_icon_add_new_image_height">55dp</dimen>
+    <dimen name="dialog_add_contact_icon_add_new_image_margin_start">24dp</dimen>
+
+    <dimen name="dialog_add_contact_input_fields_container_horizontal_margin">16dp</dimen>
+    <dimen name="dialog_add_contact_input_fields_container_margin_top">24dp</dimen>
+
+    <dimen name="dialog_add_contact_career_container_margin_top">8dp</dimen>
+    <dimen name="dialog_add_contact_email_container_margin_top">8dp</dimen>
+    <dimen name="dialog_add_contact_phone_container_margin_top">8dp</dimen>
+    <dimen name="dialog_add_contact_address_container_margin_top">8dp</dimen>
+    <dimen name="dialog_add_contact_birthday_container_margin_top">8dp</dimen>
+    <dimen name="dialog_add_contact_et_add_contact_margin_bottom">24dp</dimen>
+
+    <dimen name="dialog_add_contact_btn_save_margin_bottom">66dp</dimen>
+    <dimen name="dialog_add_contact_btn_save_height">55dp</dimen>
+    <dimen name="dialog_add_contact_btn_save_horizontal_margin">16dp</dimen>
+    <dimen name="dialog_add_contact_btn_save_text_size">18sp</dimen>
+
+
+</resources>

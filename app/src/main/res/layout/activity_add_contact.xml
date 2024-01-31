@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayoutAddContact"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android_level_3.CustomDialog">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scrollView">
+
+        <include
+            android:id="@+id/customToolbarAddContact"
+            layout="@layout/custom_toolbar_add_contact"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarContainer"
+        >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scrollViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAddImageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_add_contact_image_container_height"
+        android:background="@color/purple_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/scrollViewContainer">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="@dimen/dialog_add_contact_avatar_width"
+            android:layout_height="@dimen/dialog_add_contact_avatar_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundImage"
+            app:srcCompat="@drawable/profile_photo" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgAddImageIcon"
+            android:layout_width="@dimen/dialog_add_contact_icon_add_new_image_width"
+            android:layout_height="@dimen/dialog_add_contact_icon_add_new_image_height"
+            android:layout_marginStart="@dimen/dialog_add_contact_icon_add_new_image_margin_start"
+            app:layout_constraintBottom_toBottomOf="@+id/imgAvatar"
+            app:layout_constraintStart_toEndOf="@+id/imgAvatar"
+            app:layout_constraintTop_toTopOf="@+id/imgAvatar"
+            app:shapeAppearanceOverlay="@style/RoundImage"
+            app:srcCompat="@drawable/ic_add_photo"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgFillFields"
+            android:layout_width="@dimen/dialog_add_contact_icon_add_new_image_width"
+            android:layout_height="@dimen/dialog_add_contact_icon_add_new_image_height"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imgAvatar"
+            app:layout_constraintEnd_toStartOf="@+id/imgAvatar"
+            app:layout_constraintTop_toTopOf="@+id/imgAvatar"
+            app:layout_constraintVertical_bias="0.517"
+            app:shapeAppearanceOverlay="@style/RoundImage"
+            app:srcCompat="@drawable/ic_done_outline_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clInputFieldsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dialog_add_contact_input_fields_container_horizontal_margin"
+            android:layout_marginTop="@dimen/dialog_add_contact_input_fields_container_margin_top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clAddImageContainer">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutNameContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvInscriptionUserName"
+                    style="@style/AddContactTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_add_contact_tv_inscription_user_name_text"/>
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etUserName"
+                    style="@style/AddContactEditTextViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textNoSuggestions" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutCareerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dialog_add_contact_career_container_margin_top"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutNameContainer">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvInscriptionCareer"
+                    style="@style/AddContactTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_add_contact_tv_inscription_career_text" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    style="@style/AddContactEditTextViewStyle"
+                    android:id="@+id/etCareer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textNoSuggestions" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutEmailContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dialog_add_contact_email_container_margin_top"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutCareerContainer">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/AddContactTextViewStyle"
+                    android:id="@+id/tvInscriptionEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_add_contact_tv_inscription_email_text" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    style="@style/AddContactEditTextViewStyle"
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/dialog_add_contact_email_hint"
+                    android:inputType="textEmailAddress|textNoSuggestions"
+                    android:textAppearance="@style/AddContactEditTextViewStyle"
+                    android:textColorHint="@color/dialog_add_contact_hint_color" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutPhoneContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dialog_add_contact_phone_container_margin_top"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutEmailContainer">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/AddContactTextViewStyle"
+                    android:id="@+id/tvInscriptionPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_add_contact_tv_inscription_phone_text" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    style="@style/AddContactEditTextViewStyle"
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/dialog_add_contact_phone_hint"
+                    android:inputType="phone|textNoSuggestions"
+                    android:textColorHint="@color/dialog_add_contact_hint_color" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutAddressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dialog_add_contact_address_container_margin_top"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutPhoneContainer">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/AddContactTextViewStyle"
+                    android:id="@+id/tvInscriptionAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_add_contact_tv_inscription_address_text" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    style="@style/AddContactEditTextViewStyle"
+                    android:id="@+id/etAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:lines="2" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutDateContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dialog_add_contact_birthday_container_margin_top"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutAddressContainer">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/AddContactTextViewStyle"
+                    android:id="@+id/tvInscriptionBirthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_add_contact_tv_inscription_birthday_text" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    style="@style/AddContactEditTextViewStyle"
+                    android:id="@+id/etBirthday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dialog_add_contact_et_add_contact_margin_bottom"
+                    android:hint="@string/dialog_add_contact_birthday_hint"
+                    android:inputType="number|textNoSuggestions"
+                    android:textColorHint="@color/dialog_add_contact_hint_color" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerForButtonSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dialog_add_contact_btn_save_margin_bottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clInputFieldsContainer"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSaveUserData"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dialog_add_contact_btn_save_height"
+                android:layout_marginHorizontal="@dimen/dialog_add_contact_btn_save_horizontal_margin"
+                android:background="@drawable/my_contacts_button_style"
+                android:text="@string/dialog_add_contact_btn_save_text"
+                android:textSize="@dimen/dialog_add_contact_btn_save_text_size"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

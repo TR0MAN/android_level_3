@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/clFragmentMainBasicLayout"
+    tools:context="com.example.android_level_3.FragmentContactsList">
+
+    <include
+        android:id="@+id/toolbarContactList"
+        layout="@layout/custom_toolbar_contacts"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/newContactContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/new_contact_container_height"
+        android:background="@color/purple_color"
+        app:layout_constraintTop_toBottomOf="@id/toolbarContactList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/rvContacts">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAddNewContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/tv_add_new_contact_text_margin_start"
+            android:padding="@dimen/tv_add_new_contact_text_padding"
+            android:textSize="@dimen/tv_add_new_contact_text_size"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="@string/tv_add_new_contact_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvContacts"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newContactContainer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

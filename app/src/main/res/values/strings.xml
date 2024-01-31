@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Android_level_3</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--    settings fragment text -->
+    <string name="tv_main_profile_settings_text">Settings</string>
+    <string name="log_out">Log out</string>
+    <string name="fragment_settings_name_text">Tkachenko Roman</string>
+    <string name="fragment_settings_profession_text">Android course student</string>
+    <string name="fragment_settings_address_text">5295 Gaylord Walks Apk. 110</string>
+    <string name="my_contacts_button_text">"""V i e w   m y   c o n t a c t s"""</string>
+    <string name="edit_profile_button_text">Edit profile</string>
+    <string name="bottom_text_message_text">Go to settings and fill out the profile</string>
+
+    <!--    fragment contacts list parameters  -->
+    <string name="tv_add_new_contact_text">Add contacts</string>
+
+    <!--    fragment contact profile parameters  -->
+    <string name="fragment_profile_name_text">Jenny Walker</string>
+    <string name="fragment_profile_profession_text">Make-up artist</string>
+    <string name="fragment_profile_address_text">775 Westminster Avenue APT D5 Brooklyn, NY, 11230</string>
+    <string name="fragment_profile_button_message_text">M E S S A G E</string>
+
+    <!--    custom toolbar parameters  -->
+    <string name="tv_toolbar_add_contact_text">Add contact</string>
+    <string name="tv_toolbar_contact_list_text">Contacts</string>
+    <string name="tv_toolbar_profile_text">Profile</string>
+
+    <!--    custom dialog window parameters  -->
+    <string name="dialog_add_contact_tv_inscription_user_name_text">Username</string>
+    <string name="dialog_add_contact_tv_inscription_career_text">Career</string>
+    <string name="dialog_add_contact_tv_inscription_email_text">Email</string>
+    <string name="dialog_add_contact_tv_inscription_phone_text">Phone</string>
+    <string name="dialog_add_contact_tv_inscription_address_text">Address</string>
+    <string name="dialog_add_contact_tv_inscription_birthday_text">Date of birth</string>
+    <string name="dialog_add_contact_email_hint">name@gmail.com</string>
+    <string name="dialog_add_contact_phone_hint">(099)-456-78-90</string>
+    <string name="dialog_add_contact_birthday_hint">12.05.1995</string>
+    <string name="dialog_add_contact_btn_save_text">S A V E</string>
+
+    <string name="snackbar_button_text">RESTORE</string>
+    <string name="toolbar_contact_list_search_button_toast_message">Development in progress...</string>
+
+</resources>
