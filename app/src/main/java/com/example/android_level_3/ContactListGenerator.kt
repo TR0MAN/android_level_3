@@ -1,5 +1,6 @@
 package com.example.android_level_3
 
+import java.util.UUID
 import kotlin.random.Random
 
 class ContactListGenerator {
@@ -17,9 +18,27 @@ class ContactListGenerator {
     )
 
     private val profession = listOf(
-        "Actress", "Biologist", "Chemist", "Dentist", "Engineer", "Florist", "Graphic Designer",
-        "Hairstylist", "Journalist", "Interpreter", "Librarian", "Milkman", "Nurse", "Optometrist",
-        "Programmer", "Research Scientist", "Singer", "Teacher", "Voice Actor", "Waitress", "Zoologist"
+        "Actress",
+        "Biologist",
+        "Chemist",
+        "Dentist",
+        "Engineer",
+        "Florist",
+        "Graphic Designer",
+        "Hairstylist",
+        "Journalist",
+        "Interpreter",
+        "Librarian",
+        "Milkman",
+        "Nurse",
+        "Optometrist",
+        "Programmer",
+        "Research Scientist",
+        "Singer",
+        "Teacher",
+        "Voice Actor",
+        "Waitress",
+        "Zoologist"
     )
 
     private val address = listOf(
@@ -61,17 +80,17 @@ class ContactListGenerator {
     )
 
     // генерация списка из контакт-листа
-    fun getContactList(): MutableList<User> {
-
-        val contactList = (0..firstNameList.size).map {
-            User(
-                userName = "${firstNameList[Random.nextInt(firstNameList.size)]} ${lastNameList[Random.nextInt(lastNameList.size)]}",
-                userCareer = profession[Random.nextInt(profession.size)],
-                userAddress = address[Random.nextInt(address.size)],
-                userImage = avatar[it % avatar.size]
-            )
-        }
-        return contactList as MutableList
+    fun getContactList(): List<Contact> = (0..firstNameList.size).map {
+        Contact(
+            id = UUID.randomUUID().toString(),
+            userName = "${firstNameList[Random.nextInt(firstNameList.size)]} ${
+                lastNameList[Random.nextInt(
+                    lastNameList.size
+                )]
+            }",
+            userCareer = profession[Random.nextInt(profession.size)],
+            userAddress = address[Random.nextInt(address.size)],
+            userImage = avatar[it % avatar.size]
+        )
     }
-
 }

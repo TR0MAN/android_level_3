@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import com.example.android_level_3.databinding.ActivityAddContactBinding
+import java.util.UUID
 
 // Нужно делать через DialogFragment() из-за того, что он правильно управляет жизненным циклом диалога
 // и восстанавливает его после поворота (диалог вовремя скрывется и правильно восстанавливается после поворота)
@@ -102,8 +103,9 @@ class CustomDialog: DialogFragment() {
     }
 
     // обработка нажатия кнопки SAVE
-    private fun saveNewUserData() :User {
-        return User(
+    private fun saveNewUserData() :Contact {
+        return Contact(
+            id = UUID.randomUUID().toString(),
             userName = binding.etUserName.text.toString(),
             userCareer = binding.etCareer.text.toString(),
             userEmail = binding.etEmail.text.toString(),

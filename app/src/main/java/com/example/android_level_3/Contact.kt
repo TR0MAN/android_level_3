@@ -2,7 +2,9 @@ package com.example.android_level_3
 
 import java.io.Serializable
 
-data class User(
+
+data class Contact(
+    val id: String,
     val userName: String,
     val userCareer: String,
     val userEmail: String = "default.mail@mail.com",

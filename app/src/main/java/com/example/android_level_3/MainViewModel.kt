@@ -1,21 +1,25 @@
 package com.example.android_level_3
 
 import android.os.CountDownTimer
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-open class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
-    private var contactList = ContactListGenerator().getContactList()
+    private val _contactListLiveData = MutableLiveData<List<Contact>>(emptyList())
+    internal val contactListLiveData: LiveData<List<Contact>> = _contactListLiveData
 
     val onTickTimerMessage = MutableLiveData<Int>()
     val onFinishTimer = MutableLiveData<Boolean>()
     private var timer: CountDownTimer? = null
 
-    var temporaryUserData: User? = null
+    var temporaryContactData: Contact? = null
     var temporaryUserPosition: Int = 0
 
-    fun getContactList() = contactList
+    init {
+        _contactListLiveData.value = ContactListGenerator().getContactList()
+    }
 
     // отсчет 5 секунд для возможности восстановления контакта
     fun timerStart() {
@@ -36,9 +40,22 @@ open class MainViewModel: ViewModel() {
     }
 
     // остановка таймера, если контакт был восстановлен
-    fun timerStop(){
+    fun timerStop() {
         timer?.cancel()
         timer = null
+    }
+
+    fun removeContact(contact: Contact) {
+        _contactListLiveData.value = _contactListLiveData.value?.toMutableList()?.apply {
+            remove(contact)
+        }
+    }
+
+    fun addContact(contact: Contact, index: Int = 0) {
+        if (index < 0 || contactListLiveData.value?.contains(contact) == true) return
+        _contactListLiveData.value = _contactListLiveData.value?.toMutableList()?.apply {
+            add(index, contact)
+        }
     }
 
 }

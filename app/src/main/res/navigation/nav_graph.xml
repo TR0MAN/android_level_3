@@ -32,7 +32,7 @@
         tools:layout="@layout/fragment_contact_profile" >
         <argument
             android:name="currentUserProfile"
-            app:argType="com.example.android_level_3.User" />
+            app:argType="com.example.android_level_3.Contact" />
     </fragment>
     <dialog
         android:id="@+id/customDialog"
