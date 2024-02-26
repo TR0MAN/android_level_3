@@ -10,7 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android_level_3.adapter.ContactAdapter
+import com.example.android_level_3.adapter.ElementClickListener
 import com.example.android_level_3.databinding.FragmentContactsListBinding
+import com.example.android_level_3.model.Contact
+import com.example.android_level_3.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentContactsList : Fragment() {
@@ -19,7 +23,7 @@ class FragmentContactsList : Fragment() {
     private lateinit var recyclerAdapter: ContactAdapter
     private val viewModel: MainViewModel by viewModels<MainViewModel>()
 
-    private lateinit var actionListener: ContactAdapter.ElementClickListener
+    private lateinit var actionListener: ElementClickListener
     private var snackbar: Snackbar? = null
     private var snackbarVisibility = false
     private var snackbarTimer = 5
@@ -66,10 +70,10 @@ class FragmentContactsList : Fragment() {
     private fun getResultFromCustomDialog() {
         parentFragmentManager.setFragmentResultListener(Const.REQUEST_KEY, viewLifecycleOwner){ key, value ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                value.getSerializable(Const.RESULT_KEY, User::class.java)
-                    ?.let { recyclerAdapter.addNewContact(it) }
+                value.getSerializable(Const.RESULT_KEY, Contact::class.java)
+                    ?.let { recyclerAdapter.addNewContact(it) }             // TODO добавляю новый контакт (исправить ID)
             } else {
-                recyclerAdapter.addNewContact(value.getSerializable(Const.RESULT_KEY) as User)
+                recyclerAdapter.addNewContact(value.getSerializable(Const.RESULT_KEY) as Contact)
             }
         }
     }
@@ -97,7 +101,7 @@ class FragmentContactsList : Fragment() {
     // инициализация слушателя нажатий по элементам списка
     private fun initElementClickListener() {
 
-        actionListener = object : ContactAdapter.ElementClickListener {
+        actionListener = object : ElementClickListener {
 
             override fun onElementDeleteClick(position: Int) {
                 recyclerAdapter.removeContact(position)

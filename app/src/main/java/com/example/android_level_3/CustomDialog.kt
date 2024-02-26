@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import com.example.android_level_3.databinding.ActivityAddContactBinding
+import com.example.android_level_3.model.Contact
 
 // Нужно делать через DialogFragment() из-за того, что он правильно управляет жизненным циклом диалога
 // и восстанавливает его после поворота (диалог вовремя скрывется и правильно восстанавливается после поворота)
@@ -102,15 +103,16 @@ class CustomDialog: DialogFragment() {
     }
 
     // обработка нажатия кнопки SAVE
-    private fun saveNewUserData() :User {
-        return User(
-            userName = binding.etUserName.text.toString(),
-            userCareer = binding.etCareer.text.toString(),
-            userEmail = binding.etEmail.text.toString(),
-            userPhoneNumber = binding.etPhone.text.toString(),
-            userAddress = binding.etAddress.text.toString(),
-            userBirthday = binding.etBirthday.text.toString(),
-            userImage = avatarImageUri.toString()
+    private fun saveNewUserData() : Contact {
+        return Contact(
+            id = -1,
+            contactName = binding.etUserName.text.toString(),
+            contactCareer = binding.etCareer.text.toString(),
+            contactEmail = binding.etEmail.text.toString(),
+            contactPhoneNumber = binding.etPhone.text.toString(),
+            contactAddress = binding.etAddress.text.toString(),
+            contactBirthday = binding.etBirthday.text.toString(),
+            contactImage = avatarImageUri.toString()
         )
     }
 

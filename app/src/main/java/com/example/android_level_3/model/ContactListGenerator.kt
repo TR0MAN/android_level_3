@@ -1,4 +1,4 @@
-package com.example.android_level_3
+package com.example.android_level_3.model
 
 import kotlin.random.Random
 
@@ -61,14 +61,15 @@ class ContactListGenerator {
     )
 
     // генерация списка из контакт-листа
-    fun getContactList(): MutableList<User> {
+    fun getContactList(): MutableList<Contact> {
 
         val contactList = (0..firstNameList.size).map {
-            User(
-                userName = "${firstNameList[Random.nextInt(firstNameList.size)]} ${lastNameList[Random.nextInt(lastNameList.size)]}",
-                userCareer = profession[Random.nextInt(profession.size)],
-                userAddress = address[Random.nextInt(address.size)],
-                userImage = avatar[it % avatar.size]
+            Contact(
+                id = it + 1,
+                contactName = "${firstNameList[Random.nextInt(firstNameList.size)]} ${lastNameList[Random.nextInt(lastNameList.size)]}",
+                contactCareer = profession[Random.nextInt(profession.size)],
+                contactAddress = address[Random.nextInt(address.size)],
+                contactImage = avatar[it % avatar.size]
             )
         }
         return contactList as MutableList

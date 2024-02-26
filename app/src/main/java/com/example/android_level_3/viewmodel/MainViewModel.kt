@@ -1,8 +1,15 @@
-package com.example.android_level_3
+package com.example.android_level_3.viewmodel
 
 import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.android_level_3.model.ContactListGenerator
+import com.example.android_level_3.model.Contact
+
+// TODO
+//  1. перенести методы добавления/удаления из адаптера
+//  2. убарать работу с таймером (его не нужно было реализовывать в задании)
+//  3. разобраться со списком, сделать его типа List .
 
 open class MainViewModel: ViewModel() {
 
@@ -12,7 +19,7 @@ open class MainViewModel: ViewModel() {
     val onFinishTimer = MutableLiveData<Boolean>()
     private var timer: CountDownTimer? = null
 
-    var temporaryUserData: User? = null
+    var temporaryUserData: Contact? = null
     var temporaryUserPosition: Int = 0
 
     fun getContactList() = contactList

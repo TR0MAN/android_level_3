@@ -28,11 +28,11 @@ class FragmentContactProfile : Fragment() {
 
         // вставка полученных данных о пользователе в соответствующие поля
         with(binding) {
-            tvProfileName.text = args.currentUserProfile.userName
-            tvProfileProfession.text = args.currentUserProfile.userCareer
-            tvProfileAddress.text = args.currentUserProfile.userAddress
+            tvProfileName.text = args.currentUserProfile.contactName
+            tvProfileProfession.text = args.currentUserProfile.contactCareer
+            tvProfileAddress.text = args.currentUserProfile.contactAddress
             Glide.with(binding.imgProfileMainPhoto.context)
-                .load(args.currentUserProfile.userImage)
+                .load(args.currentUserProfile.contactImage)
                 .circleCrop()
                 .placeholder(R.drawable.default_avatar)
                 .into(binding.imgProfileMainPhoto)
