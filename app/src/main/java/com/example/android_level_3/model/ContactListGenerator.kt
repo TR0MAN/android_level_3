@@ -61,7 +61,7 @@ class ContactListGenerator {
     )
 
     // генерация списка из контакт-листа
-    fun getContactList(): MutableList<Contact> {
+    fun createContactList(): MutableList<Contact> {
 
         val contactList = (0..firstNameList.size).map {
             Contact(

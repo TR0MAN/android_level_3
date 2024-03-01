@@ -12,5 +12,4 @@ class ContactDiffUtilCallback : DiffUtil.ItemCallback<Contact>() {
         return oldItem == newItem
     }
 
-
 }

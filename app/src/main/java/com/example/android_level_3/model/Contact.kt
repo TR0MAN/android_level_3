@@ -1,7 +1,6 @@
 package com.example.android_level_3.model
 
 import java.io.Serializable
-import java.net.IDN
 
 // TODO - добавить ID и возможно поле isChecked
 data class Contact (

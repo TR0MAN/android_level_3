@@ -2,6 +2,7 @@ package com.example.android_level_3
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,17 +12,24 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_level_3.adapter.ContactAdapter
+import com.example.android_level_3.adapter.ContactAdapter2
 import com.example.android_level_3.adapter.ElementClickListener
 import com.example.android_level_3.databinding.FragmentContactsListBinding
 import com.example.android_level_3.model.Contact
 import com.example.android_level_3.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.delay
+import java.text.FieldPosition
+import kotlin.concurrent.thread
 
 class FragmentContactsList : Fragment() {
 
     private lateinit var binding: FragmentContactsListBinding
     private lateinit var recyclerAdapter: ContactAdapter
-    private val viewModel: MainViewModel by viewModels<MainViewModel>()
+
+    private lateinit var recyclerListAdapter: ContactAdapter2
+
+    private val viewModel: MainViewModel by viewModels()
 
     private lateinit var actionListener: ElementClickListener
     private var snackbar: Snackbar? = null
@@ -48,9 +56,15 @@ class FragmentContactsList : Fragment() {
         initElementClickListener()
         setFragmentButtonsListeners()
 
-        recyclerAdapter = ContactAdapter(viewModel.getContactList(), actionListener)
+//        recyclerAdapter = ContactAdapter(viewModel.getContactList(), actionListener)
+//        binding.rvContacts.layoutManager = LinearLayoutManager(requireContext())
+//        binding.rvContacts.adapter = recyclerAdapter
+
+        recyclerListAdapter = ContactAdapter2(actionListener)
         binding.rvContacts.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvContacts.adapter = recyclerAdapter
+        binding.rvContacts.adapter = recyclerListAdapter
+
+//        recyclerListAdapter.submitList(viewModel.getContactList())      COMMENT
 
         return binding.root
     }
@@ -71,9 +85,20 @@ class FragmentContactsList : Fragment() {
         parentFragmentManager.setFragmentResultListener(Const.REQUEST_KEY, viewLifecycleOwner){ key, value ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 value.getSerializable(Const.RESULT_KEY, Contact::class.java)
-                    ?.let { recyclerAdapter.addNewContact(it) }             // TODO добавляю новый контакт (исправить ID)
+                    ?.let {
+//                        recyclerAdapter.addNewContact(it)       // TODO добавляю новый контакт (исправить ID)
+
+                        // TODO - ADD CONTACT
+                        viewModel.addContact(it)
+                    }
             } else {
-                recyclerAdapter.addNewContact(value.getSerializable(Const.RESULT_KEY) as Contact)
+//                recyclerAdapter.addNewContact(value.getSerializable(Const.RESULT_KEY) as Contact)
+
+                // TODO - ADD CONTACT
+                viewModel.addContact(value.getSerializable(Const.RESULT_KEY) as Contact)
+
+                // только для теста, что обновлять список
+//                recyclerAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -96,6 +121,21 @@ class FragmentContactsList : Fragment() {
                 }
             }
         }
+
+
+        // обновление списка в List Adapter
+        viewModel.observableContactList.observe(viewLifecycleOwner) { list ->
+                list.forEach {
+                    Log.d("TAG", "[FRAGMENT] > contact = $it")
+                }
+                Log.d("TAG", "[FRAGMENT] > List Size = ${list.size}")
+                Log.d("TAG", "[FRAGMENT] > LastContact = ${list.last()}")
+
+            recyclerListAdapter.submitList(list)
+        }
+
+
+
     }
 
     // инициализация слушателя нажатий по элементам списка
@@ -104,7 +144,15 @@ class FragmentContactsList : Fragment() {
         actionListener = object : ElementClickListener {
 
             override fun onElementDeleteClick(position: Int) {
-                recyclerAdapter.removeContact(position)
+//                recyclerAdapter.removeContact(position)
+
+                Log.d("TAG", "contact = $position")
+//                // TODO - DELETE CONTACT
+                viewModel.deleteContact(position)
+
+//                recyclerListAdapter.submitList(viewModel.getContactList())      // TODO - ???
+
+//                recyclerAdapter.notifyDataSetChanged()              // только для теста, что обновлять список
 
                 if (snackbar != null) {
                     viewModel.timerStop()
@@ -117,10 +165,10 @@ class FragmentContactsList : Fragment() {
             }
 
             override fun onElementProfileClick(position: Int) {
-                val currentUser = viewModel.getContactList()[position]
-                val destinationPointWithData = FragmentContactsListDirections
-                    .actionFragmentContactsListToFragmentContactProfile(currentUser)
-                findNavController().navigate(destinationPointWithData)
+//                val currentUser = viewModel.getContactList()[position]            COMMENT
+//                val destinationPointWithData = FragmentContactsListDirections
+//                    .actionFragmentContactsListToFragmentContactProfile(currentUser)
+//                findNavController().navigate(destinationPointWithData)
                 snackbar?.dismiss()
             }
         }
@@ -135,7 +183,15 @@ class FragmentContactsList : Fragment() {
         snackbar?.setActionTextColor(requireContext().getColor(R.color.orange_color))
         snackbar?.setAction(getString(R.string.snackbar_button_text)) {
             snackbar?.dismiss()
-            recyclerAdapter.restoreContact()
+
+//            recyclerAdapter.restoreContact()
+
+            // TODO RESTORE CONTACT
+            viewModel.restoreContact()
+//            recyclerListAdapter.submitList(viewModel.getContactList())        COMMENT
+//            recyclerAdapter.notifyDataSetChanged()                  // только для теста, что обновлять список
+
+
             viewModel.timerStop()
             snackbarVisibility = false
             snackbar = null
@@ -169,26 +225,27 @@ class FragmentContactsList : Fragment() {
         outState.putInt(Const.SNACKBAR_TIMER_KEY, snackbarTimer)
     }
 
+
     // сохранение во ViewModel данных об удаленном пользователе
-    private fun saveTemporaryDeletedData() {
-        viewModel.temporaryUserData = recyclerAdapter.temporaryContactData
-        viewModel.temporaryUserPosition = recyclerAdapter.temporaryContactPosition
-    }
+//    private fun saveTemporaryDeletedData() {
+//        viewModel.deletedContactData = recyclerAdapter.temporaryContactData
+//        viewModel.deletedContactPosition = recyclerAdapter.temporaryContactPosition
+//    }
 
     // восстановление данных в RecyclerAdapter об удаленном пользователе
-    private fun loadTemporaryDeletedData() {
-        recyclerAdapter.temporaryContactData = viewModel.temporaryUserData
-        recyclerAdapter.temporaryContactPosition = viewModel.temporaryUserPosition
-    }
+//    private fun loadTemporaryDeletedData() {
+//        recyclerAdapter.temporaryContactData = viewModel.deletedContactData
+//        recyclerAdapter.temporaryContactPosition = viewModel.deletedContactPosition
+//    }
 
-    override fun onStart() {
-        super.onStart()
-        loadTemporaryDeletedData()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        loadTemporaryDeletedData()
+//    }
 
-    override fun onStop() {
-        super.onStop()
-        saveTemporaryDeletedData()
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        saveTemporaryDeletedData()
+//    }
 
 }
