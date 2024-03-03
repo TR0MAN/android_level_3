@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tvAuthorizationTextBetweenButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/profile_top_side"
+        tools:context=".AuthorizationActivity">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAuthorizationQuestionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/AuthorizationQuestionTextMarginBottom"
+            android:text="@string/authorization_question_text"
+            android:textColor="@color/gray_color"
+            android:textSize="@dimen/AuthorizationQuestionTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvAuthorizationSingInText"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAuthorizationSingInText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/AuthorizationSingInTextMarginStart"
+            android:text="@string/authorization_sing_in_text"
+            android:textColor="@color/white_color"
+            android:textSize="@dimen/AuthorizationSingInTextSize"
+            app:layout_constraintBottom_toBottomOf="@+id/tvAuthorizationQuestionText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvAuthorizationQuestionText" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAuthorizationAdditionalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/AuthorizationAdditionalTextMarginBottom"
+            android:gravity="center_horizontal"
+            android:text="@string/authorization_additional_text"
+            android:textColor="@color/white_color"
+            android:textSize="@dimen/AuthorizationAdditionalTextSize"
+            app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationQuestionText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAuthorizationRegister"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/AuthorizationRegisterButtonHeight"
+            android:layout_marginStart="@dimen/AuthorizationRegisterButtonMarginStart"
+            android:layout_marginEnd="@dimen/AuthorizationRegisterButtonMarginEnd"
+            android:layout_marginBottom="@dimen/AuthorizationRegisterButtonMarginBottom"
+            android:background="@drawable/register_button_style_selector"
+            android:text="@string/authorization_register_button_text"
+            android:textColor="@color/register_button_custom_text_color"
+            android:textSize="@dimen/AuthorizationRegisterButtonTextSize"
+            app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationAdditionalText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAuthorizationTextOr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/AuthorizationTextOrMarginBottom"
+            android:text="@string/authorization_text_or"
+            android:textColor="@color/white_color"
+            android:textSize="@dimen/AuthorizationTextOrTextSize"
+            app:layout_constraintBottom_toTopOf="@+id/btnAuthorizationRegister"
+            app:layout_constraintEnd_toEndOf="@+id/btnAuthorizationRegister"
+            app:layout_constraintStart_toStartOf="@+id/btnAuthorizationRegister" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linearLayoutButtonImitator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ButtonImitatorHeight"
+            android:layout_marginStart="@dimen/ButtonImitatorMarginStart"
+            android:layout_marginEnd="@dimen/ButtonImitatorMarginEnd"
+            android:layout_marginBottom="@dimen/ButtonImitatorMarginBottom"
+            android:background="@drawable/google_button_style_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationTextOr"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgAuthorizationButtonGoogleIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/google_logo_24_24" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAuthorizationButtonGoogleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/AuthorizationButtonGoogleTextPaddingLeft"
+                android:text="@string/authorization_button_google_text"
+                android:textSize="@dimen/AuthorizationButtonGoogleTextSize"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/chkAuthorizationRememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/AuthorizationRememberMeMarginBottom"
+            android:text="@string/authorization_remember_me_text"
+            android:textColor="@color/gray_color"
+            android:textSize="@dimen/AuthorizationRememberMeTextSize"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutButtonImitator"
+            app:layout_constraintStart_toStartOf="@+id/linearLayoutButtonImitator" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputPasswordContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/InputPasswordContainerMarginHorizontal"
+            android:layout_marginTop="@dimen/InputPasswordContainerMarginTop"
+            app:counterEnabled="true"
+            app:counterMaxLength="16"
+            app:counterTextColor="@color/white_color"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/gray_color"
+            app:helperText="@string/authorization_email_and_password_helper_text"
+            app:helperTextTextColor="@color/orange_color"
+            app:layout_constraintBottom_toTopOf="@+id/chkAuthorizationRememberMe"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayoutButtonImitator"
+            app:layout_constraintStart_toStartOf="@+id/linearLayoutButtonImitator">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputPasswordForm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPassword"
+                android:maxLength="16"
+                android:paddingStart="@dimen/InputPasswordFormPaddingStart"
+                android:textColor="@color/white_color"
+                android:textSize="@dimen/InputPasswordFormTextSize"
+                android:textStyle="bold" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAuthorizationPasswordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/AuthorizationPasswordTextMarginStart"
+            android:text="@string/authorization_password_text"
+            android:textColor="@color/gray_color"
+            android:textSize="@dimen/AuthorizationPasswordTextSize"
+            app:layout_constraintBottom_toTopOf="@+id/textInputPasswordContainer"
+            app:layout_constraintStart_toStartOf="@+id/textInputPasswordContainer" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputEmailContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/InputEmailContainerMarginHorizontal"
+            android:layout_marginTop="@dimen/InputEmailContainerMarginTop"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/gray_color"
+            app:helperText="@string/authorization_email_and_password_helper_text"
+            app:helperTextTextColor="@color/orange_color"
+            app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationPasswordText"
+            app:layout_constraintEnd_toEndOf="@+id/textInputPasswordContainer"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textInputPasswordContainer">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEmailForm"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress"
+                android:paddingStart="@dimen/InputEmailFormPaddingStart"
+                android:textColor="@color/white_color"
+                android:textSize="@dimen/InputEmailFormTextSize"
+                android:textStyle="bold">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAuthorizationTextEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/authorization_email_text"
+            android:textColor="@color/gray_color"
+            android:textSize="@dimen/AuthorizationTextEmailTextSize"
+            app:layout_constraintBottom_toTopOf="@+id/textInputEmailContainer"
+            app:layout_constraintStart_toStartOf="@+id/textInputEmailContainer" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAuthorizationHelperText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/AuthorizationHelperTextMarginBottom"
+            android:text="@string/authorization_helper_text"
+            android:textColor="@color/gray_color"
+            app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationTextEmail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAuthorizationGreetingsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/AuthorizationGreetingsTextMarginBottom"
+            android:text="@string/authorization_greetings_text"
+            android:textColor="@color/white_color"
+            android:textSize="@dimen/AuthorizationGreetingsTextSize"
+            app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationHelperText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
