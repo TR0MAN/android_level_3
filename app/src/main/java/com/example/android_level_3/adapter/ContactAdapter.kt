@@ -11,11 +11,6 @@ import com.example.android_level_3.databinding.ElementContactViewBinding
 import com.example.android_level_3.model.Contact
 
 // TODO
-//  1. перенести методы добавления/удаления во viewmodel                                            - ГОТОВО
-//  2. сменить адаптер на ListAdapter                                                               - ГОТОВО
-//  3. добавить работу с DiffUtils                                                                  - ГОТОВО
-//  4. перевесить слушатели в onCreateViewHolder                                                    - ГОТОВО
-//  5. переместить переменные для временного хранения удаленного пользователя в viewmodel           - ГОТОВО
 //  6. убрать комментарии в конце
 
 interface ElementClickListener {
@@ -61,9 +56,7 @@ class ContactAdapter(private val clickListener: ElementClickListener) :
             clickListener.onElementProfileClick(contact)
         }
 
-        binding.root.setOnClickListener {
-
-        }
+        binding.root.setOnClickListener { }
 
         return ContactViewHolder(binding)
     }

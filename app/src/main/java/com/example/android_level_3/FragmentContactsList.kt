@@ -72,11 +72,9 @@ class FragmentContactsList : Fragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 value.getSerializable(Const.RESULT_KEY, Contact::class.java)
                     ?.let {
-                        // TODO - ADD CONTACT
                         viewModel.addContact(it)
                     }
             } else {
-                // TODO - ADD CONTACT
                 viewModel.addContact(value.getSerializable(Const.RESULT_KEY) as Contact)
             }
         }
@@ -114,7 +112,6 @@ class FragmentContactsList : Fragment() {
         actionListener = object : ElementClickListener {
 
             override fun onElementDeleteClick(contact: Contact) {
-//                Log.d("TAG", "[FRAGMENT] contact = $contact")
                 viewModel.deleteContact(contact)                                                    // TODO - DELETE CONTACT
 
                 if (snackbar != null) {
@@ -161,6 +158,8 @@ class FragmentContactsList : Fragment() {
 
         binding.tvAddNewContact.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentContactsList_to_customDialog)
+            snackbar?.dismiss()
+            snackbarVisibility = false
         }
 
         // реакция на "стрелочку" назад в ToolBar

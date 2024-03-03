@@ -9,9 +9,7 @@ import com.example.android_level_3.model.ContactListGenerator
 import com.example.android_level_3.model.Contact
 
 // TODO
-//  1. перенести методы добавления/удаления из адаптера                                             - ГОТОВО
 //  2. убарать работу с таймером (его не нужно было реализовывать в задании)
-//  3. разобраться со списком, сделать его типа List.                                               - ГОТОВО
 
 open class MainViewModel: ViewModel() {
 
@@ -29,19 +27,21 @@ open class MainViewModel: ViewModel() {
         contactList.value = ContactListGenerator().createContactList()
     }
 
-//    fun getContactList() = contactList                                          // TODO DELETE ???
-
     fun addContact(newContact: Contact) {
-
-        var position = contactList.value?.last()?.id
-        if (position == null) {
-            position = 0
-        }
-        val contact = newContact.copy(id = position + 1)
-//        Log.d("TAG", "[ViewModel] > UPDATED contact = $contact")
-
-        contactList.value = contactList.value?.toMutableList()?.apply {
-            add(contact)
+        if (contactList.value?.size != 0) {
+            var position = contactList.value?.last()?.id
+            if (position == null) {
+                position = 0
+            }
+            val contact = newContact.copy(id = position + 1)
+            contactList.value = contactList.value?.toMutableList()?.apply {
+                add(contact)
+            }
+        } else {
+            contactList.value = contactList.value?.toMutableList()?.apply {
+                val contact = newContact.copy(id = 1)
+                add(0, contact)
+            }
         }
     }
 
@@ -49,26 +49,21 @@ open class MainViewModel: ViewModel() {
         if (contactList.value?.contains(contactForDelete) == false) return
 
         deletedContactPosition = contactList.value?.indexOf(contactForDelete)!!
-//        Log.d("TAG", "[ViewModel] > Position = $deletedContactPosition")
         deletedContactData = contactForDelete
-//        Log.d("TAG", "[ViewModel] > Data = $deletedContactData")
 
         contactList.value = contactList.value?.toMutableList()?.apply {
             remove(contactForDelete)
-
         }
     }
 
     fun restoreContact() {
-        if (contactList.value?.size == 0
-            || contactList.value?.contains(deletedContactData) == true) return
+        if (contactList.value?.contains(deletedContactData) == true) return
 
         deletedContactData?.let {
             contactList.value = contactList.value?.toMutableList()?.apply {
                 add(deletedContactPosition, it)
             }
         }
-
     }
 
     fun deleteMultipleContact() {
@@ -98,55 +93,4 @@ open class MainViewModel: ViewModel() {
         timer?.cancel()
         timer = null
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-//        val newList = mutableListOf<Contact>()
-//        newList.add(
-//            Contact(
-//                id = 30,
-//                contactName = "Alla",
-//                contactCareer = "Actor",
-//                contactEmail = "sdsd@mail.com",
-//                contactPhoneNumber = "112233444",
-//                contactAddress = "Lviv",
-//                contactBirthday = "01.01.01",
-//                contactImage = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww"
-//            )
-//        )
-//
-//        newList.add(
-//            Contact(
-//                id = 31,
-//                contactName = "Ben",
-//                contactCareer = "Actor",
-//                contactEmail = "sdsd@mail.com",
-//                contactPhoneNumber = "112233444",
-//                contactAddress = "Lviv",
-//                contactBirthday = "01.01.01",
-//                contactImage = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww"
-//            )
-//        )
-//
-//        newList.add(
-//            Contact(
-//                id = 32,
-//                contactName = "Camilla",
-//                contactCareer = "Actor",
-//                contactEmail = "sdsd@mail.com",
-//                contactPhoneNumber = "112233444",
-//                contactAddress = "Lviv",
-//                contactBirthday = "01.01.01",
-//                contactImage = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww"
-//            )
-//        )
-//        observableContactList.value = newList

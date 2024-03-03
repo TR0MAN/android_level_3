@@ -63,7 +63,7 @@ class ContactListGenerator {
     // генерация списка из контакт-листа
     fun createContactList(): MutableList<Contact> {
 
-        val contactList = (0..firstNameList.size).map {
+        val contactList = (0..firstNameList.size/5).map {
             Contact(
                 id = it + 1,
                 contactName = "${firstNameList[Random.nextInt(firstNameList.size)]} ${lastNameList[Random.nextInt(lastNameList.size)]}",
