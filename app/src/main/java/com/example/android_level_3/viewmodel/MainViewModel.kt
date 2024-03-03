@@ -1,15 +1,11 @@
 package com.example.android_level_3.viewmodel
 
-import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android_level_3.model.ContactListGenerator
 import com.example.android_level_3.model.Contact
 
-// TODO
-//  2. убарать работу с таймером (его не нужно было реализовывать в задании)
 
 open class MainViewModel: ViewModel() {
 
@@ -18,10 +14,6 @@ open class MainViewModel: ViewModel() {
 
     private var deletedContactData: Contact? = null
     private var deletedContactPosition: Int = 0
-    private var timer: CountDownTimer? = null
-
-    val onTickTimerMessage = MutableLiveData<Int>()
-    val onFinishTimer = MutableLiveData<Boolean>()
 
     init {
         contactList.value = ContactListGenerator().createContactList()
@@ -70,27 +62,5 @@ open class MainViewModel: ViewModel() {
 
     }
 
-    // отсчет 5 секунд для возможности восстановления контакта
-    fun timerStart() {
-        onFinishTimer.value = false
-        if (timer == null) {
-            timer = object : CountDownTimer(5100L, 1000L) {
 
-                override fun onTick(millisUntilFinished: Long) {
-                    onTickTimerMessage.value = (millisUntilFinished / 1000L).toInt()
-                }
-
-                override fun onFinish() {
-                    onFinishTimer.value = true
-                    timer = null
-                }
-            }.start()
-        }
-    }
-
-    // остановка таймера, если контакт был восстановлен
-    fun timerStop(){
-        timer?.cancel()
-        timer = null
-    }
 }

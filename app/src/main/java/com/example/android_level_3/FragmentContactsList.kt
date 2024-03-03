@@ -26,17 +26,6 @@ class FragmentContactsList : Fragment() {
 
     private lateinit var actionListener: ElementClickListener
     private var snackbar: Snackbar? = null
-    private var snackbarVisibility = false
-    private var snackbarTimer = 5
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // восстановление данных послеповорота экрана
-        savedInstanceState?.let {
-            snackbarVisibility = it.getBoolean(Const.SNACKBAR_VISIBILITY_KEY)
-            snackbarTimer = it.getInt(Const.SNACKBAR_TIMER_KEY)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,17 +44,6 @@ class FragmentContactsList : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // отображение SnackBar после поворота экрана (если он отображался до поворота)
-        if (snackbarVisibility) {
-            snackbar = createSnackbar(snackbarTimer)
-            snackbar?.show()
-            snackbarVisibility = true
-        }
-    }
-
     // получение обьекта User с экрана добавления нового пользователя и добавление его в список
     private fun getResultFromCustomDialog() {
         parentFragmentManager.setFragmentResultListener(Const.REQUEST_KEY, viewLifecycleOwner){ key, value ->
@@ -82,28 +60,11 @@ class FragmentContactsList : Fragment() {
 
     // инициализация наблюдателей за состоянием таймера обратного отсчета
     private fun setObservers() {
-        // отображение сообщения на каждый тик (раз в 1 секунду)
-        viewModel.onTickTimerMessage.observe(viewLifecycleOwner) { currentValue ->
-            snackbar?.setText("Restore contact? ($currentValue sec)")
-            snackbarTimer = currentValue
-        }
-
-        // по окончанию таймера, скрываем Snackbar
-        viewModel.onFinishTimer.observe(viewLifecycleOwner) {status ->
-            if (status) {
-                snackbar?.let {
-                    it.dismiss()
-                    snackbar = null
-                    snackbarVisibility = false
-                }
-            }
-        }
 
         // обновление списка в List Adapter
         viewModel.observableContactList.observe(viewLifecycleOwner) { contactList ->
             recyclerViewAdapter.submitList(contactList)
         }
-
     }
 
     // инициализация слушателя нажатий по элементам списка
@@ -113,15 +74,8 @@ class FragmentContactsList : Fragment() {
 
             override fun onElementDeleteClick(contact: Contact) {
                 viewModel.deleteContact(contact)                                                    // TODO - DELETE CONTACT
-
-                if (snackbar != null) {
-                    viewModel.timerStop()
-                    snackbar = null
-                }
-                snackbar = createSnackbar(snackbarTimer)
+                createSnackbar()
                 snackbar?.show()
-                snackbarVisibility = true
-                viewModel.timerStart()
             }
 
             override fun onElementProfileClick(contact: Contact) {
@@ -134,23 +88,12 @@ class FragmentContactsList : Fragment() {
         }
     }
 
-    // создание и первичная инициализация Snackbar
-    private fun createSnackbar(currentTimer: Int): Snackbar? {
-        val rootView = binding.clFragmentMainBasicLayout as View
-        var snackbar: Snackbar? = Snackbar.make(rootView,"", Snackbar.LENGTH_SHORT)
-        snackbar?.setText("Restore contact? ($currentTimer sec)")
-        snackbar?.setDuration(Snackbar.LENGTH_INDEFINITE)
-        snackbar?.setActionTextColor(requireContext().getColor(R.color.orange_color))
-        snackbar?.setAction(getString(R.string.snackbar_button_text)) {
-            snackbar?.dismiss()
-
-            viewModel.restoreContact()                                                              // TODO RESTORE
-
-            viewModel.timerStop()
-            snackbarVisibility = false
-            snackbar = null
-        }
-        return snackbar
+    fun createSnackbar(){
+        snackbar = Snackbar.make(binding.root, getString(R.string.snackbar_button_message), 5000)
+            .setActionTextColor(requireContext().getColor(R.color.orange_color))
+            .setAction(getString(R.string.snackbar_button_text)) {
+                viewModel.restoreContact()
+            }
     }
 
     // инициализация слушателей кнопок фрагмента
@@ -159,7 +102,6 @@ class FragmentContactsList : Fragment() {
         binding.tvAddNewContact.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentContactsList_to_customDialog)
             snackbar?.dismiss()
-            snackbarVisibility = false
         }
 
         // реакция на "стрелочку" назад в ToolBar
@@ -171,13 +113,6 @@ class FragmentContactsList : Fragment() {
             Toast.makeText(requireContext(),
                 getString(R.string.toolbar_contact_list_search_button_toast_message), Toast.LENGTH_SHORT).show()
         }
-    }
-
-    // сохраняем состояние Snackbar (видимость и оставшееся время отсчета) при повороте экрана
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(Const.SNACKBAR_VISIBILITY_KEY, snackbarVisibility)
-        outState.putInt(Const.SNACKBAR_TIMER_KEY, snackbarTimer)
     }
 
 }

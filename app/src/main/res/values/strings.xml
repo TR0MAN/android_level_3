@@ -40,5 +40,6 @@
 
     <string name="snackbar_button_text">RESTORE</string>
     <string name="toolbar_contact_list_search_button_toast_message">Development in progress...</string>
+    <string name="snackbar_button_message">Contact was deleted</string>
 
 </resources>
