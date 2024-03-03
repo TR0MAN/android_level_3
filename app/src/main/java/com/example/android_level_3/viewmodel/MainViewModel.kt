@@ -7,21 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android_level_3.model.ContactListGenerator
 import com.example.android_level_3.model.Contact
-import java.util.ArrayList
 
 // TODO
 //  1. перенести методы добавления/удаления из адаптера                                             - ГОТОВО
 //  2. убарать работу с таймером (его не нужно было реализовывать в задании)
-//  3. разобраться со списком, сделать его типа List .
+//  3. разобраться со списком, сделать его типа List.                                               - ГОТОВО
 
 open class MainViewModel: ViewModel() {
 
-    private var contactList = MutableLiveData<List<Contact>>()
-        val observableContactList: LiveData<List<Contact>> = contactList
-
-//    private var contactList2 = ContactListGenerator().createContactList()
-//      val observableContactList = MutableLiveData<MutableList<Contact>>()
-
+    private val contactList = MutableLiveData<List<Contact>>()
+    val observableContactList: LiveData<List<Contact>> = contactList
 
     private var deletedContactData: Contact? = null
     private var deletedContactPosition: Int = 0
@@ -32,67 +27,55 @@ open class MainViewModel: ViewModel() {
 
     init {
         contactList.value = ContactListGenerator().createContactList()
-//        observableContactList.value = contactList2
     }
 
-    fun getContactList() = contactList
-
-    // отсчет 5 секунд для возможности восстановления контакта
-
+//    fun getContactList() = contactList                                          // TODO DELETE ???
 
     fun addContact(newContact: Contact) {
-//        Log.d("TAG", "[ViewModel] > NEW contact = $newContact")
-//
-//        val position = contactList.value?.last()?.id!!
-//        Log.d("TAG", "position = $position")
-////        if (position == null) {
-////            position = 0
-////        }
-//        val contact = newContact.copy(id = position + 1)
+
+        var position = contactList.value?.last()?.id
+        if (position == null) {
+            position = 0
+        }
+        val contact = newContact.copy(id = position + 1)
 //        Log.d("TAG", "[ViewModel] > UPDATED contact = $contact")
-//
-//        contactList.value = contactList.value?.toMutableList()?.apply {
-//            add(position, contact)
-//        }
-//
-//        observableContactList.value?.forEach { Log.d("TAG", "[ViewModel] > contact = $it") }
 
-//        Log.d("TAG", "position = $position, last = ${contactList.last()}")
-
-        // TODO Вариант 2
-//        Log.d("TAG", "[ViewModel] > NEW contact = $newContact")
-//        val position2 = contactList2.last().id
-//        Log.d("TAG", "position = $position2")
-//
-//        val contact2 = newContact.copy(id = position2 + 1)
-//        Log.d("TAG", "[ViewModel] > UPDATED contact = $contact2")
-//
-//        contactList2.add(contact2)
-//        contactList2.forEach { Log.d("TAG", "[ViewModel] > contact = $it") }
-//
-////        val newList = contactList2
-////        newList.add(contact)
-//        observableContactList.value = contactList2
+        contactList.value = contactList.value?.toMutableList()?.apply {
+            add(contact)
+        }
     }
 
-    fun deleteContact(position: Int) {
-//        deletedContactData = contactList[position]
-//        deletedContactPosition = position
-//        contactList.removeAt(position)
+    fun deleteContact(contactForDelete: Contact) {
+        if (contactList.value?.contains(contactForDelete) == false) return
+
+        deletedContactPosition = contactList.value?.indexOf(contactForDelete)!!
+//        Log.d("TAG", "[ViewModel] > Position = $deletedContactPosition")
+        deletedContactData = contactForDelete
+//        Log.d("TAG", "[ViewModel] > Data = $deletedContactData")
+
+        contactList.value = contactList.value?.toMutableList()?.apply {
+            remove(contactForDelete)
+
+        }
     }
 
     fun restoreContact() {
-//        contactList.add(deletedContactPosition, deletedContactData!!)
+        if (contactList.value?.size == 0
+            || contactList.value?.contains(deletedContactData) == true) return
 
-    // УБРАТЬ
-//        notifyItemInserted(temporaryContactPosition)
-//        notifyItemRangeChanged(temporaryContactPosition, contactList.size)
+        deletedContactData?.let {
+            contactList.value = contactList.value?.toMutableList()?.apply {
+                add(deletedContactPosition, it)
+            }
+        }
+
     }
 
     fun deleteMultipleContact() {
 
     }
 
+    // отсчет 5 секунд для возможности восстановления контакта
     fun timerStart() {
         onFinishTimer.value = false
         if (timer == null) {

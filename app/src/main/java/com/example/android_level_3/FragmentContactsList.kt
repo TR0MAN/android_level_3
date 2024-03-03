@@ -2,7 +2,6 @@ package com.example.android_level_3
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,23 +11,17 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_level_3.adapter.ContactAdapter
-import com.example.android_level_3.adapter.ContactAdapter2
 import com.example.android_level_3.adapter.ElementClickListener
 import com.example.android_level_3.databinding.FragmentContactsListBinding
 import com.example.android_level_3.model.Contact
 import com.example.android_level_3.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.delay
-import java.text.FieldPosition
-import kotlin.concurrent.thread
 
 class FragmentContactsList : Fragment() {
 
     private lateinit var binding: FragmentContactsListBinding
-    private lateinit var recyclerAdapter: ContactAdapter
 
-    private lateinit var recyclerListAdapter: ContactAdapter2
-
+    private val recyclerViewAdapter by lazy { ContactAdapter(actionListener) }
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var actionListener: ElementClickListener
@@ -52,19 +45,12 @@ class FragmentContactsList : Fragment() {
         binding = FragmentContactsListBinding.inflate(inflater, container, false)
 
         getResultFromCustomDialog()
-        initCountDownListeners()
+        setObservers()
         initElementClickListener()
         setFragmentButtonsListeners()
 
-//        recyclerAdapter = ContactAdapter(viewModel.getContactList(), actionListener)
-//        binding.rvContacts.layoutManager = LinearLayoutManager(requireContext())
-//        binding.rvContacts.adapter = recyclerAdapter
-
-        recyclerListAdapter = ContactAdapter2(actionListener)
         binding.rvContacts.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvContacts.adapter = recyclerListAdapter
-
-//        recyclerListAdapter.submitList(viewModel.getContactList())      COMMENT
+        binding.rvContacts.adapter = recyclerViewAdapter
 
         return binding.root
     }
@@ -86,25 +72,18 @@ class FragmentContactsList : Fragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 value.getSerializable(Const.RESULT_KEY, Contact::class.java)
                     ?.let {
-//                        recyclerAdapter.addNewContact(it)       // TODO добавляю новый контакт (исправить ID)
-
                         // TODO - ADD CONTACT
                         viewModel.addContact(it)
                     }
             } else {
-//                recyclerAdapter.addNewContact(value.getSerializable(Const.RESULT_KEY) as Contact)
-
                 // TODO - ADD CONTACT
                 viewModel.addContact(value.getSerializable(Const.RESULT_KEY) as Contact)
-
-                // только для теста, что обновлять список
-//                recyclerAdapter.notifyDataSetChanged()
             }
         }
     }
 
     // инициализация наблюдателей за состоянием таймера обратного отсчета
-    private fun initCountDownListeners() {
+    private fun setObservers() {
         // отображение сообщения на каждый тик (раз в 1 секунду)
         viewModel.onTickTimerMessage.observe(viewLifecycleOwner) { currentValue ->
             snackbar?.setText("Restore contact? ($currentValue sec)")
@@ -122,19 +101,10 @@ class FragmentContactsList : Fragment() {
             }
         }
 
-
         // обновление списка в List Adapter
-        viewModel.observableContactList.observe(viewLifecycleOwner) { list ->
-                list.forEach {
-                    Log.d("TAG", "[FRAGMENT] > contact = $it")
-                }
-                Log.d("TAG", "[FRAGMENT] > List Size = ${list.size}")
-                Log.d("TAG", "[FRAGMENT] > LastContact = ${list.last()}")
-
-            recyclerListAdapter.submitList(list)
+        viewModel.observableContactList.observe(viewLifecycleOwner) { contactList ->
+            recyclerViewAdapter.submitList(contactList)
         }
-
-
 
     }
 
@@ -143,16 +113,9 @@ class FragmentContactsList : Fragment() {
 
         actionListener = object : ElementClickListener {
 
-            override fun onElementDeleteClick(position: Int) {
-//                recyclerAdapter.removeContact(position)
-
-                Log.d("TAG", "contact = $position")
-//                // TODO - DELETE CONTACT
-                viewModel.deleteContact(position)
-
-//                recyclerListAdapter.submitList(viewModel.getContactList())      // TODO - ???
-
-//                recyclerAdapter.notifyDataSetChanged()              // только для теста, что обновлять список
+            override fun onElementDeleteClick(contact: Contact) {
+//                Log.d("TAG", "[FRAGMENT] contact = $contact")
+                viewModel.deleteContact(contact)                                                    // TODO - DELETE CONTACT
 
                 if (snackbar != null) {
                     viewModel.timerStop()
@@ -164,11 +127,11 @@ class FragmentContactsList : Fragment() {
                 viewModel.timerStart()
             }
 
-            override fun onElementProfileClick(position: Int) {
-//                val currentUser = viewModel.getContactList()[position]            COMMENT
-//                val destinationPointWithData = FragmentContactsListDirections
-//                    .actionFragmentContactsListToFragmentContactProfile(currentUser)
-//                findNavController().navigate(destinationPointWithData)
+            override fun onElementProfileClick(contact: Contact) {
+                if (viewModel.observableContactList.value?.contains(contact) == false) return
+                val destinationPointWithData = FragmentContactsListDirections
+                    .actionFragmentContactsListToFragmentContactProfile(contact)
+                findNavController().navigate(destinationPointWithData)
                 snackbar?.dismiss()
             }
         }
@@ -184,13 +147,7 @@ class FragmentContactsList : Fragment() {
         snackbar?.setAction(getString(R.string.snackbar_button_text)) {
             snackbar?.dismiss()
 
-//            recyclerAdapter.restoreContact()
-
-            // TODO RESTORE CONTACT
-            viewModel.restoreContact()
-//            recyclerListAdapter.submitList(viewModel.getContactList())        COMMENT
-//            recyclerAdapter.notifyDataSetChanged()                  // только для теста, что обновлять список
-
+            viewModel.restoreContact()                                                              // TODO RESTORE
 
             viewModel.timerStop()
             snackbarVisibility = false
@@ -215,7 +172,6 @@ class FragmentContactsList : Fragment() {
             Toast.makeText(requireContext(),
                 getString(R.string.toolbar_contact_list_search_button_toast_message), Toast.LENGTH_SHORT).show()
         }
-
     }
 
     // сохраняем состояние Snackbar (видимость и оставшееся время отсчета) при повороте экрана
@@ -224,28 +180,5 @@ class FragmentContactsList : Fragment() {
         outState.putBoolean(Const.SNACKBAR_VISIBILITY_KEY, snackbarVisibility)
         outState.putInt(Const.SNACKBAR_TIMER_KEY, snackbarTimer)
     }
-
-
-    // сохранение во ViewModel данных об удаленном пользователе
-//    private fun saveTemporaryDeletedData() {
-//        viewModel.deletedContactData = recyclerAdapter.temporaryContactData
-//        viewModel.deletedContactPosition = recyclerAdapter.temporaryContactPosition
-//    }
-
-    // восстановление данных в RecyclerAdapter об удаленном пользователе
-//    private fun loadTemporaryDeletedData() {
-//        recyclerAdapter.temporaryContactData = viewModel.deletedContactData
-//        recyclerAdapter.temporaryContactPosition = viewModel.deletedContactPosition
-//    }
-
-//    override fun onStart() {
-//        super.onStart()
-//        loadTemporaryDeletedData()
-//    }
-
-//    override fun onStop() {
-//        super.onStop()
-//        saveTemporaryDeletedData()
-//    }
 
 }
