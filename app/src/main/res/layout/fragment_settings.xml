@@ -150,6 +150,7 @@
                 android:background="@drawable/my_contacts_button_style"
                 android:text="@string/my_contacts_button_text"
                 android:textColor="@color/white_color"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -158,27 +159,29 @@
                 android:id="@+id/btnMyProfileEditProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/edit_profile_button_margin_bot"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_profile_button_background"
                 android:text="@string/edit_profile_button_text"
                 android:textAllCaps="false"
                 android:textColor="@color/edit_button_custom_text_color"
                 android:textSize="@dimen/edit_profile_button_text_size"
-                app:layout_constraintBottom_toTopOf="@+id/btnSettingsViewContacts"
-                app:layout_constraintEnd_toEndOf="@+id/btnSettingsViewContacts"
-                app:layout_constraintStart_toStartOf="@+id/btnSettingsViewContacts" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvMyProfileBottomMessage" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvMyProfileBottomMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/bottom_text_message_margin_bot"
+                android:layout_marginTop="60dp"
                 android:fontFamily="@font/patuaone_regular"
                 android:text="@string/bottom_text_message_text"
                 android:textSize="@dimen/bottom_text_message_text_size"
-                app:layout_constraintBottom_toTopOf="@+id/btnMyProfileEditProfile"
                 app:layout_constraintEnd_toEndOf="@+id/btnMyProfileEditProfile"
-                app:layout_constraintStart_toStartOf="@+id/btnMyProfileEditProfile"/>
+                app:layout_constraintHorizontal_bias="0.504"
+                app:layout_constraintStart_toStartOf="@+id/btnMyProfileEditProfile"
+                app:layout_constraintTop_toBottomOf="@+id/layoutIconContainer" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutIconContainer"

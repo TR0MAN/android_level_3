@@ -12,5 +12,6 @@
     <color name="profile_top_side">#232235</color>
 
     <color name="dialog_add_contact_hint_color">#E0E0E0</color>
+    <color name="transparent">#00FFFFFF</color>
 
 </resources>

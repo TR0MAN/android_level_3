@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.android_level_3.databinding.FragmentContactProfileBinding
+import com.example.android_level_3.model.Contact
 
 class FragmentContactProfile : Fragment() {
 

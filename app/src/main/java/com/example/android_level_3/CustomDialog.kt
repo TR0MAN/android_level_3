@@ -6,32 +6,22 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import com.example.android_level_3.databinding.ActivityAddContactBinding
+import com.example.android_level_3.databinding.FragmentContactsListBinding
 import com.example.android_level_3.model.Contact
 
 // Нужно делать через DialogFragment() из-за того, что он правильно управляет жизненным циклом диалога
 // и восстанавливает его после поворота (диалог вовремя скрывется и правильно восстанавливается после поворота)
 // при создании через AlertDialog.Builder после поворота диалог пропадет
 class CustomDialog: DialogFragment() {
-
-// TODO -> Возможна ли такая реализация слушателя во Fragment?
-//    interface DialogButtonListener {
-//        fun buttonSaveListener(newUser: User)
-//    }
-
-//  TODO -> если да, то как правильно сделать инициализацию в onAttach для Fragment? (так не работает)
-//        try {
-//            dialogListener = context/activity as DialogButtonListener
-//        } catch (e: ClassCastException) {
-//            throw ClassCastException(activity.toString() + " must implement DialogButtonListener")
-//        }
-
 
     private lateinit var addContactImageResult: ActivityResultLauncher<Intent>
     private val binding by lazy { ActivityAddContactBinding.inflate(layoutInflater) }
@@ -72,12 +62,10 @@ class CustomDialog: DialogFragment() {
             addContactImage()
         }
 
-        // клик по кнопке SAVE
+
+        // клик по кнопке SAVE с передачей нового контакта в предыдущий фрагмент
         binding.btnSaveUserData.setOnClickListener {
-            parentFragmentManager.setFragmentResult(Const.REQUEST_KEY,
-                Bundle().apply {
-                    putSerializable(Const.RESULT_KEY, saveNewUserData())
-                })
+            findNavController().previousBackStackEntry?.savedStateHandle?.set(Const.RESULT_KEY, saveNewUserData())
             dialog?.cancel()
         }
 

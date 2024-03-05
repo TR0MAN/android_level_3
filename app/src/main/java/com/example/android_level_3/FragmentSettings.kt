@@ -18,9 +18,15 @@ class FragmentSettings : Fragment() {
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
-        binding.btnSettingsViewContacts.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentSettings_to_fragmentContactsList)
+        // выход на страницу авторизации по кнопке Logout
+        binding.btnMyProfileLogOut.setOnClickListener {
+            requireActivity().finish()
         }
+
+        // TODO - по идее уже не нужно
+//        binding.btnSettingsViewContacts.setOnClickListener {
+//            findNavController().navigate(R.id.action_fragmentSettings_to_fragmentContactsList)
+//        }
 
         return binding.root
     }

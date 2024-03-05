@@ -51,12 +51,14 @@ class ContactAdapter(private val clickListener: ElementClickListener) :
             clickListener.onElementDeleteClick(contact)
         }
 
-        binding.imgContactAvatar.setOnClickListener {                                        // TODO - DETAIL VIEW
+        binding.root.setOnClickListener {                                        // TODO - DETAIL VIEW
             val contact = it.tag as Contact
             clickListener.onElementProfileClick(contact)
         }
 
-        binding.root.setOnClickListener { }
+
+
+//        binding.imgContactAvatar.setOnClickListener { }                   // TODO - DELETE LATER
 
         return ContactViewHolder(binding)
     }
@@ -65,7 +67,7 @@ class ContactAdapter(private val clickListener: ElementClickListener) :
         holder.bind(getItem(position))
         with(holder.binding) {
             imgContactDelete.tag = getItem(position)
-            imgContactAvatar.tag = getItem(position)
+//            imgContactAvatar.tag = getItem(position)                      // TODO - DELETE
             root.tag = getItem(position)
         }
     }
