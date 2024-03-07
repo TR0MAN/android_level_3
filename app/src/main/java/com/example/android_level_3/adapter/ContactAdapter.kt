@@ -1,7 +1,9 @@
 package com.example.android_level_3.adapter
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -17,12 +19,18 @@ interface ElementClickListener {
     fun onElementDeleteClick(contact: Contact)
 
     fun onElementProfileClick(contact: Contact)
+
+    fun onElementLongClick(contactId: Int)
+
+    fun onElementChecked(checkBoxState: Boolean, contactId: Int)
 }
 
-class ContactAdapter(private val clickListener: ElementClickListener) :
+class ContactAdapter(
+    private val clickListener: ElementClickListener,
+    private val multiSelectState: Boolean) :
     ListAdapter<Contact, ContactAdapter.ContactViewHolder>(ContactDiffUtilCallback()) {
 
-        // по шаблону заполняем данными элемент списка
+    // по шаблону заполняем данными элемент списка
     inner class ContactViewHolder(
         val binding: ElementContactViewBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(contact: Contact) {
@@ -33,6 +41,17 @@ class ContactAdapter(private val clickListener: ElementClickListener) :
                     .circleCrop()
                     .placeholder(R.drawable.default_avatar)
                     .into(binding.imgContactAvatar)
+
+                if (multiSelectState) {
+                    binding.checkboxForDelete.visibility = View.VISIBLE
+                    binding.checkboxForDelete.isChecked = contact.isSelected
+                    binding.root.setBackgroundColor(Color.rgb(231, 231, 231))
+
+                    // ADD isSelected variant ???
+
+                } else {
+                    binding.checkboxForDelete.visibility = View.GONE
+                }
             }
     }
 
@@ -53,10 +72,30 @@ class ContactAdapter(private val clickListener: ElementClickListener) :
 
         binding.root.setOnClickListener {                                        // TODO - DETAIL VIEW
             val contact = it.tag as Contact
-            clickListener.onElementProfileClick(contact)
+
+            if (multiSelectState) {
+                var checkBoxState = contact.isSelected
+                if (!checkBoxState) {
+                    binding.checkboxForDelete.isChecked = true
+                    checkBoxState = true
+                } else {
+//                    holder.binding.checkboxElement.isChecked = false
+                    binding.checkboxForDelete.isChecked = false
+                    checkBoxState = false
+                }
+                clickListener.onElementChecked(checkBoxState, contact.id)
+            } else {
+                clickListener.onElementProfileClick(contact)
+            }
         }
 
-
+        if (!multiSelectState) {
+            binding.root.setOnLongClickListener {
+                val contact = it.tag as Contact
+                clickListener.onElementLongClick(contact.id)
+                return@setOnLongClickListener true
+            }
+        }
 
 //        binding.imgContactAvatar.setOnClickListener { }                   // TODO - DELETE LATER
 
@@ -67,8 +106,10 @@ class ContactAdapter(private val clickListener: ElementClickListener) :
         holder.bind(getItem(position))
         with(holder.binding) {
             imgContactDelete.tag = getItem(position)
-//            imgContactAvatar.tag = getItem(position)                      // TODO - DELETE
             root.tag = getItem(position)
+
+//            imgContactAvatar.tag = getItem(position)                      // TODO - DELETE
+
         }
     }
 }

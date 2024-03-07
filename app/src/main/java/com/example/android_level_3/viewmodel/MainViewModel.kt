@@ -1,5 +1,6 @@
 package com.example.android_level_3.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,6 +19,8 @@ open class MainViewModel: ViewModel() {
     init {
         contactList.value = ContactListGenerator().createContactList()
     }
+
+    fun getContactList() = contactList.value?.toMutableList()
 
     fun addContact(newContact: Contact) {
         if (contactList.value?.size != 0) {
@@ -58,9 +61,41 @@ open class MainViewModel: ViewModel() {
         }
     }
 
-    fun deleteMultipleContact() {
+    fun deleteMultipleContact(listForDelete: List<Int>?) {
+        if (listForDelete == null) return
+        val listForRemove = mutableListOf<Contact>()
 
+        listForDelete.forEach { contactId ->
+            contactList.value?.filter { it.id == contactId }?.map {
+                listForRemove.add(it)
+            }
+        }
+        contactList.value = contactList.value?.toMutableList()?.apply {
+            removeAll(listForRemove)
+        }
     }
 
+    // TODO - ВСЕ РАБОТАЕТ
+    fun changeSelectableState3(contact: Contact) {
+        contactList.value?.filter { it == contact }?.map {
+            Log.d("TAG", "[VM][STATE] Filter [FOUND] - $it")
+            val state = it.isSelected
+            Log.d("TAG", "[VM][STATE] OLD Selected State $state")
+            it.isSelected = !state
+            Log.d("TAG", "[VM][STATE] NEW Selected State ${it.isSelected}")
+            Log.d("TAG", "[VM][STATE] RESULT -> ID=${it.id} isSelect=${it.isSelected}")
+        }
+    }
 
+    fun changeSelectableState(contactId: Int) {
+
+        contactList.value?.filter { it.id == contactId }?.map {
+            Log.d("TAG", "[VM][STATE] Filter [FOUND] - $it")
+            val state = it.isSelected
+            Log.d("TAG", "[VM][STATE] OLD Selected State $state")
+            it.isSelected = !state
+            Log.d("TAG", "[VM][STATE] NEW Selected State ${it.isSelected}")
+            Log.d("TAG", "[VM][STATE] RESULT -> ID=${it.id} isSelect=${it.isSelected}")
+        }
+    }
 }

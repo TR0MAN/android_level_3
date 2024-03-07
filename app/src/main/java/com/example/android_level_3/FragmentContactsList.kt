@@ -1,6 +1,5 @@
 package com.example.android_level_3
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,26 +8,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager
 import com.example.android_level_3.adapter.ContactAdapter
 import com.example.android_level_3.adapter.ElementClickListener
 import com.example.android_level_3.databinding.FragmentContactsListBinding
 import com.example.android_level_3.model.Contact
 import com.example.android_level_3.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
-import java.text.FieldPosition
 
+// TODO
+//  1. Разобраться с внешним видом элемента в RecyclerView в режиме группового удаления
+//  2. Отработать показ мультивыбора (если он был) при повороте экрана
+//  3. Попробовать убирать TabLayout в режиме мультивыбора и возвращать его в режиме просмотра контактов
+//  4. Почистить все закомментированные строки и удалить не нужное.
 
 class FragmentContactsList : Fragment() {
 
     private lateinit var binding: FragmentContactsListBinding
+    private lateinit var recyclerViewAdapter: ContactAdapter
+//    private val recyclerViewAdapter by lazy { ContactAdapter(actionListener, true) }
 
-    private val recyclerViewAdapter by lazy { ContactAdapter(actionListener) }
     private val viewModel: MainViewModel by viewModels()
+
+    private val selectedContactList = MutableLiveData<MutableSet<Int>>(mutableSetOf())
 
     private lateinit var actionListener: ElementClickListener
     private var snackbar: Snackbar? = null
@@ -43,43 +47,45 @@ class FragmentContactsList : Fragment() {
         initElementClickListener()
         setFragmentButtonsListeners()
 
-        binding.rvContacts.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvContacts.adapter = recyclerViewAdapter
+        createAdapter(multiSelectState = false)
 
         return binding.root
     }
 
-    // TODO - DELETE
-    // получение обьекта Contact с экрана добавления нового пользователя и добавление его в список
-//    private fun getResultFromCustomDialog() {
-//        parentFragment?.parentFragmentManager?.setFragmentResultListener(Const.REQUEST_KEY, viewLifecycleOwner){ key, value ->
-//            Log.d("TAG", "INSIDE  parentFragmentManager")
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                value.getSerializable(Const.RESULT_KEY, Contact::class.java)
-//                    ?.let {
-//                        Log.d("TAG", "[FRAGMENT] dialog result(it) - $it")
-//                        viewModel.addContact(it)
-//                    }
-//            } else {
-//                val test = value.getSerializable(Const.RESULT_KEY) as Contact
-//                Log.d("TAG", "[FRAGMENT] dialog result(test) - $test")
-//                viewModel.addContact(value.getSerializable(Const.RESULT_KEY) as Contact)
-//            }
-//        }
-//    }
-
     // инициализация наблюдателей за состоянием таймера обратного отсчета
     private fun setObservers() {
+
+        // наблюдатель за списком контактов на удаление
+        selectedContactList.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                createAdapter(multiSelectState = false)
+                Log.d("TAG", "LIST EMPTY ${selectedContactList.value}")             // TODO - DELETE
+            }
+            Log.d("TAG", "selectedContactList = ${selectedContactList.value}")      // TODO - DELETE
+        }
+
+        // TODO - DELETE
+//        listObserver.observe(viewLifecycleOwner) {
+//            if (it.isEmpty()) {
+////                createCommonList()
+//                Log.d("TAG", "LIST EMPTY $listForDelete")
+//            }
+//        }
+
 
         // обновление списка в List Adapter
         viewModel.observableContactList.observe(viewLifecycleOwner) { contactList ->
             recyclerViewAdapter.submitList(contactList)
         }
 
-        // получение контакта из далогового фрамента
-        val result = findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Contact>(Const.RESULT_KEY)
-        result?.observe(viewLifecycleOwner) { newContact ->
-            viewModel.addContact(newContact)
+        // получение нового контакта из далогового фрагмента
+        val resultOfAddingNewContact =
+            findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Contact>(Const.RESULT_KEY)
+        resultOfAddingNewContact?.observe(viewLifecycleOwner) { newContact ->
+            if (newContact != null) {
+                viewModel.addContact(newContact)
+                resultOfAddingNewContact.value = null
+            }
         }
     }
 
@@ -102,10 +108,32 @@ class FragmentContactsList : Fragment() {
                 findNavController().navigate(destinationPointWithData)
                 snackbar?.dismiss()
             }
+
+            override fun onElementLongClick(contactId: Int) {
+                viewModel.changeSelectableState(contactId)
+                createAdapter(multiSelectState = true)
+                selectedContactList.value = selectedContactList.value?.apply {
+                    add(contactId)
+                }
+            }
+
+            override fun onElementChecked(checkBoxState: Boolean, contactId: Int) {
+                if (checkBoxState) {
+                    selectedContactList.value = selectedContactList.value?.apply { add(contactId) }
+                    viewModel.changeSelectableState(contactId)
+                } else {
+                    val status = selectedContactList.value?.contains(contactId)!!
+                    if (status) {
+                        selectedContactList.value =
+                            selectedContactList.value?.apply { remove(contactId) }
+                        viewModel.changeSelectableState(contactId)
+                    }
+                }
+            }
         }
     }
 
-    fun createSnackbar(){
+    fun createSnackbar() {
         snackbar = Snackbar.make(binding.root, getString(R.string.snackbar_button_message), 5000)
             .setActionTextColor(requireContext().getColor(R.color.orange_color))
             .setAction(getString(R.string.snackbar_button_text)) {
@@ -121,17 +149,43 @@ class FragmentContactsList : Fragment() {
             snackbar?.dismiss()
         }
 
+        // действия по клику на кнопку удаления ГРУППЫ
+        binding.imgDeleteManyContacts.setOnClickListener {
+            viewModel.deleteMultipleContact(selectedContactList.value?.toList())
+            selectedContactList.value?.toMutableList()?.clear()
+            createAdapter(multiSelectState = false)
+
+            // ПРОВЕРИТЬ РАБОТУ - РАБОТАЕТ                  // TODO - DELETE
+//            val newSet = mutableSetOf<Int>()
+//            selectedContactList.value = newSet
+        }
+
         // реакция на "стрелочку" назад в ToolBar
         binding.toolbarContactList.imgBackToolbarContactList.setOnClickListener {
-            findNavController().popBackStack()
+//            findNavController().popBackStack()
         }
 
         binding.toolbarContactList.imgSearchToolbarContactList.setOnClickListener {
-            Toast.makeText(requireContext(),
-                getString(R.string.toolbar_contact_list_search_button_toast_message), Toast.LENGTH_SHORT).show()
+            Toast.makeText( requireContext(),
+                getString(R.string.toolbar_contact_list_search_button_toast_message),
+                Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun createAdapter(multiSelectState: Boolean) {
+        binding.imgDeleteManyContacts.visibility = if (multiSelectState) View.VISIBLE else View.GONE
+        recyclerViewAdapter = ContactAdapter(actionListener, multiSelectState)
+        binding.recyclerViewContacts.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewContacts.adapter = recyclerViewAdapter
+        recyclerViewAdapter.submitList(viewModel.getContactList())
+    }
 
+    // TODO - DELETE
+//    private fun createAdapter(multiSelectState: Boolean) {
+//        binding.imgDeleteManyContacts.visibility = if (multiSelectState) View.VISIBLE else View.GONE
+//        val newAdapter = ContactAdapter(actionListener, multiSelectState)
+//        binding.recyclerViewContacts.layoutManager = LinearLayoutManager(requireContext())
+//        binding.recyclerViewContacts.adapter = newAdapter
+//    }
 
 }
