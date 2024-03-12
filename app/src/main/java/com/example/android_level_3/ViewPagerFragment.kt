@@ -5,14 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.android_level_3.adapter.ViewPagerAdapter
 import com.example.android_level_3.databinding.FragmentViewPagerBinding
+import com.example.android_level_3.viewmodel.MainViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ViewPagerFragment : Fragment() {
 
     private lateinit var binding: FragmentViewPagerBinding
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +39,14 @@ class ViewPagerFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) { }
         })
 
+        setObservers()
         return binding.root
+    }
+
+    private fun setObservers() {
+        viewModel.tabLayoutVisibility.observe(viewLifecycleOwner) { visibility ->
+            binding.tabLayout.visibility = if (visibility) View.VISIBLE else View.GONE
+        }
     }
 
     companion object {

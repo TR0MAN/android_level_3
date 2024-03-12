@@ -34,13 +34,12 @@ class CustomDialog: DialogFragment() {
         addContactImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ActivityResultCallback {
             if (it.resultCode == AppCompatActivity.RESULT_OK) {
                 avatarImageUri = it?.data?.data
-
                 binding.imgAvatar.setImageURI(avatarImageUri)
             }
         })
     }
 
-    // восстанавливаем выбранную пользователем картинку (после поворота/пересоздания)
+    // restore contact image after rotation/recreation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (avatarImageUri == null) {
@@ -57,11 +56,26 @@ class CustomDialog: DialogFragment() {
         val dialogBuilder = AlertDialog.Builder(context)
         dialogBuilder.setView(binding.root)
 
+        setButtonListeners()
+
+        dialog = dialogBuilder.create()
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(true)
+        return dialog
+    }
+
+    // сохраняем выбранную пользователем картинку (при повороте, до кнопки SAVE)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (avatarImageUri != null) {
+            outState.putString(Const.AVATAR_IMAGE_KEY, avatarImageUri.toString())
+        }
+    }
+    private fun setButtonListeners() {
         // клик по кнопке "выбрать фото"
         binding.imgAddImageIcon.setOnClickListener {
             addContactImage()
         }
-
 
         // клик по кнопке SAVE с передачей нового контакта в предыдущий фрагмент
         binding.btnSaveUserData.setOnClickListener {
@@ -76,11 +90,6 @@ class CustomDialog: DialogFragment() {
 
         // иконка автоматического заполнения данными полей (для удобства теста)
         binding.imgFillFields.setOnClickListener { fillAllFields()  }
-
-        dialog = dialogBuilder.create()
-        dialog.setCancelable(true)
-        dialog.setCanceledOnTouchOutside(true)
-        return dialog
     }
 
     // добавление картинки/аватарки нового контакта
@@ -114,12 +123,6 @@ class CustomDialog: DialogFragment() {
         binding.etBirthday.setText("12/01/1990")
     }
 
-    // сохраняем выбранную пользователем картинку (при повороте, до кнопки SAVE)
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (avatarImageUri != null) {
-            outState.putString(Const.AVATAR_IMAGE_KEY, avatarImageUri.toString())
-        }
-    }
+
 }
 

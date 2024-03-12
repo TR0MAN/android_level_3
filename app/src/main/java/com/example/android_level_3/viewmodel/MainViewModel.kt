@@ -13,6 +13,9 @@ open class MainViewModel: ViewModel() {
     private val contactList = MutableLiveData<List<Contact>>()
     val observableContactList: LiveData<List<Contact>> = contactList
 
+    val checkedContactList = mutableSetOf<Int>()
+    val tabLayoutVisibility = MutableLiveData<Boolean>(true)
+
     private var deletedContactData: Contact? = null
     private var deletedContactPosition: Int = 0
 
@@ -75,27 +78,10 @@ open class MainViewModel: ViewModel() {
         }
     }
 
-    // TODO - ВСЕ РАБОТАЕТ
-    fun changeSelectableState3(contact: Contact) {
-        contactList.value?.filter { it == contact }?.map {
-            Log.d("TAG", "[VM][STATE] Filter [FOUND] - $it")
-            val state = it.isSelected
-            Log.d("TAG", "[VM][STATE] OLD Selected State $state")
-            it.isSelected = !state
-            Log.d("TAG", "[VM][STATE] NEW Selected State ${it.isSelected}")
-            Log.d("TAG", "[VM][STATE] RESULT -> ID=${it.id} isSelect=${it.isSelected}")
-        }
-    }
-
     fun changeSelectableState(contactId: Int) {
-
         contactList.value?.filter { it.id == contactId }?.map {
-            Log.d("TAG", "[VM][STATE] Filter [FOUND] - $it")
             val state = it.isSelected
-            Log.d("TAG", "[VM][STATE] OLD Selected State $state")
             it.isSelected = !state
-            Log.d("TAG", "[VM][STATE] NEW Selected State ${it.isSelected}")
-            Log.d("TAG", "[VM][STATE] RESULT -> ID=${it.id} isSelect=${it.isSelected}")
         }
     }
 }

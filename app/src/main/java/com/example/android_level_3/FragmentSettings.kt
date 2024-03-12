@@ -23,7 +23,7 @@ class FragmentSettings : Fragment() {
             requireActivity().finish()
         }
 
-        // TODO - по идее уже не нужно
+        // стало не нужным (в задании уроаня 4) ввиду использования TabLayout (пока оставить)
 //        binding.btnSettingsViewContacts.setOnClickListener {
 //            findNavController().navigate(R.id.action_fragmentSettings_to_fragmentContactsList)
 //        }
