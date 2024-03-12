@@ -2,6 +2,33 @@
     <string name="app_name">Android_level_3</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--    authorization activity text -->
+    <string name="authorization_question_text">Already have an account?</string>
+    <string name="authorization_sing_in_text">Sing in</string>
+    <string name="authorization_register_button_text">R E G I S T E R</string>
+    <string name="authorization_text_or">or</string>
+    <string name="authorization_button_google_text" translatable="false">G O O G L E</string>
+    <string name="authorization_remember_me_text">Remember me</string>
+    <string name="authorization_password_text">Password</string>
+    <string name="authorization_email_text">E-mail</string>
+    <string name="authorization_helper_text">Fill out the profile and go to the application</string>
+    <string name="authorization_greetings_text">Let\'s get acquainted</string>
+    <string name="authorization_additional_text">By clicking Register you agree to our Terms\n and Conditions</string>
+    <string name="authorization_email_and_password_helper_text">required</string>
+
+    <!--    password ans email check status -->
+    <string name="error_min_8_symbols_password">Minimum 8 symbols password</string>
+    <string name="error_upper_case_symbol">Must contain 1 upper-case symbol</string>
+    <string name="error_lower_case_symbol">Must contain 1 lower-case symbol</string>
+    <string name="error_contain_number">Must contain 1 number (0-9)</string>
+    <string name="error_contain_special_symbol"><![CDATA[Must contain 1 special symbol (!@#$%^&*)]]></string>
+    <string name="error_include_wrong_spec_symbols"><![CDATA[Must not include symbols (~`()_+|?/.{}[],<>=-)]]></string>
+    <string name="error_include_white_space">Must not include a white space</string>
+    <string name="unknown_user">Unknown User</string>
+    <string name="empty_password_or_email_fields">Password or E-mail fields have errors</string>
+    <string name="response_ok">All fine</string>
+    <string name="response_wrong_email">Incorrect E-mail Address</string>
+
     <!--    settings fragment text -->
     <string name="tv_main_profile_settings_text">Settings</string>
     <string name="log_out">Log out</string>
@@ -40,5 +67,6 @@
 
     <string name="snackbar_button_text">RESTORE</string>
     <string name="toolbar_contact_list_search_button_toast_message">Development in progress...</string>
+    <string name="snackbar_button_message">Contact was deleted</string>
 
 </resources>

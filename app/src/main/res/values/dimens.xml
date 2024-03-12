@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--    authorization activity parameters  -->
+    <dimen name="AuthorizationQuestionTextMarginBottom">10dp</dimen>
+    <dimen name="AuthorizationQuestionTextSize">16sp</dimen>
+
+    <dimen name="AuthorizationSingInTextMarginStart">16dp</dimen>
+    <dimen name="AuthorizationSingInTextSize">16sp</dimen>
+
+    <dimen name="AuthorizationAdditionalTextMarginBottom">4dp</dimen>
+    <dimen name="AuthorizationAdditionalTextSize">14sp</dimen>
+
+    <dimen name="AuthorizationRegisterButtonHeight">63dp</dimen>
+    <dimen name="AuthorizationRegisterButtonMarginStart">8dp</dimen>
+    <dimen name="AuthorizationRegisterButtonMarginEnd">8dp</dimen>
+    <dimen name="AuthorizationRegisterButtonMarginBottom">14dp</dimen>
+    <dimen name="AuthorizationRegisterButtonTextSize">18sp</dimen>
+
+    <dimen name="AuthorizationTextOrMarginBottom">4dp</dimen>
+    <dimen name="AuthorizationTextOrTextSize">20sp</dimen>
+
+    <dimen name="ButtonImitatorHeight">48dp</dimen>
+    <dimen name="ButtonImitatorMarginStart">8dp</dimen>
+    <dimen name="ButtonImitatorMarginEnd">8dp</dimen>
+    <dimen name="ButtonImitatorMarginBottom">4dp</dimen>
+
+    <dimen name="AuthorizationButtonGoogleTextSize">20sp</dimen>
+    <dimen name="AuthorizationButtonGoogleTextPaddingLeft">16dp</dimen>
+
+    <dimen name="AuthorizationRememberMeMarginBottom">36dp</dimen>
+    <dimen name="AuthorizationRememberMeTextSize">16sp</dimen>
+
+    <dimen name="InputPasswordContainerMarginHorizontal">12dp</dimen>
+    <dimen name="InputPasswordContainerMarginTop">16dp</dimen>
+
+    <dimen name="InputPasswordFormPaddingStart">22dp</dimen>
+    <dimen name="InputPasswordFormTextSize">20sp</dimen>
+
+    <dimen name="AuthorizationPasswordTextMarginStart">12dp</dimen>
+    <dimen name="AuthorizationPasswordTextSize">14sp</dimen>
+
+    <dimen name="InputEmailContainerMarginHorizontal">12dp</dimen>
+    <dimen name="InputEmailContainerMarginTop">16dp</dimen>
+
+    <dimen name="InputEmailFormPaddingStart">22dp</dimen>
+    <dimen name="InputEmailFormTextSize">20sp</dimen>
+
+    <dimen name="AuthorizationTextEmailTextSize">14sp</dimen>
+
+    <dimen name="AuthorizationHelperTextMarginBottom">28dp</dimen>
+    <dimen name="AuthorizationGreetingsTextMarginBottom">12dp</dimen>
+    <dimen name="AuthorizationGreetingsTextSize">28sp</dimen>
+
+
     <!--    fragment settings parameters  -->
     <dimen name="constraint_layout_top_min_height">330dp</dimen>
     <dimen name="constraint_layout_bottom_min_height">330dp</dimen>

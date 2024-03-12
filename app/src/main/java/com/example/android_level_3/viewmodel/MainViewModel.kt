@@ -1,6 +1,5 @@
 package com.example.android_level_3.viewmodel
 
-import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,24 +7,23 @@ import androidx.lifecycle.ViewModel
 import com.example.android_level_3.model.ContactListGenerator
 import com.example.android_level_3.model.Contact
 
-// TODO
-//  2. убарать работу с таймером (его не нужно было реализовывать в задании)
 
 open class MainViewModel: ViewModel() {
 
     private val contactList = MutableLiveData<List<Contact>>()
     val observableContactList: LiveData<List<Contact>> = contactList
 
+    val checkedContactList = mutableSetOf<Int>()
+    val tabLayoutVisibility = MutableLiveData<Boolean>(true)
+
     private var deletedContactData: Contact? = null
     private var deletedContactPosition: Int = 0
-    private var timer: CountDownTimer? = null
-
-    val onTickTimerMessage = MutableLiveData<Int>()
-    val onFinishTimer = MutableLiveData<Boolean>()
 
     init {
         contactList.value = ContactListGenerator().createContactList()
     }
+
+    fun getContactList() = contactList.value?.toMutableList()
 
     fun addContact(newContact: Contact) {
         if (contactList.value?.size != 0) {
@@ -66,31 +64,24 @@ open class MainViewModel: ViewModel() {
         }
     }
 
-    fun deleteMultipleContact() {
+    fun deleteMultipleContact(listForDelete: List<Int>?) {
+        if (listForDelete == null) return
+        val listForRemove = mutableListOf<Contact>()
 
-    }
-
-    // отсчет 5 секунд для возможности восстановления контакта
-    fun timerStart() {
-        onFinishTimer.value = false
-        if (timer == null) {
-            timer = object : CountDownTimer(5100L, 1000L) {
-
-                override fun onTick(millisUntilFinished: Long) {
-                    onTickTimerMessage.value = (millisUntilFinished / 1000L).toInt()
-                }
-
-                override fun onFinish() {
-                    onFinishTimer.value = true
-                    timer = null
-                }
-            }.start()
+        listForDelete.forEach { contactId ->
+            contactList.value?.filter { it.id == contactId }?.map {
+                listForRemove.add(it)
+            }
+        }
+        contactList.value = contactList.value?.toMutableList()?.apply {
+            removeAll(listForRemove)
         }
     }
 
-    // остановка таймера, если контакт был восстановлен
-    fun timerStop(){
-        timer?.cancel()
-        timer = null
+    fun changeSelectableState(contactId: Int) {
+        contactList.value?.filter { it.id == contactId }?.map {
+            val state = it.isSelected
+            it.isSelected = !state
+        }
     }
 }

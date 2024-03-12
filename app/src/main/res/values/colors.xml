@@ -6,11 +6,13 @@
     <color name="purple_color">#232235</color>
     <color name="orange_color">#fb5e06</color>
     <color name="gray_color">#b2b2b3</color>
-    <color name="white_color">#FFFFFFFF</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="element_view_gray_background_color">#E7E7E7</color>
 
     <color name="profile_bot_side">#FFFFFF</color>
     <color name="profile_top_side">#232235</color>
 
     <color name="dialog_add_contact_hint_color">#E0E0E0</color>
+    <color name="transparent">#00FFFFFF</color>
 
 </resources>
