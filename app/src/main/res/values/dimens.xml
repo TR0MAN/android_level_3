@@ -34,7 +34,7 @@
     <dimen name="InputPasswordContainerMarginHorizontal">12dp</dimen>
     <dimen name="InputPasswordContainerMarginTop">16dp</dimen>
 
-    <dimen name="InputPasswordFormPaddingStart">22dp</dimen>
+    <dimen name="InputPasswordFormPaddingStart">8dp</dimen>
     <dimen name="InputPasswordFormTextSize">20sp</dimen>
 
     <dimen name="AuthorizationPasswordTextMarginStart">12dp</dimen>
@@ -140,9 +140,9 @@
     <dimen name="dialog_add_contact_phone_container_margin_top">8dp</dimen>
     <dimen name="dialog_add_contact_address_container_margin_top">8dp</dimen>
     <dimen name="dialog_add_contact_birthday_container_margin_top">8dp</dimen>
-    <dimen name="dialog_add_contact_et_add_contact_margin_bottom">24dp</dimen>
+    <dimen name="dialog_add_contact_et_add_contact_margin_bottom">10dp</dimen>
 
-    <dimen name="dialog_add_contact_btn_save_margin_bottom">66dp</dimen>
+    <dimen name="dialog_add_contact_btn_save_margin_bottom">8dp</dimen>
     <dimen name="dialog_add_contact_btn_save_height">55dp</dimen>
     <dimen name="dialog_add_contact_btn_save_horizontal_margin">16dp</dimen>
     <dimen name="dialog_add_contact_btn_save_text_size">18sp</dimen>

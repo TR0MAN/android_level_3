@@ -61,12 +61,19 @@
     <string name="dialog_add_contact_tv_inscription_address_text">Address</string>
     <string name="dialog_add_contact_tv_inscription_birthday_text">Date of birth</string>
     <string name="dialog_add_contact_email_hint">name@gmail.com</string>
-    <string name="dialog_add_contact_phone_hint">(099)-456-78-90</string>
-    <string name="dialog_add_contact_birthday_hint">12.05.1995</string>
+    <string name="dialog_add_contact_phone_hint">example 099-456-78-90</string>
+    <string name="dialog_add_contact_birthday_hint">example 2000/05/23</string>
+    <string name="dialog_add_contact_birthday_help">( for example 2000/05/25 )</string>
     <string name="dialog_add_contact_btn_save_text">S A V E</string>
+
+    <!--    registration activity parameters  -->
+    <string name="registration_wrong_birthday_format">Date of birth must be correct or empty</string>
+    <string name="registration_empty_field_username">Username field must not be empty</string>
 
     <string name="snackbar_button_text">RESTORE</string>
     <string name="toolbar_contact_list_search_button_toast_message">Development in progress...</string>
     <string name="snackbar_button_message">Contact was deleted</string>
+
+
 
 </resources>
