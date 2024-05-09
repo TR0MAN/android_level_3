@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android_level_3.model.ContactListGenerator
 import com.example.android_level_3.model.Contact
-
+import com.example.android_level_3.retrofit.Retrofit
+import com.example.android_level_3.retrofit.RetrofitServerApi
+import com.example.android_level_3.retrofit.model.UserData
 
 open class MainViewModel: ViewModel() {
 
@@ -19,11 +21,16 @@ open class MainViewModel: ViewModel() {
     private var deletedContactData: Contact? = null
     private var deletedContactPosition: Int = 0
 
+    var serverApi: RetrofitServerApi
+
     init {
-        contactList.value = ContactListGenerator().createContactList()
+//        contactList.value = ContactListGenerator().createContactList()
+        contactList.postValue(ContactListGenerator().createContactList())       // TODO - DELETE (уже не нужно)
+        serverApi = Retrofit.createRetrofitApi()
     }
 
     fun getContactList() = contactList.value?.toMutableList()
+
 
     fun addContact(newContact: Contact) {
         if (contactList.value?.size != 0) {
@@ -84,4 +91,5 @@ open class MainViewModel: ViewModel() {
             it.isSelected = !state
         }
     }
+
 }

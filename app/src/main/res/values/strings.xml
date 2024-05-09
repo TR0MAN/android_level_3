@@ -73,7 +73,10 @@
     <string name="snackbar_button_text">RESTORE</string>
     <string name="toolbar_contact_list_search_button_toast_message">Development in progress...</string>
     <string name="snackbar_button_message">Contact was deleted</string>
-
+    <string name="authorisation_alert_dialog_title">Something wrong!</string>
+    <string name="authorisation_alert_dialog_help_message">User with such data is not registered.\nWould you like to register a new user?</string>
+    <string name="authorisation_alert_dialog_positive_button_text">REGISTER</string>
+    <string name="authorisation_alert_dialog_negative_button_text">CANCEL</string>
 
 
 </resources>
