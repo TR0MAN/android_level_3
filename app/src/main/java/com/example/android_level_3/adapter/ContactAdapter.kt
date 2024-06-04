@@ -1,6 +1,5 @@
 package com.example.android_level_3.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,33 +8,52 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.android_level_3.R
 import com.example.android_level_3.databinding.ElementContactViewBinding
-import com.example.android_level_3.model.Contact
+import com.example.android_level_3.retrofit.model.Contact
 
 class ContactAdapter(
     private val clickListener: ElementClickListener,
-    private val multiSelectState: Boolean) :
+    private val multiSelectState: Boolean?,
+    private val usersInContactList: List<Int>?,
+    private val selectedContacts: List<Int>?) :
     ListAdapter<Contact, ContactAdapter.ContactViewHolder>(ContactDiffUtilCallback()) {
 
     // по шаблону заполняем данными элемент списка
     inner class ContactViewHolder(
         val binding: ElementContactViewBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(contact: Contact) {
-                binding.tvContactName.text = contact.contactName
-                binding.tvContactCareer.text = contact.contactCareer
+                binding.tvContactName.text = contact.name.toString()
+                binding.tvContactCareer.text = contact.career.toString()
                 Glide.with(binding.imgContactAvatar.context)                                        // v.2 тут можно передавать context при создании, вместе со списком
-                    .load(contact.contactImage)
+                    .load(contact.image)
                     .circleCrop()
                     .placeholder(R.drawable.default_avatar)
                     .into(binding.imgContactAvatar)
 
-                if (multiSelectState) {
-                    binding.checkboxForDelete.visibility = View.VISIBLE
-                    binding.checkboxForDelete.isChecked = contact.isSelected
-                    binding.root.setBackgroundResource(R.drawable.element_view_style_gray)
-                    binding.imgContactDelete.visibility = View.GONE
-                } else {
-                    binding.checkboxForDelete.visibility = View.GONE
-
+                when (multiSelectState) {
+                    null -> {
+                        if (usersInContactList != null) {
+                            if (usersInContactList.contains(contact.id)) {
+                                binding.imgContactInList.visibility = View.VISIBLE
+                                binding.imgContactAddToContacts.visibility = View.GONE
+                            } else {
+                                binding.imgContactInList.visibility = View.GONE
+                                binding.imgContactAddToContacts.visibility = View.VISIBLE
+                            }
+                        } else {
+                            binding.imgContactInList.visibility = View.GONE
+                            binding.imgContactAddToContacts.visibility = View.VISIBLE
+                        }
+                    }
+                    true -> {                                                                       // режим группового удаления
+                        binding.checkboxForDelete.visibility = View.VISIBLE
+                        binding.root.setBackgroundResource(R.drawable.element_view_style_gray)
+                        selectedContacts?.let {
+                            binding.checkboxForDelete.isChecked = selectedContacts.contains(contact.id)
+                        }
+                    }
+                    false -> {                                                                      // обычный вид списка (с корзинами)
+                        binding.imgContactDelete.visibility = View.VISIBLE
+                    }
                 }
             }
     }
@@ -49,34 +67,47 @@ class ContactAdapter(
         val inflater = LayoutInflater.from(parent.context)
         val binding = ElementContactViewBinding.inflate(inflater, parent, false)
 
-        binding.imgContactDelete.setOnClickListener {
-            val contact = it.tag as Contact
-            clickListener.onElementDeleteClick(contact)
-        }
-
-        binding.root.setOnClickListener {
-            val contact = it.tag as Contact
-
-            if (multiSelectState) {
-                var checkBoxState = contact.isSelected
-                if (!checkBoxState) {
-                    binding.checkboxForDelete.isChecked = true
-                    checkBoxState = true
-                } else {
-                    binding.checkboxForDelete.isChecked = false
-                    checkBoxState = false
+        when (multiSelectState) {
+            null -> {
+                binding.imgContactAddToContacts.setOnClickListener {
+                    val contact = it.tag as Contact
+                    clickListener.onElementClickAction(contact)
                 }
-                clickListener.onElementChecked(checkBoxState, contact.id)
-            } else {
-                clickListener.onElementProfileClick(contact)
+            }
+            true -> {
+                binding.root.setOnClickListener {                                            // слушатель для переключения состояния контакта (выбран/не выбран)
+                    val contact = it.tag as Contact
+                    var checkBoxState = binding.checkboxForDelete.isChecked
+                    if (!checkBoxState) {
+                        binding.checkboxForDelete.isChecked = true
+                        checkBoxState = true
+                    } else {
+                        binding.checkboxForDelete.isChecked = false
+                        checkBoxState = false
+                    }
+                    clickListener.onElementChecked(checkBoxState, contact.id)
+                }
+            }
+            false -> {
+                binding.imgContactDelete.setOnClickListener {                                // слушатель на иконку "корзины" и удаление
+                    val contact = it.tag as Contact
+                    clickListener.onElementClickAction(contact)
+                }
+                binding.root.setOnClickListener {                                            // слушатель на элемент для перехода к профилю контакта
+                    val contact = it.tag as Contact
+                    clickListener.onElementProfileClick(contact)
+                }
             }
         }
 
-        if (!multiSelectState) {
-            binding.root.setOnLongClickListener {
-                val contact = it.tag as Contact
-                clickListener.onElementLongClick(contact.id)
-                return@setOnLongClickListener true
+        // "вешаем" слушатель на root view в режиме группового удаления
+        multiSelectState?.let { state ->
+            if (!state) {
+                binding.root.setOnLongClickListener {
+                    val contact = it.tag as Contact
+                    clickListener.onElementLongClick(contact.id)
+                    return@setOnLongClickListener true
+                }
             }
         }
 
@@ -86,20 +117,9 @@ class ContactAdapter(
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         holder.bind(getItem(position))
         with(holder.binding) {
+            imgContactAddToContacts.tag = getItem(position)
             imgContactDelete.tag = getItem(position)
             root.tag = getItem(position)
         }
     }
 }
-
-
-//notifyItemRemoved(position)                                         // работает, но весь список не обновляется, каждый элемент сохраняет свою прежнюю позицию
-//                                                                            // есть (15, 16, 17, 18 элемент), удаляем 17, получаем список (15, 16, 18)
-
-//Другие методы оповещения:
-//notifyItemChanged(int),
-//notifyItemInserted(int),
-//notifyItemRemoved(int),
-//notifyItemRangeChanged(int, int),
-//notifyItemRangeInserted(int, int),
-//notifyItemRangeRemoved(int, int)

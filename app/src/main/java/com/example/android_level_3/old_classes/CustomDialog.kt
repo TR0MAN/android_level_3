@@ -1,4 +1,4 @@
-package com.example.android_level_3
+package com.example.android_level_3.old_classes
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,9 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import com.example.android_level_3.Const
 import com.example.android_level_3.databinding.ActivityAddContactBinding
-import com.example.android_level_3.databinding.FragmentContactsListBinding
-import com.example.android_level_3.model.Contact
 
 // Нужно делать через DialogFragment() из-за того, что он правильно управляет жизненным циклом диалога
 // и восстанавливает его после поворота (диалог вовремя скрывется и правильно восстанавливается после поворота)
@@ -100,8 +98,8 @@ class CustomDialog: DialogFragment() {
     }
 
     // обработка нажатия кнопки SAVE
-    private fun saveNewUserData() : Contact {
-        return Contact(
+    private fun saveNewUserData() : TestContact {
+        return TestContact(
             id = -1,
             contactName = binding.etUserName.text.toString(),
             contactCareer = binding.etCareer.text.toString(),

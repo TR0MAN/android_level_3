@@ -1,6 +1,7 @@
 package com.example.android_level_3.retrofit.model
 
 import java.io.File
+import java.io.Serializable
 import java.util.Date
 
 data class ExtensionServerResponse (
@@ -23,16 +24,16 @@ data class UserAuthorisationEntity (
 )
 
 data class UserData(
-    val user: FullUserInfo,
+    val user: ContactInfo,
     val accessToken: String,
     val refreshToken: String
 )
 
 data class AllUsers (
-    val users: List<FullUserInfo>
+    val users: List<Contact>
 )
 
-data class FullUserInfo(
+data class ContactInfo(
     val id: Int,
     val email: String,
     val name: String?,
@@ -45,8 +46,8 @@ data class FullUserInfo(
     val twitter: String?,
     val linkedin: String?,
     val image: File?
-//    val createdAt: Date?,       // пока не используется в проекте
-//    val updatedAt: Date?        // пока не используется в проекте
+//    val createdAt: Date?,                                                                         // пока не используется в проекте
+//    val updatedAt: Date?                                                                          // пока не используется в проекте
 )
 
 data class EditUserModel(
@@ -59,7 +60,7 @@ data class EditUserModel(
     val instagram: String?,
     val twitter: String?,
     val linkedin: String?,
-    val image: File?            // в ДОКе не указанно что приходит, а по факту есть
+    val image: File?                                                                                // в ДОКе не указанно что приходит, а по факту есть
 )
 
 data class CreateUserModel(
@@ -77,7 +78,13 @@ data class CreateUserModel(
     val image: File?
 )
 
-
+data class Contact (
+    val id: Int,
+    val name: String?,
+    val career: String?,
+    val address: String?,
+    val image: File? = null
+): Serializable
 
 // --------- CONTACTS ------------
 
@@ -89,7 +96,7 @@ data class ContactsServerResponse (
 )
 
 data class AllContacts (
-    val contacts: List<FullUserInfo>
+    val contacts: List<Contact>
 )
 
 data class ContactId (

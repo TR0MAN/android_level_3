@@ -1,10 +1,10 @@
 package com.example.android_level_3.adapter
 
-import com.example.android_level_3.model.Contact
+import com.example.android_level_3.retrofit.model.Contact
 
 interface ElementClickListener {
 
-    fun onElementDeleteClick(contact: Contact)
+    fun onElementClickAction(contact: Contact)
 
     fun onElementProfileClick(contact: Contact)
 

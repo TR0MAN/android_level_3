@@ -128,8 +128,8 @@
     <dimen name="dialog_add_contact_avatar_width">113dp</dimen>
     <dimen name="dialog_add_contact_avatar_height">113dp</dimen>
 
-    <dimen name="dialog_add_contact_icon_add_new_image_width">55dp</dimen>
-    <dimen name="dialog_add_contact_icon_add_new_image_height">55dp</dimen>
+    <dimen name="dialog_add_contact_icon_add_new_image_width">40dp</dimen>
+    <dimen name="dialog_add_contact_icon_add_new_image_height">40dp</dimen>
     <dimen name="dialog_add_contact_icon_add_new_image_margin_start">24dp</dimen>
 
     <dimen name="dialog_add_contact_input_fields_container_horizontal_margin">16dp</dimen>
@@ -146,6 +146,7 @@
     <dimen name="dialog_add_contact_btn_save_height">55dp</dimen>
     <dimen name="dialog_add_contact_btn_save_horizontal_margin">16dp</dimen>
     <dimen name="dialog_add_contact_btn_save_text_size">18sp</dimen>
+    <dimen name="contact_list_no_contact_found_text_size">22dp</dimen>
 
 
 </resources>

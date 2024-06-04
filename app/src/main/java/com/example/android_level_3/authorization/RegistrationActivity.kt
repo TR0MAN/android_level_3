@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.WindowManager
@@ -23,13 +22,7 @@ import com.example.android_level_3.databinding.ActivityRegistrationBinding
 import com.example.android_level_3.retrofit.model.CreateUserModel
 import com.example.android_level_3.retrofit.model.UserData
 import com.example.android_level_3.viewmodel.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
-// TODO семнить стартовую активити на AuthorizationActivity
+import com.google.android.material.snackbar.Snackbar
 
 class RegistrationActivity : AppCompatActivity() {
 
@@ -42,6 +35,9 @@ class RegistrationActivity : AppCompatActivity() {
     private var autoLogin: Boolean? = null
 
     private var isVisibleProgressBar = MutableLiveData(false)
+    private var connectionErrorSnackBar: Snackbar? = null
+    private var newUser: CreateUserModel? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,14 +48,36 @@ class RegistrationActivity : AppCompatActivity() {
         password = intent?.getStringExtra(Const.PASSWORD) ?: "null_pass"
         autoLogin = intent?.getBooleanExtra(Const.PREFERENCES_CHECKBOX, false)
 
-        Log.d("TAG", "--- email = [$email]\n--- pass = [$password]\n--- checkbox = [$autoLogin]")
-
         setActivityResultContract()
         setEditTextListeners()
+        setObservers()
 
         // скрываем автоматически всплывающую клавиатуру
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    }
 
+    private fun setObservers() {
+        viewModel.registrationResult.observe(this) { serverResponse ->
+            if (serverResponse == null) {                                                           // ошибка при отключенном Интернете или долгом запросе
+                connectionErrorSnackBar = createSnackBar()
+                connectionErrorSnackBar?.show()
+            } else if (serverResponse.isSuccessful) {
+                // сохраняем данные о авторизации
+                saveUserDataToPreferences(serverResponse.body()?.data)
+                // переходим в профиль пользователя
+                val intent = Intent(this@RegistrationActivity, MainActivity::class.java)
+                startActivity(intent)
+            } else {
+                // реакция на ошибку (нет связи или еще что-то)
+                connectionErrorSnackBar = createSnackBar()
+                connectionErrorSnackBar?.show()
+            }
+        }
+
+        isVisibleProgressBar.observe(this) {
+            if (it) binding.registrationProgressBar.visibility = View.VISIBLE
+            else binding.registrationProgressBar.visibility = View.GONE
+        }
     }
 
     private fun setActivityResultContract() {
@@ -159,71 +177,29 @@ class RegistrationActivity : AppCompatActivity() {
                         Helper.getBirthday(it)
                     }
                 }
-                // TODO - DELETE after tests
-                Log.d(
-                    "TAG",
-                    "name = $name \ncareer = $career \nphone = $phone \naddress = $address \nbirthday = $birthday [${birthday?.javaClass}] \ndate = $date [${date?.javaClass}] \nimage = $image"
-                )
 
-                isVisibleProgressBar.value = true
+                newUser = CreateUserModel(email = email!!,
+                    password = password!!,
+                    name = name.toString(),
+                    phone = phone.toString(),
+                    address = address.toString(),
+                    career = career.toString(),
+                    birthday = date,
+                    image = null)
 
-                // Запускаем процесс создания НОВОГО пользователя (имея все данные)
-                CoroutineScope(Dispatchers.IO).launch {
-                    // иммитация загрузки
-                    delay(2000)
-
-                    val serverResponse = viewModel.serverApi.registerNewUser(
-                        CreateUserModel(
-                            email = email!!,
-                            password = password!!,
-                            name = name.toString(),
-                            phone = phone.toString(),
-                            address = address.toString(),
-                            career = career.toString(),
-                            birthday = date,
-                            image = null
-                        )
-                    )
-
-                    if (serverResponse.isSuccessful) {
-                        // выключаем progressBar
-                        withContext(Dispatchers.Main){
-                            isVisibleProgressBar.postValue(false)
-                        }
-
-                        // сохраняем данные о авторизации
-                        saveUserDataToPreferences(serverResponse.body()?.data)
-
-                        //переходим на ПРОФИЛЬ (там данные получим из ViewModel)
-                        val intent = Intent(this@RegistrationActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        Log.d("TAG", "ServerResponse = OK")
-                        Log.d("TAG", "ServerResponse.message = [${serverResponse.message()}]")
-                        Log.d("TAG", "ServerResponse.body()?.message = [${serverResponse.body()?.message}]")
-                        Log.d("TAG", "ServerResponse.body()?.status = [${serverResponse.body()?.status}]")
-
-                    } else {
-                        // реакция на ошибку (нет связи или еще что-то)
-                        Log.d("TAG", "ServerResponse = ERROR")
-                        Log.d("TAG", "ServerResponse.message = [${serverResponse.message()}]")
-
-                        withContext(Dispatchers.Main){
-                            isVisibleProgressBar.postValue(false)
-                        }
-
-                    }
-                }
+                // запускаем процесс создания НОВОГО пользователя (имея все данные)
+                viewModel.registerNewUser(newUser!!, progressBar = isVisibleProgressBar)
             }
         }
 
         // TODO - only for quick test (DELETE after tests)
         binding.imgFillAllDataFields.setOnClickListener {
             with(binding) {
-                etUserName.setText("Sergey Nenulov")
-                etCareer.setText("Engineer")
-                etPhone.setText("050-111-22-33")
-                etAddress.setText("Ukraine, Kiev, Victory street, 1")
-                etBirthday.setText("2000/03/16")
+                etUserName.setText("Polina LiveDatova")
+                etCareer.setText("Director")
+                etPhone.setText("050-555-66-77")
+                etAddress.setText("Ukraine, Lviv, Peremoga street, 17")
+                etBirthday.setText("2004/10/22")
             }
         }
     }
@@ -231,16 +207,26 @@ class RegistrationActivity : AppCompatActivity() {
     private fun saveUserDataToPreferences(responseData: UserData?) {
         val sharedPreferences = getSharedPreferences(Const.PREFERENCES_SETTINGS, MODE_PRIVATE)
         sharedPreferences.edit().apply {
-            putString(Const.PREFERENCES_AUTHORISATION_TOKEN, responseData?.accessToken)
+            putString(Const.PREFERENCES_ACCESS_TOKEN, responseData?.accessToken)
             putString(Const.PREFERENCES_REFRESH_TOKEN, responseData?.refreshToken)
             putString(Const.PREFERENCES_USER_NAME, responseData?.user?.name)
             putString(Const.PREFERENCES_USER_CAREER, responseData?.user?.career)
             putString(Const.PREFERENCES_USER_ADDRESS, responseData?.user?.address)
+            putInt(Const.PREFERENCES_USER_ID, responseData?.user?.id!!)
             if (autoLogin == true) {
                 putString(Const.PREFERENCES_EMAIL, email)
                 putString(Const.PREFERENCES_PASSWORD, password)
             }
         }.apply()
+    }
+
+    // информационное сообщение о проблемах с Интернетом или долгий ответ сервера, с перезапуском
+    private fun createSnackBar(): Snackbar {
+        return Snackbar.make(binding.root, "Problem with connection...", Snackbar.LENGTH_INDEFINITE)
+            .setActionTextColor(getColor(R.color.orange_color))
+            .setAction("RETRY") {
+                viewModel.registerNewUser(newUser!!, progressBar = isVisibleProgressBar)
+            }
     }
 
 }

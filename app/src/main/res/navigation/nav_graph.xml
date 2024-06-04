@@ -25,11 +25,11 @@
         tools:layout="@layout/fragment_contact_profile" >
         <argument
             android:name="currentUserProfile"
-            app:argType="com.example.android_level_3.model.Contact" />
+            app:argType="com.example.android_level_3.retrofit.model.Contact" />
     </fragment>
     <dialog
         android:id="@+id/customDialog"
-        android:name="com.example.android_level_3.CustomDialog"
+        android:name="com.example.android_level_3.old_classes.CustomDialog"
         android:label="activity_add_contact"
         tools:layout="@layout/activity_add_contact" />
     <fragment
@@ -43,5 +43,26 @@
         <action
             android:id="@+id/action_viewPagerFragment_to_customDialog"
             app:destination="@id/customDialog" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_fragmentAddContact"
+            app:destination="@id/fragmentAddContact" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAddContact"
+        android:name="com.example.android_level_3.FragmentAddContact"
+        android:label="fragment_add_contact"
+        tools:layout="@layout/fragment_add_contact" >
+        <action
+            android:id="@+id/action_fragmentAddContact_to_fragmentProfileInvite"
+            app:destination="@id/fragmentProfileInvite" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentProfileInvite"
+        android:name="com.example.android_level_3.FragmentProfileInvite"
+        android:label="fragment_profile_invite"
+        tools:layout="@layout/fragment_profile_invite" >
+        <argument
+            android:name="contactInformation"
+            app:argType="com.example.android_level_3.retrofit.model.Contact" />
     </fragment>
 </navigation>

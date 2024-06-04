@@ -39,6 +39,13 @@
     <string name="edit_profile_button_text">Edit profile</string>
     <string name="bottom_text_message_text">Go to settings and fill out the profile</string>
 
+    <!--    profile (add contact) fragment text -->
+    <string name="profile_name_text">Jon Carpenter</string>
+    <string name="profile_profession_text">Dentist</string>
+    <string name="profile_address_text">521 Westminster Avenue APT D5 Brooklyn, NY, 11090</string>
+    <string name="profile_button_message_text">Message</string>
+    <string name="profile_button_add_to_contacts_text">ADD TO MY CONTACTS</string>
+
     <!--    fragment contacts list parameters  -->
     <string name="tv_add_new_contact_text">Add contacts</string>
 
@@ -52,6 +59,8 @@
     <string name="tv_toolbar_add_contact_text">Add contact</string>
     <string name="tv_toolbar_contact_list_text">Contacts</string>
     <string name="tv_toolbar_profile_text">Profile</string>
+    <string name="tv_toolbar_fragment_add_contact_text">Users</string>
+
 
     <!--    custom dialog window parameters  -->
     <string name="dialog_add_contact_tv_inscription_user_name_text">Username</string>
@@ -77,6 +86,7 @@
     <string name="authorisation_alert_dialog_help_message">User with such data is not registered.\nWould you like to register a new user?</string>
     <string name="authorisation_alert_dialog_positive_button_text">REGISTER</string>
     <string name="authorisation_alert_dialog_negative_button_text">CANCEL</string>
+    <string name="contact_list_no_contact_found_text">No contacts found</string>
 
 
 </resources>

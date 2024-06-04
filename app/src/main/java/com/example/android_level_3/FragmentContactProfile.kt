@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.android_level_3.databinding.FragmentContactProfileBinding
-import com.example.android_level_3.model.Contact
 
 class FragmentContactProfile : Fragment() {
 
@@ -29,11 +28,11 @@ class FragmentContactProfile : Fragment() {
 
         // вставка полученных данных о пользователе в соответствующие поля
         with(binding) {
-            tvProfileName.text = args.currentUserProfile.contactName
-            tvProfileProfession.text = args.currentUserProfile.contactCareer
-            tvProfileAddress.text = args.currentUserProfile.contactAddress
+            tvProfileName.text = args.currentUserProfile.name
+            tvProfileProfession.text = args.currentUserProfile.career
+            tvProfileAddress.text = args.currentUserProfile.address
             Glide.with(binding.imgProfileMainPhoto.context)
-                .load(args.currentUserProfile.contactImage)
+                .load(args.currentUserProfile.image)
                 .circleCrop()
                 .placeholder(R.drawable.default_avatar)
                 .into(binding.imgProfileMainPhoto)

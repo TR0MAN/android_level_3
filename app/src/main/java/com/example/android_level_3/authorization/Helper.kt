@@ -1,6 +1,5 @@
 package com.example.android_level_3.authorization
 
-import android.content.SharedPreferences
 import java.util.Calendar
 import java.util.Date
 

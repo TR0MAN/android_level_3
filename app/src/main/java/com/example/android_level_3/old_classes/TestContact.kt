@@ -1,9 +1,9 @@
-package com.example.android_level_3.model
+package com.example.android_level_3.old_classes
 
 import java.io.Serializable
 
 // TODO - добавить ID и возможно поле isChecked
-data class Contact (
+data class TestContact (
     val id: Int,
     val contactName: String,
     val contactCareer: String,
