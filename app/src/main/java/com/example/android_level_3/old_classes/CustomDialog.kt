@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
-import com.example.android_level_3.Const
+import com.example.android_level_3.constants.Const
 import com.example.android_level_3.databinding.ActivityAddContactBinding
 
 // Нужно делать через DialogFragment() из-за того, что он правильно управляет жизненным циклом диалога

@@ -1,10 +1,12 @@
 package com.example.android_level_3.retrofit
 
-import com.example.android_level_3.Const
+import com.example.android_level_3.constants.Const
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+private const val RETROFIT_BASE_URL = "http://178.63.9.114:7777/api/"
 
 object Retrofit {
     fun createRetrofitApi(): RetrofitServerApi {
@@ -14,12 +16,14 @@ object Retrofit {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(Const.RETROFIT_BASE_URL)
+            .baseUrl(RETROFIT_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         return retrofit.create(RetrofitServerApi::class.java)
     }
+
+
 
 }

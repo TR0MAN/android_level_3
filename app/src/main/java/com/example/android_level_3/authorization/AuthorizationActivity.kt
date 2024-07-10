@@ -13,23 +13,23 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
-import com.example.android_level_3.Const
+import com.example.android_level_3.constants.Const
 import com.example.android_level_3.MainActivity
 import com.example.android_level_3.R
+import com.example.android_level_3.constants.PreferencesConst
 import com.example.android_level_3.databinding.ActivityAuthorizationBinding
 import com.example.android_level_3.retrofit.model.UserData
-import com.example.android_level_3.viewmodel.MainViewModel
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class AuthorizationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthorizationBinding
     private var sharedPreferences: SharedPreferences? = null
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SharedViewModel
 
-    private var isVisibleProgressBar = MutableLiveData(false)
     private var connectionErrorSnackBar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +37,9 @@ class AuthorizationActivity : AppCompatActivity() {
         binding = ActivityAuthorizationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
-        sharedPreferences = getSharedPreferences(Const.PREFERENCES_SETTINGS, MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(PreferencesConst.PREFERENCES_SETTINGS, MODE_PRIVATE)
 
         autoLoginCheck()
         setObservers()
@@ -50,51 +50,51 @@ class AuthorizationActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        isVisibleProgressBar.observe(this) {
-            if (it) binding.progressBar.visibility = View.VISIBLE
+        viewModel.isVisibleProgressBarInAuthorizationActivity.observe(this) { visibility ->
+            if (visibility) binding.progressBar.visibility = View.VISIBLE
             else binding.progressBar.visibility = View.GONE
         }
-
+        // message when the Internet is disconnected or the request time is long
         viewModel.authorisationResult.observe(this) { serverResponse ->
-            if (serverResponse == null) {                                                           // ошибка при отключенном Интернете или долгом запросе
+            if (serverResponse == null) {
                 connectionErrorSnackBar = createSnackBar()
                 connectionErrorSnackBar?.show()
             } else if (serverResponse.isSuccessful) {
-                // запоминаю данные в SharedPreferences для автологина (если была галочка)
+                // save data in SharedPreferences for autologin (if checkbox be checked)
                 checkingAutoLoginFunction()
-                // сохраняем пришедшие данные AccessToken, RefreshToken и UserData
+                // save incoming data AccessToken, RefreshToken, UserData
                 saveUserDataToPreferences(serverResponse.body()?.data)
-                // переходим в профиль пользователя
+
                 val intent = Intent(this@AuthorizationActivity, MainActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.horiz_from_right_to_center,
                     R.anim.horiz_from_center_to_left)
             } else {
-                // если пользователя с введенными e-mail и password нет, предлагаем создать
+                // if user with this e-mail and password not found, propose to create new user
                 createAlertDialog().show()
             }
         }
     }
 
-    // проверка, нет ли сохраненных записей по ключу "email"
-    // если есть, ставим "метку" что нужен автологин и переходим на страницу профиля
+    // checking records in SharedPreferences, where key is "email"
+    // if find, put a “tag” that autologin is required and go to profile page
     private fun autoLoginCheck() {
-        if (sharedPreferences?.contains(Const.PREFERENCES_EMAIL) == true) {
+        if (sharedPreferences?.contains(PreferencesConst.PREFERENCES_EMAIL) == true) {
             sharedPreferences?.edit()?.apply {
-                putBoolean(Const.PREFERENCES_AUTOLOGIN, true)
+                putBoolean(PreferencesConst.PREFERENCES_AUTOLOGIN, true)
             }?.apply()
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
 
-    // переход к MainActivity после удачной регистрации
+    // go to MainActivity, if registration be successful
     private fun setListeners() {
         binding.btnAuthorizationRegister.setOnClickListener {
             if (emailValidator() && passwordValidator() == getString(R.string.response_ok)) {
 
                 viewModel.getAuthorisation( email = binding.textInputEmailForm.text.toString(),
                     password = binding.textInputPasswordForm.text.toString(),
-                    progressBar = isVisibleProgressBar)
+                    progressBar = viewModel.isVisibleProgressBarInAuthorizationActivity)
             } else {
                 Toast.makeText(this,
                     getString(R.string.empty_password_or_email_fields), Toast.LENGTH_SHORT).show()
@@ -109,26 +109,26 @@ class AuthorizationActivity : AppCompatActivity() {
 
     private fun saveUserDataToPreferences(responseData: UserData?) {
         sharedPreferences?.edit()?.apply {
-            putString(Const.PREFERENCES_ACCESS_TOKEN, responseData?.accessToken)
-            putString(Const.PREFERENCES_REFRESH_TOKEN, responseData?.refreshToken)
-            putString(Const.PREFERENCES_USER_NAME, responseData?.user?.name)
-            putString(Const.PREFERENCES_USER_CAREER, responseData?.user?.career)
-            putString(Const.PREFERENCES_USER_ADDRESS, responseData?.user?.address)
-            putInt(Const.PREFERENCES_USER_ID, responseData?.user?.id!!)
+            putString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, responseData?.accessToken)
+            putString(PreferencesConst.PREFERENCES_REFRESH_TOKEN, responseData?.refreshToken)
+            putString(PreferencesConst.PREFERENCES_USER_NAME, responseData?.user?.name)
+            putString(PreferencesConst.PREFERENCES_USER_CAREER, responseData?.user?.career)
+            putString(PreferencesConst.PREFERENCES_USER_ADDRESS, responseData?.user?.address)
+            putInt(PreferencesConst.PREFERENCES_USER_ID, responseData?.user?.id!!)
         }?.apply()
     }
 
-    // если выбран "Remember Me", запись данных для авторизации в SharedPreferences
+    // if checked checkbox "Remember Me", recording authorization data in SharedPreferences
     private fun checkingAutoLoginFunction() {
         if (binding.checkBoxAuthorizationRememberMe.isChecked) {
             sharedPreferences?.edit()?.apply {
-                putString(Const.PREFERENCES_EMAIL, binding.textInputEmailForm.text.toString())
-                putString(Const.PREFERENCES_PASSWORD, binding.textInputPasswordForm.text.toString())
+                putString(PreferencesConst.PREFERENCES_EMAIL, binding.textInputEmailForm.text.toString())
+                putString(PreferencesConst.PREFERENCES_PASSWORD, binding.textInputPasswordForm.text.toString())
             }?.apply()
         }
     }
 
-    // диалоговое окно для создания нового пользователя
+    // dialog for new user creating
     private fun createAlertDialog(): AlertDialog.Builder {
         return AlertDialog.Builder(this).apply {
             setTitle(getString(R.string.authorisation_alert_dialog_title))
@@ -136,13 +136,13 @@ class AuthorizationActivity : AppCompatActivity() {
             setCancelable(false)
             setPositiveButton(getString(R.string.authorisation_alert_dialog_positive_button_text)) { dialog, id ->
                 val intent = Intent(this@AuthorizationActivity, RegistrationActivity::class.java)
-                // передаем почту, пароль, состояние checkBox для регистрации нового пользователя
+                // transmit email, password, checkBox status to register a new user
                     intent.putExtra(Const.EMAIL, binding.textInputEmailForm.text.toString())
                     intent.putExtra(Const.PASSWORD, binding.textInputPasswordForm.text.toString())
                 if (binding.checkBoxAuthorizationRememberMe.isChecked) {
-                    intent.putExtra(Const.PREFERENCES_CHECKBOX, true)
+                    intent.putExtra(PreferencesConst.PREFERENCES_CHECKBOX, true)
                 } else {
-                    intent.putExtra(Const.PREFERENCES_CHECKBOX, false)
+                    intent.putExtra(PreferencesConst.PREFERENCES_CHECKBOX, false)
                 }
                 startActivity(intent)
                 dialog.cancel()
@@ -155,25 +155,21 @@ class AuthorizationActivity : AppCompatActivity() {
         }
     }
 
-    // отслеживание изменений в поле e-mail, с последующей валидацией
+    // tracking changes in e-mail field, followed by validation
     private fun emailFormObserver() {
-        binding.textInputEmailForm.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (!emailValidator()) {binding.textInputEmailContainer.helperText =
-                        getString(R.string.response_wrong_email)
-                    binding.textInputEmailContainer.setHelperTextColor( ColorStateList
-                            .valueOf(getColor(R.color.orange_color)) )
-                } else {
-                    binding.textInputEmailContainer.helperText = getString(R.string.response_ok)
-                    binding.textInputEmailContainer.setHelperTextColor(ColorStateList.valueOf(Color.GREEN))
-                }
+        binding.textInputEmailForm.doOnTextChanged { _, _, _, _ ->
+            if (!emailValidator()) { binding.textInputEmailContainer.helperText =
+                getString(R.string.response_wrong_email)
+                binding.textInputEmailContainer.setHelperTextColor( ColorStateList
+                    .valueOf(getColor(R.color.orange_color)) )
+            } else {
+                binding.textInputEmailContainer.helperText = getString(R.string.response_ok)
+                binding.textInputEmailContainer.setHelperTextColor(ColorStateList.valueOf(Color.GREEN))
             }
-        })
+        }
     }
 
-    // валидация введенного текста (для почты)
+    // validation for email text field
     private fun emailValidator(): Boolean {
         val email = binding.textInputEmailForm.text.toString()
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -182,28 +178,24 @@ class AuthorizationActivity : AppCompatActivity() {
         return true
     }
 
-    // отслеживание поля для введения пароля, с последующей валидацией
+    // tracking and validation the password field
     private fun passwordFormObserver() {
-        binding.textInputPasswordForm.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (passwordValidator() != getString(R.string.response_ok)) {
-                    binding.textInputPasswordContainer.helperText = passwordValidator()
-                    binding.textInputPasswordContainer.setHelperTextColor(
-                        ColorStateList
-                            .valueOf(getColor(R.color.orange_color))
-                    )
-                } else {
-                    binding.textInputPasswordContainer.helperText = passwordValidator()
-                    binding.textInputPasswordContainer
-                        .setHelperTextColor(ColorStateList.valueOf(Color.GREEN))
-                }
+        binding.textInputPasswordForm.doOnTextChanged { _, _, _, _ ->
+            if (passwordValidator() != getString(R.string.response_ok)) {
+                binding.textInputPasswordContainer.helperText = passwordValidator()
+                binding.textInputPasswordContainer.setHelperTextColor(
+                    ColorStateList
+                        .valueOf(getColor(R.color.orange_color))
+                )
+            } else {
+                binding.textInputPasswordContainer.helperText = passwordValidator()
+                binding.textInputPasswordContainer
+                    .setHelperTextColor(ColorStateList.valueOf(Color.GREEN))
             }
-        })
+        }
     }
 
-    // валидация введенного текста, для почты
+    // validation entered text for email field
     private fun passwordValidator(): String {
         val password = binding.textInputPasswordForm.text.toString()
         if (password.length < 8) {
@@ -230,7 +222,7 @@ class AuthorizationActivity : AppCompatActivity() {
         return getString(R.string.response_ok)
     }
 
-    // замена стандартного символа скрытия буквы пароля, на большой символ ('●' '⬤')
+    // replacing the standard password escape character with a large character ('●' '⬤')
     private fun customSymbolTextInputForm() {
         binding.textInputPasswordForm.transformationMethod =
             object : PasswordTransformationMethod() {
@@ -249,7 +241,7 @@ class AuthorizationActivity : AppCompatActivity() {
             }
     }
 
-    // сохраняем состояние полей ввода и checkbox (при повороте)
+    // save state email and password field (when rotated)
     override fun onSaveInstanceState(outState: Bundle) {
         outState.run {
             putString(Const.STATE_EMAIL_FIELD, binding.textInputEmailForm.text.toString())
@@ -259,7 +251,7 @@ class AuthorizationActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    // восстанавливаем состояние полей ввода и checkbox (после поворота)
+    // restore state email and password field (after rotate)
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         savedInstanceState.run {
@@ -269,18 +261,18 @@ class AuthorizationActivity : AppCompatActivity() {
         }
     }
 
-    // информационное сообщение о проблемах с Интернетом или долгий ответ сервера, с перезапуском
+    // message about internet trouble or long request time
     private fun createSnackBar(): Snackbar {
-        return Snackbar.make(binding.root, "Problem with connection...", Snackbar.LENGTH_INDEFINITE)
+        return Snackbar.make(binding.root,
+            getString(R.string.connection_error_snackbar_message), Snackbar.LENGTH_INDEFINITE)
             .setActionTextColor(getColor(R.color.orange_color))
-            .setAction("RETRY") {
+            .setAction(getString(R.string.connection_error_snackbar_action_button_text)) {
                 viewModel.getAuthorisation( email = binding.textInputEmailForm.text.toString(),
                     password = binding.textInputPasswordForm.text.toString(),
-                    progressBar = isVisibleProgressBar)
+                    progressBar = viewModel.isVisibleProgressBarInAuthorizationActivity)
             }
     }
 
-    // метод автоматического заполнения полей почта и пароль (для быстрого теста) (УДАЛИТЬ)
     private fun fillAuthorisationData() {
         binding.textInputEmailForm.setText("unit6@email.com")
         binding.textInputPasswordForm.setText("2@Qwertyu")
@@ -294,8 +286,6 @@ class AuthorizationActivity : AppCompatActivity() {
         super.onStop()
         connectionErrorSnackBar?.dismiss()
     }
-
-
 
 }
 

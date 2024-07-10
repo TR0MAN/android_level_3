@@ -88,5 +88,9 @@
     <string name="authorisation_alert_dialog_negative_button_text">CANCEL</string>
     <string name="contact_list_no_contact_found_text">No contacts found</string>
 
+    <string name="connection_error_snackbar_message">Problem with connection...</string>
+    <string name="connection_error_snackbar_action_button_text">RETRY</string>
+    <string name="date_filed_correct_input_message">( Ok )</string>
+
 
 </resources>

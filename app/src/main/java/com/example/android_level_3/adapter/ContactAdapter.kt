@@ -17,7 +17,6 @@ class ContactAdapter(
     private val selectedContacts: List<Int>?) :
     ListAdapter<Contact, ContactAdapter.ContactViewHolder>(ContactDiffUtilCallback()) {
 
-    // по шаблону заполняем данными элемент списка
     inner class ContactViewHolder(
         val binding: ElementContactViewBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(contact: Contact) {
@@ -44,14 +43,14 @@ class ContactAdapter(
                             binding.imgContactAddToContacts.visibility = View.VISIBLE
                         }
                     }
-                    true -> {                                                                       // режим группового удаления
+                    true -> {
                         binding.checkboxForDelete.visibility = View.VISIBLE
                         binding.root.setBackgroundResource(R.drawable.element_view_style_gray)
                         selectedContacts?.let {
                             binding.checkboxForDelete.isChecked = selectedContacts.contains(contact.id)
                         }
                     }
-                    false -> {                                                                      // обычный вид списка (с корзинами)
+                    false -> {
                         binding.imgContactDelete.visibility = View.VISIBLE
                     }
                 }
@@ -75,7 +74,7 @@ class ContactAdapter(
                 }
             }
             true -> {
-                binding.root.setOnClickListener {                                            // слушатель для переключения состояния контакта (выбран/не выбран)
+                binding.root.setOnClickListener {
                     val contact = it.tag as Contact
                     var checkBoxState = binding.checkboxForDelete.isChecked
                     if (!checkBoxState) {
@@ -89,18 +88,18 @@ class ContactAdapter(
                 }
             }
             false -> {
-                binding.imgContactDelete.setOnClickListener {                                // слушатель на иконку "корзины" и удаление
+                binding.imgContactDelete.setOnClickListener {
                     val contact = it.tag as Contact
                     clickListener.onElementClickAction(contact)
                 }
-                binding.root.setOnClickListener {                                            // слушатель на элемент для перехода к профилю контакта
+                binding.root.setOnClickListener {
                     val contact = it.tag as Contact
                     clickListener.onElementProfileClick(contact)
                 }
             }
         }
 
-        // "вешаем" слушатель на root view в режиме группового удаления
+        // set listener on root view in group deleting
         multiSelectState?.let { state ->
             if (!state) {
                 binding.root.setOnLongClickListener {
@@ -110,7 +109,6 @@ class ContactAdapter(
                 }
             }
         }
-
         return ContactViewHolder(binding)
     }
 

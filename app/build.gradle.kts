@@ -58,10 +58,12 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
 
     // Library Retrofit and JSON converter
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    val retrofit_version = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
 
     // Library OkHttp и OkHttp-interceptor
-    implementation("com.squareup.okhttp3:logging-interceptor:4.7.2")
-    implementation("com.squareup.okhttp3:okhttp:4.7.2")
+    val okHttp_version = "4.7.2"
+    implementation("com.squareup.okhttp3:logging-interceptor:$okHttp_version")
+    implementation("com.squareup.okhttp3:okhttp:$okHttp_version")
 }

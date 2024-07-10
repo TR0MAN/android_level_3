@@ -21,6 +21,12 @@ class FragmentContactProfile : Fragment() {
     ): View {
         binding = FragmentContactProfileBinding.inflate(inflater, container, false)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         // возврат назад, при нажатии на "стрелочку" возврата в ToolBar
         binding.customToolbarProfile.imgBackToolbarProfile.setOnClickListener {
             findNavController().popBackStack()
@@ -37,7 +43,5 @@ class FragmentContactProfile : Fragment() {
                 .placeholder(R.drawable.default_avatar)
                 .into(binding.imgProfileMainPhoto)
         }
-
-        return binding.root
     }
 }

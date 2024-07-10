@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.android_level_3.constants.Const
 import com.example.android_level_3.databinding.FragmentProfileInviteBinding
 
 class FragmentProfileInvite : Fragment() {
@@ -21,10 +22,14 @@ class FragmentProfileInvite : Fragment() {
     ): View {
         binding = FragmentProfileInviteBinding.inflate(inflater, container, false)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setContactDataToUI()
         setButtonListeners()
-
-        return binding.root
     }
 
     private fun setButtonListeners() {

@@ -4,8 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.WindowManager
@@ -14,27 +12,27 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.lifecycle.MutableLiveData
-import com.example.android_level_3.Const
+import androidx.core.widget.doOnTextChanged
+import com.example.android_level_3.constants.Const
 import com.example.android_level_3.MainActivity
 import com.example.android_level_3.R
+import com.example.android_level_3.constants.PreferencesConst
 import com.example.android_level_3.databinding.ActivityRegistrationBinding
 import com.example.android_level_3.retrofit.model.CreateUserModel
 import com.example.android_level_3.retrofit.model.UserData
-import com.example.android_level_3.viewmodel.MainViewModel
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class RegistrationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistrationBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: SharedViewModel by viewModels()
     private lateinit var addContactImageResult: ActivityResultLauncher<Intent>
 
     private var email: String? = null
     private var password: String? = null
     private var autoLogin: Boolean? = null
 
-    private var isVisibleProgressBar = MutableLiveData(false)
     private var connectionErrorSnackBar: Snackbar? = null
     private var newUser: CreateUserModel? = null
 
@@ -44,9 +42,9 @@ class RegistrationActivity : AppCompatActivity() {
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        email = intent?.getStringExtra(Const.EMAIL) ?: "null_email"
-        password = intent?.getStringExtra(Const.PASSWORD) ?: "null_pass"
-        autoLogin = intent?.getBooleanExtra(Const.PREFERENCES_CHECKBOX, false)
+        email = intent?.getStringExtra(Const.EMAIL) ?: PreferencesConst.PREFERENCES_EMAIL_DEFAULT_VALUE
+        password = intent?.getStringExtra(Const.PASSWORD) ?: PreferencesConst.PREFERENCES_PASSWORD_DEFAULT_VALUE
+        autoLogin = intent?.getBooleanExtra(PreferencesConst.PREFERENCES_CHECKBOX, false)
 
         setActivityResultContract()
         setEditTextListeners()
@@ -74,8 +72,8 @@ class RegistrationActivity : AppCompatActivity() {
             }
         }
 
-        isVisibleProgressBar.observe(this) {
-            if (it) binding.registrationProgressBar.visibility = View.VISIBLE
+        viewModel.isVisibleProgressBarInRegistrationActivity.observe(this) { visibility ->
+            if (visibility) binding.registrationProgressBar.visibility = View.VISIBLE
             else binding.registrationProgressBar.visibility = View.GONE
         }
     }
@@ -123,21 +121,18 @@ class RegistrationActivity : AppCompatActivity() {
             }
         }
         // check DATE format for BIRTHDAY field
-        binding.etBirthday.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (Helper.dateValidator(s.toString()) == null) {
-                    binding.tvBirthdayHelp.visibility = View.VISIBLE
-                    binding.tvBirthdayHelp.setTextColor(Color.GREEN)
-                    binding.tvBirthdayHelp.text = "( Ok )"
-                } else {
-                    binding.tvBirthdayHelp.visibility = View.VISIBLE
-                    binding.tvBirthdayHelp.setTextColor(getColor(R.color.orange_color))
-                    binding.tvBirthdayHelp.text = Helper.dateValidator(s.toString())
-                }
+        binding.etBirthday.doOnTextChanged { text, _, _, _ ->
+            if (Helper.dateValidator(text.toString()) == null) {
+                binding.tvBirthdayHelp.visibility = View.VISIBLE
+                binding.tvBirthdayHelp.setTextColor(Color.GREEN)
+                binding.tvBirthdayHelp.text =
+                    getString(R.string.date_filed_correct_input_message)
+            } else {
+                binding.tvBirthdayHelp.visibility = View.VISIBLE
+                binding.tvBirthdayHelp.setTextColor(getColor(R.color.orange_color))
+                binding.tvBirthdayHelp.text = Helper.dateValidator(text.toString())
             }
-        })
+        }
 
         // choose avatar image
         binding.imgAddImageIcon.setOnClickListener {
@@ -188,7 +183,10 @@ class RegistrationActivity : AppCompatActivity() {
                     image = null)
 
                 // запускаем процесс создания НОВОГО пользователя (имея все данные)
-                viewModel.registerNewUser(newUser!!, progressBar = isVisibleProgressBar)
+                viewModel.registerNewUser(
+                    newUserData = newUser!!,
+                    progressBar = viewModel.isVisibleProgressBarInRegistrationActivity
+                )
             }
         }
 
@@ -205,27 +203,31 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun saveUserDataToPreferences(responseData: UserData?) {
-        val sharedPreferences = getSharedPreferences(Const.PREFERENCES_SETTINGS, MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(PreferencesConst.PREFERENCES_SETTINGS, MODE_PRIVATE)
         sharedPreferences.edit().apply {
-            putString(Const.PREFERENCES_ACCESS_TOKEN, responseData?.accessToken)
-            putString(Const.PREFERENCES_REFRESH_TOKEN, responseData?.refreshToken)
-            putString(Const.PREFERENCES_USER_NAME, responseData?.user?.name)
-            putString(Const.PREFERENCES_USER_CAREER, responseData?.user?.career)
-            putString(Const.PREFERENCES_USER_ADDRESS, responseData?.user?.address)
-            putInt(Const.PREFERENCES_USER_ID, responseData?.user?.id!!)
+            putString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, responseData?.accessToken)
+            putString(PreferencesConst.PREFERENCES_REFRESH_TOKEN, responseData?.refreshToken)
+            putString(PreferencesConst.PREFERENCES_USER_NAME, responseData?.user?.name)
+            putString(PreferencesConst.PREFERENCES_USER_CAREER, responseData?.user?.career)
+            putString(PreferencesConst.PREFERENCES_USER_ADDRESS, responseData?.user?.address)
+            putInt(PreferencesConst.PREFERENCES_USER_ID, responseData?.user?.id!!)
             if (autoLogin == true) {
-                putString(Const.PREFERENCES_EMAIL, email)
-                putString(Const.PREFERENCES_PASSWORD, password)
+                putString(PreferencesConst.PREFERENCES_EMAIL, email)
+                putString(PreferencesConst.PREFERENCES_PASSWORD, password)
             }
         }.apply()
     }
 
     // информационное сообщение о проблемах с Интернетом или долгий ответ сервера, с перезапуском
     private fun createSnackBar(): Snackbar {
-        return Snackbar.make(binding.root, "Problem with connection...", Snackbar.LENGTH_INDEFINITE)
+        return Snackbar.make(binding.root,
+            getString(R.string.connection_error_snackbar_message), Snackbar.LENGTH_INDEFINITE)
             .setActionTextColor(getColor(R.color.orange_color))
-            .setAction("RETRY") {
-                viewModel.registerNewUser(newUser!!, progressBar = isVisibleProgressBar)
+            .setAction(getString(R.string.connection_error_snackbar_action_button_text)) {
+                viewModel.registerNewUser(
+                    newUserData = newUser!!,
+                    progressBar = viewModel.isVisibleProgressBarInRegistrationActivity
+                )
             }
     }
 

@@ -27,25 +27,24 @@ interface RetrofitServerApi {
     @POST("login")
     suspend fun authoriseUser(@Body userLoginData: UserAuthorisationEntity): Response<ServerResponse>
 
-    // For refresh (not used now)
+    @Headers("Content-type: application/json")
+    @GET("users")
+    suspend fun getAllUsers(@Header("Authorization") token: String): Response<ExtensionServerResponse>
+
+    // not used now
     @Headers("Content-type: application/json")
     @POST("refresh")
     suspend fun refreshToken(
         @Header("RefreshToken") refreshToken: String
     ): Response<ServerResponse>
 
-    // Get information about USER (not used now)
+    // not used now
     @GET("users/{userId}")
     suspend fun getUserData(
         @Header("Authorization") token: String,
         @Path("userId") userId: Int): ServerResponse
 
-    // Get all USERS
-    @Headers("Content-type: application/json")
-    @GET("users")
-    suspend fun getAllUsers(@Header("Authorization") token: String): Response<ExtensionServerResponse>
-
-    // Edit USER data (not used now)
+    // not used now
     @Headers("Content-type: application/json")
     @PUT("users/{userId}")
     suspend fun editUserData(
@@ -55,14 +54,12 @@ interface RetrofitServerApi {
     ): ServerResponse
 
 
-    // Get USER contacts
     @GET("users/{userId}/contacts")
     suspend fun getUserContacts(
         @Path("userId") userId: Int,
         @Header("Authorization") accessToken: String
     ): Response<ContactsServerResponse>
 
-    // Add contact to USER contacts
     @Headers("Content-type: application/json")
     @PUT("users/{userId}/contacts")
     suspend fun addContactToUserContactList(
@@ -71,7 +68,6 @@ interface RetrofitServerApi {
         @Body contactId: ContactId
     ): Response<ContactsServerResponse>
 
-    // Delete contact from USER contacts
     @DELETE("users/{userId}/contacts/{contactId}")
     suspend fun deleteContactFromUserList(
         @Path("userId") userId: Int,

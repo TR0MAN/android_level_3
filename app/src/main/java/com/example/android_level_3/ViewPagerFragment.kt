@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.android_level_3.adapter.ViewPagerAdapter
 import com.example.android_level_3.databinding.FragmentViewPagerBinding
-import com.example.android_level_3.viewmodel.MainViewModel
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ViewPagerFragment : Fragment() {
 
     private lateinit var binding: FragmentViewPagerBinding
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,21 +27,31 @@ class ViewPagerFragment : Fragment() {
     ): View {
         binding = FragmentViewPagerBinding.inflate(inflater, container, false)
 
-        binding.viewPager.adapter = ViewPagerAdapter(requireActivity(), FRAGMENT_LIST)
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = TAB_NAMES[position]
-            tab.setIcon(TAB_ICONS[position])
-        }.attach()
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initViewPager()
+        initTabLayout()
+        setObservers()
+    }
+
+    private fun initTabLayout() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) { tab.icon?.alpha = 250 }
             override fun onTabUnselected(tab: TabLayout.Tab) { tab.icon?.alpha = 70 }
             override fun onTabReselected(tab: TabLayout.Tab) { }
         })
+    }
 
-        setObservers()
-
-        return binding.root
+    private fun initViewPager() {
+        binding.viewPager.adapter = ViewPagerAdapter(requireActivity(), FRAGMENT_LIST)
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = TAB_NAMES[position]
+            tab.setIcon(TAB_ICONS[position])
+        }.attach()
     }
 
     private fun setObservers() {
