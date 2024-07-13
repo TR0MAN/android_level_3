@@ -16,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.android_level_3.constants.Const
 import com.example.android_level_3.databinding.ActivityAddContactBinding
 
+// NOT USED CLASS
+
 // Нужно делать через DialogFragment() из-за того, что он правильно управляет жизненным циклом диалога
 // и восстанавливает его после поворота (диалог вовремя скрывется и правильно восстанавливается после поворота)
 // при создании через AlertDialog.Builder после поворота диалог пропадет

@@ -69,7 +69,6 @@
             android:textSize="@dimen/AuthorizationRegisterButtonTextSize"
             app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationAdditionalText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -217,7 +216,6 @@
             android:textColor="@color/gray_color"
             app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationTextEmail"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -230,14 +228,13 @@
             android:textSize="@dimen/AuthorizationGreetingsTextSize"
             app:layout_constraintBottom_toTopOf="@+id/tvAuthorizationHelperText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:padding="@dimen/progressbar_padding"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -247,8 +244,8 @@
 
         <ImageView
             android:id="@+id/imgFillAuthorisationData"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/fill_authorisation_data_image_width"
+            android:layout_height="@dimen/fill_authorisation_data_image_height"
             app:layout_constraintEnd_toStartOf="@+id/tvAuthorizationGreetingsText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvAuthorizationGreetingsText"

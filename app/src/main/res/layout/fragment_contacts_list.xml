@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="4dp"
+        android:padding="@dimen/fragment_contacts_list_contact_container_padding"
         android:gravity="center_horizontal|center_vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/imgDeleteManyContacts"
@@ -67,8 +67,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgNoContacts"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/fragment_contacts_list_image_no_contacts_width"
+            android:layout_height="@dimen/fragment_contacts_list_image_no_contacts_height"
             android:visibility="visible"
             android:src="@drawable/contacts_is_empty"/>
 
@@ -82,14 +82,13 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgDeleteManyContacts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:paddingTop="16dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginEnd="@dimen/fragment_contacts_list_image_group_delete_margin_end"
+        android:paddingTop="@dimen/fragment_contacts_list_image_group_delete_padding_top"
+        android:layout_marginBottom="@dimen/fragment_contacts_list_image_group_delete_margin_bottom"
         android:src="@drawable/basket_icon"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +99,7 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:padding="@dimen/progressbar_padding"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

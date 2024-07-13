@@ -99,7 +99,7 @@ class FragmentAddContact : Fragment(), ElementClickListener {
             else binding.progressBar.visibility = View.GONE
         }
 
-        // показываем/прячем панель для поиска (при изменении состояния)
+        // show/hide search panel (when rotate screen)
         viewModel.isActiveSearchAddContact.observe(viewLifecycleOwner) { visible ->
             with(binding) {
                 if (visible) {
@@ -113,11 +113,11 @@ class FragmentAddContact : Fragment(), ElementClickListener {
             }
         }
 
-        // "слушатель" на добавление контакта
+        // listener for getting contact id for adding new contact to contact list
         val resultOfAddingContact =
             findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Int>(Const.RESULT_KEY)
 
-        // наблюдатель за изменением состояния "слушателя"
+        // observer for adding new contact to contact list
         resultOfAddingContact?.observe(viewLifecycleOwner) { id ->
             if (id != null) {
                 contactId = id
@@ -166,7 +166,6 @@ class FragmentAddContact : Fragment(), ElementClickListener {
                     viewModel.listOfAllUsers.value = viewModel.listOfAllUsers.value
             }
         }
-
     }
 
     private fun actionAfterFiltered() {
@@ -186,7 +185,6 @@ class FragmentAddContact : Fragment(), ElementClickListener {
             binding.noContactsContainer.visibility = View.VISIBLE
 
         }
-
     }
     private fun createConnectionErrorSnackBar(requestType: String): Snackbar {
         return Snackbar.make(binding.root,

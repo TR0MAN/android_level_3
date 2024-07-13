@@ -1,6 +1,7 @@
 package com.example.android_level_3
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,17 +27,17 @@ class FragmentContactsList : Fragment() {
 
     private val viewModel: SharedViewModel by activityViewModels()
 
-    private var informationSnackbar: Snackbar? = null                                               // Snackbar для восстановления удаленного пользователя
-    private var connectionErrorSnackbar: Snackbar? = null                                           // Snackbar для перезапуска запроса, при ошибке / долгом запросе
+    // Snackbar for restore deleted user
+    private var informationSnackbar: Snackbar? = null
+    // Snackbar for showing message about connection problem
+    private var connectionErrorSnackbar: Snackbar? = null
     private var contactIdForDelete: Int? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentContactsListBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -52,13 +53,13 @@ class FragmentContactsList : Fragment() {
         }
     }
 
-    // запрос списка контактов пользователя
+    // request for getting list of contacts
     private fun requestGetUserContacts() {
         viewModel.getUserContacts(userId = viewModel.userId.value!!, token = viewModel.token.value!!,
             progressBar = viewModel.isVisibleProgressBarInFragmentContactsList)
     }
 
-    // запрос на удаление из списка контактов
+    // request for deleting from user contacts list
     private fun requestDeleteFromContacts() {
         viewModel.deleteFromContacts(
             userId = viewModel.userId.value!!, token = viewModel.token.value!!,
@@ -66,14 +67,14 @@ class FragmentContactsList : Fragment() {
             progressBar = viewModel.isVisibleProgressBarInFragmentContactsList)
     }
 
-    // запрос на групповое удаление из списка контактов (по факту много раз одиночное)
+    // request for group deleting from user contacts list (many times deleting one contact)
     private fun deleteMultipleContact(contactsForGroupDelete: MutableSet<Int>?) {
         viewModel.deleteFromContacts( userId = viewModel.userId.value!!,
             token = viewModel.token.value!!, idForDelete = contactsForGroupDelete!!.first(),
             progressBar = viewModel.isVisibleProgressBarInFragmentContactsList)
     }
 
-    // запрос на восстановление удаленного контакта
+    // request for restore deleting contact (just adding deleted contact)
     private fun requestRestoreInContactList() {
         viewModel.addToContactList(userId = viewModel.userId.value!!, token = viewModel.token.value!!,
             contactId = contactIdForDelete!!,
@@ -89,23 +90,21 @@ class FragmentContactsList : Fragment() {
                 binding.recyclerViewContacts.visibility = View.VISIBLE
                 binding.noContactsContainer.visibility = View.GONE
 
-                // актуализация списка контактов (их ID)
+                // updating list of user contacts ID
                 viewModel.userContactsIdList.clear()
-                list.forEach {
-                    viewModel.userContactsIdList.add(it.id)
-                }
+                viewModel.userContactsIdList.addAll(list.map { it.id })
 
-                // восстановление состояния после поврота (список на удаление и отмеченные люди)
+                // restore state after rotate screen (list for group deleting and checked contacts)
                 if (viewModel.listSelectedContactsForGroupDelete.value?.isEmpty() == false) {
                     createAdapter(multiSelectState = true,
                         selectedContacts = viewModel.listSelectedContactsForGroupDelete.value?.toList(),
                         contactsList = viewModel.listWithAllContacts.value)
                 } else {
-                    // восстановление состояния посика (если он был до поворота)
+                    // restoring state of search panel (if panel be visible before rotating)
                     if (viewModel.isActiveSearchUserContacts.value == true) {
                         actionAfterFiltered()
                     } else {
-                        // действия при обычном повороте
+                        // action after rotate screen
                         createAdapter(multiSelectState = false, selectedContacts = null)
                         recyclerViewAdapter.submitList(list)
                     }
@@ -124,7 +123,7 @@ class FragmentContactsList : Fragment() {
             }
         }
 
-        // отслеживание результата запроса списка контактов
+        // observing result of a contact list request
         viewModel.getUserContactsResult.observe(viewLifecycleOwner) { serverResponse ->
             if (serverResponse == null) {                                                           // показываем Snackbar с ошибкой + можно перезапустить запрос
                 connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_GET_CONTACTS)
@@ -137,11 +136,11 @@ class FragmentContactsList : Fragment() {
             }
         }
 
-        // отслеживание результата запроса на удаление
+        // observing the result of a deletion request
         viewModel.deleteFromContactsResult.observe(viewLifecycleOwner) { serverResponse ->
             if (serverResponse == null) {
 
-                // вариант для группового удаления
+                // case with group deletion
                 if(viewModel.listSelectedContactsForGroupDelete.value?.isEmpty() == false) {
                     connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_GROUP_DELETE)
                     connectionErrorSnackbar?.show()
@@ -150,7 +149,7 @@ class FragmentContactsList : Fragment() {
                     connectionErrorSnackbar?.show()
                 }
             } else if (serverResponse.isSuccessful) {
-                // вариант для группового удаления
+                // case with group deletion
                 if (viewModel.listSelectedContactsForGroupDelete.value?.isEmpty() == false) {
                     val currentIdForDelete = viewModel.listSelectedContactsForGroupDelete.value?.first()
                     viewModel.listSelectedContactsForGroupDelete.value?.remove(currentIdForDelete)
@@ -164,11 +163,11 @@ class FragmentContactsList : Fragment() {
                 viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts
 
             } else {
-                // случай с попыткой удалить контакт которого нет в списке контактов
+                // trying to delete a contact that is not in the contact list
                 if (serverResponse.body()?.message.equals("Contact not found")) {
                     requestGetUserContacts()
                 }
-                // слечай для группового дуаления
+                // case with group deletion
                 if (viewModel.listSelectedContactsForGroupDelete.value?.isEmpty() == false) {
                     connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_GROUP_DELETE)
                     connectionErrorSnackbar?.show()
@@ -179,7 +178,7 @@ class FragmentContactsList : Fragment() {
             }
         }
 
-        // отслеживание результата запроса на добавление контакта в список
+        // observing the result of a addition request
         viewModel.addToContactListResult.observe(viewLifecycleOwner) { serverResponse ->
             if (serverResponse == null) {
                 connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_RESTORE_CONTACT)
@@ -216,21 +215,24 @@ class FragmentContactsList : Fragment() {
 
         actionListener = object : ElementClickListener {
 
-            override fun onElementClickAction(contact: Contact) {                                   // слушатель на удаление контакта
+            // listener for contact deleting
+            override fun onElementClickAction(contact: Contact) {
                 contactIdForDelete = contact.id
                 requestDeleteFromContacts()
                 createInformationSnackbar()
                 informationSnackbar?.show()
             }
 
-            override fun onElementProfileClick(contact: Contact) {                                  // слушатель на переход к профилю контакта
+            // listener for go to contact profile
+            override fun onElementProfileClick(contact: Contact) {
                 val destinationPointWithData = ViewPagerFragmentDirections
                     .actionViewPagerFragmentToFragmentContactProfile(contact)
                 findNavController().navigate(destinationPointWithData)
                 informationSnackbar?.dismiss()
             }
 
-            override fun onElementLongClick(contactId: Int) {                                       // слушатель на переход в режим группового удаления
+            // listener to switch to group delete mode
+            override fun onElementLongClick(contactId: Int) {
                 viewModel.listSelectedContactsForGroupDelete.value =
                     viewModel.listSelectedContactsForGroupDelete.value?.apply { add(contactId) }
                 createAdapter(multiSelectState = true,
@@ -238,7 +240,8 @@ class FragmentContactsList : Fragment() {
                 viewModel.tabLayoutVisibility.value = false
             }
 
-            override fun onElementChecked(checkBoxState: Boolean, contactId: Int) {                 // слушатель на клики по эелементу в режиме группового удаления
+            // listener for clicks on an element in group deletion mode
+            override fun onElementChecked(checkBoxState: Boolean, contactId: Int) {
                 if (checkBoxState) {
                     viewModel.listSelectedContactsForGroupDelete.value =
                         viewModel.listSelectedContactsForGroupDelete.value?.apply { add(contactId) }
@@ -308,7 +311,7 @@ class FragmentContactsList : Fragment() {
 //        }
     }
 
-    // отображение результата поиска после фильтрации
+    // displaying the search result after filtering
     private fun actionAfterFiltered() {
         if (viewModel.filteredContactsList.value?.isNotEmpty() == true) {
             binding.recyclerViewContacts.visibility = View.VISIBLE

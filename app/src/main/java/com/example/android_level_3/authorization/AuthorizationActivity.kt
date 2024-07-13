@@ -273,11 +273,12 @@ class AuthorizationActivity : AppCompatActivity() {
             }
     }
 
+    // TODO - DELETE method after test (in the end)
     private fun fillAuthorisationData() {
         binding.textInputEmailForm.setText("unit6@email.com")
         binding.textInputPasswordForm.setText("2@Qwertyu")
 
-        // старый контакт
+        // old contact for testing
 //        binding.textInputEmailForm.setText("unit5@email.com")
 //        binding.textInputPasswordForm.setText("1!Qqwerty")
     }

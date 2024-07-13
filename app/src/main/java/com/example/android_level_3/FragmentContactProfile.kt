@@ -27,12 +27,12 @@ class FragmentContactProfile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // возврат назад, при нажатии на "стрелочку" возврата в ToolBar
+        // back to previous fragment, when pressed "BACK" in ToolBar
         binding.customToolbarProfile.imgBackToolbarProfile.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        // вставка полученных данных о пользователе в соответствующие поля
+        // inserting user data into the appropriate fields
         with(binding) {
             tvProfileName.text = args.currentUserProfile.name
             tvProfileProfession.text = args.currentUserProfile.career

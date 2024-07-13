@@ -50,6 +50,7 @@ data class ContactInfo(
 //    val updatedAt: Date?                                                                          // пока не используется в проекте
 )
 
+// NOT USED NOW
 data class EditUserModel(
     val name: String?,
     val phone: String?,

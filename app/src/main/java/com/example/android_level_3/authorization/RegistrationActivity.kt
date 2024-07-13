@@ -50,23 +50,22 @@ class RegistrationActivity : AppCompatActivity() {
         setEditTextListeners()
         setObservers()
 
-        // скрываем автоматически всплывающую клавиатуру
+        // hide the automatically pop-up keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     private fun setObservers() {
         viewModel.registrationResult.observe(this) { serverResponse ->
-            if (serverResponse == null) {                                                           // ошибка при отключенном Интернете или долгом запросе
+            if (serverResponse == null) {
                 connectionErrorSnackBar = createSnackBar()
                 connectionErrorSnackBar?.show()
             } else if (serverResponse.isSuccessful) {
-                // сохраняем данные о авторизации
+                // save authorisation data to Preferences
                 saveUserDataToPreferences(serverResponse.body()?.data)
-                // переходим в профиль пользователя
+                // go to USER profile
                 val intent = Intent(this@RegistrationActivity, MainActivity::class.java)
                 startActivity(intent)
             } else {
-                // реакция на ошибку (нет связи или еще что-то)
                 connectionErrorSnackBar = createSnackBar()
                 connectionErrorSnackBar?.show()
             }
@@ -78,8 +77,10 @@ class RegistrationActivity : AppCompatActivity() {
         }
     }
 
+
     private fun setActivityResultContract() {
-        // регистрация (выполнение) "контракта" после отработки startActivityForResult с получением данных (выбранной из галереи картинки)
+        // registration (execution) of the “contract” after executing startActivityForResult
+        // with receiving data (picture selected from the gallery)
         addContactImageResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
             ActivityResultCallback {
@@ -120,6 +121,7 @@ class RegistrationActivity : AppCompatActivity() {
                 }
             }
         }
+
         // check DATE format for BIRTHDAY field
         binding.etBirthday.doOnTextChanged { text, _, _, _ ->
             if (Helper.dateValidator(text.toString()) == null) {
@@ -182,7 +184,7 @@ class RegistrationActivity : AppCompatActivity() {
                     birthday = date,
                     image = null)
 
-                // запускаем процесс создания НОВОГО пользователя (имея все данные)
+                // make request to register a new user
                 viewModel.registerNewUser(
                     newUserData = newUser!!,
                     progressBar = viewModel.isVisibleProgressBarInRegistrationActivity
@@ -190,7 +192,7 @@ class RegistrationActivity : AppCompatActivity() {
             }
         }
 
-        // TODO - only for quick test (DELETE after tests)
+        // TODO - only for quick test (DELETE after test)
         binding.imgFillAllDataFields.setOnClickListener {
             with(binding) {
                 etUserName.setText("Polina LiveDatova")
@@ -218,7 +220,7 @@ class RegistrationActivity : AppCompatActivity() {
         }.apply()
     }
 
-    // информационное сообщение о проблемах с Интернетом или долгий ответ сервера, с перезапуском
+    // information message about connection error
     private fun createSnackBar(): Snackbar {
         return Snackbar.make(binding.root,
             getString(R.string.connection_error_snackbar_message), Snackbar.LENGTH_INDEFINITE)

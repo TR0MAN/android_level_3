@@ -21,7 +21,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import retrofit2.Response
 import java.net.ConnectException
 
-open class SharedViewModel: ViewModel() {
+class SharedViewModel: ViewModel() {
 
     private val contactList = MutableLiveData<List<TestContact>>()
     val observableContactList: LiveData<List<TestContact>> = contactList
@@ -30,19 +30,19 @@ open class SharedViewModel: ViewModel() {
 
     var serverApi: RetrofitServerApi
 
-    // данные юзера необходимые для дальнейших запросов
+    // user data for server requests
     val token = MutableLiveData<String>()
     val userId = MutableLiveData<Int>()
 
-    // поля состояния видимости для режима поиска (список всех юзеров, список контактов)
+    // state of fields visibility for search mode (list of all users and list of contacts)
     val isActiveSearchAddContact = MutableLiveData<Boolean>(false)
     val isActiveSearchUserContacts = MutableLiveData<Boolean>(false)
 
-    // списки контактов/юзеров удовлетворящих поисковому запросу
+    // list of contacts and users after filtering by keyword
     val filteredContactsList = MutableLiveData<MutableList<Contact>>(mutableListOf())
     val filteredUserList = MutableLiveData<MutableList<Contact>>(mutableListOf())
 
-    // наблюдаемые переменные, куда приходят результаты запроса к серверу
+    // observed variables, which coming server responses
     val registrationResult = MutableLiveData<Response<ServerResponse>?>()
     val authorisationResult = MutableLiveData<Response<ServerResponse>?>()
     val getUserContactsResult = MutableLiveData<Response<ContactsServerResponse>?>()
@@ -50,15 +50,16 @@ open class SharedViewModel: ViewModel() {
     var addToContactListResult = MutableLiveData<Response<ContactsServerResponse>?>()
     var deleteFromContactsResult = MutableLiveData<Response<ContactsServerResponse>?>()
 
-    // список всех контактов пользователя
+    // list with all user contacts
     val listWithAllContacts = MutableLiveData<List<Contact>>()
-    // список ВСЕХ доступных для добавления юзеров
+    // list of all contacts available for adding
     val listOfAllUsers = MutableLiveData<List<Contact>>()
-    // ID контактов, для RecView И отображения галочек (что они уже в списке)
+    // list of contact ID, which have already been added
     var userContactsIdList = mutableSetOf<Int>()
-    // ID выбранных контактов для группового удаления
+    // list of contacts ID for group deleting
     val listSelectedContactsForGroupDelete = MutableLiveData<MutableSet<Int>>(mutableSetOf())
 
+    // variables for show/hide progressbars when a request to the server occurs
     val isVisibleProgressBarInFragmentAddContact = MutableLiveData(false)
     val isVisibleProgressBarInFragmentContactsList = MutableLiveData(false)
     val isVisibleProgressBarInFragmentSettings = MutableLiveData(false)

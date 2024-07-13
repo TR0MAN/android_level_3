@@ -2,7 +2,7 @@ package com.example.android_level_3.old_classes
 
 import java.io.Serializable
 
-// TODO - добавить ID и возможно поле isChecked
+// NOT USED CLASS
 data class TestContact (
     val id: Int,
     val contactName: String,

@@ -22,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/scrollViewContainer"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/registration_activity_scroll_view_container_height"
             android:background="@color/purple_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +64,7 @@
                     android:id="@+id/imgFillAllDataFields"
                     android:layout_width="@dimen/dialog_add_contact_icon_add_new_image_width"
                     android:layout_height="@dimen/dialog_add_contact_icon_add_new_image_height"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginEnd="@dimen/registration_activity_fill_all_data_fields_margin_end"
                     app:layout_constraintBottom_toBottomOf="@+id/imgAvatar"
                     app:layout_constraintEnd_toStartOf="@+id/imgAvatar"
                     app:layout_constraintTop_toTopOf="@+id/imgAvatar"
@@ -221,7 +221,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="8dp"
                             android:textColor="@color/gray_color"
-                            android:textSize="12sp"
+                            android:textSize="@dimen/registration_activity_birthday_help_field_text_size"
                             android:textStyle="bold"
                             android:visibility="invisible"
                             android:text="@string/dialog_add_contact_birthday_help"
@@ -249,8 +249,7 @@
                 android:id="@+id/containerForButtonSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="@dimen/dialog_add_contact_btn_save_margin_bottom"
+                android:layout_marginVertical="@dimen/dialog_add_contact_btn_save_margin_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -268,8 +267,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -277,7 +275,7 @@
                 android:id="@+id/registrationProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
+                android:padding="@dimen/progressbar_padding"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -58,12 +58,12 @@ class FragmentSettings : Fragment() {
         }
 
         viewModel.authorisationResult.observe(viewLifecycleOwner) { serverResponse ->
-            if (serverResponse == null) {                                                           // показываем Snackbar с ошибкой и даем возможность перезапустить
+            if (serverResponse == null) {
                 connectionErrorSnackbar = createErrorConnectionSnackBar()
                 connectionErrorSnackbar?.show()
             } else if (serverResponse.isSuccessful) {
 
-                // сохраняем обновленные данные AccessToken и RefreshToken (после авторизации)
+                // save updated data AccessToken and RefreshToken (after authorisation)
                 sharedPreferences.edit().apply {
                     putString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, serverResponse.body()?.data?.accessToken.toString())
                     putString(PreferencesConst.PREFERENCES_REFRESH_TOKEN, serverResponse.body()?.data?.refreshToken.toString())
@@ -80,7 +80,7 @@ class FragmentSettings : Fragment() {
         }
     }
 
-    // авторизация, если был "автологин"
+    // make authorisation if autologin be checked
     private fun refreshUserDataAfterAutoLogin() {
         viewModel.getAuthorisation(
             email = sharedPreferences?.getString(PreferencesConst.PREFERENCES_EMAIL, null).toString(),
@@ -97,7 +97,7 @@ class FragmentSettings : Fragment() {
             }
     }
 
-    // подстановка данных о пользователе (при автологине)
+    // insert user data in fields (when be checked autologin)
     private fun setUserDataToUI() {
         with(binding) {
             sharedPreferences.getString(PreferencesConst.PREFERENCES_USER_NAME, null)?.let {tvProfileName.text = it}
@@ -110,7 +110,7 @@ class FragmentSettings : Fragment() {
 
     private fun setButtonListener() {
 
-        // выход на страницу авторизации по кнопке Logout + очистка от функции "автологина"
+        // logout from account and clearing "autologin" data
         binding.btnMyProfileLogOut.setOnClickListener {
             sharedPreferences.edit()?.apply {
                 clear()

@@ -22,7 +22,9 @@ class ContactAdapter(
             fun bind(contact: Contact) {
                 binding.tvContactName.text = contact.name.toString()
                 binding.tvContactCareer.text = contact.career.toString()
-                Glide.with(binding.imgContactAvatar.context)                                        // v.2 тут можно передавать context при создании, вместе со списком
+
+                // v.2 тут можно передавать context при создании, вместе со списком
+                Glide.with(binding.imgContactAvatar.context)
                     .load(contact.image)
                     .circleCrop()
                     .placeholder(R.drawable.default_avatar)

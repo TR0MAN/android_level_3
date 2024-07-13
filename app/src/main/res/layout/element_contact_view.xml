@@ -12,9 +12,9 @@
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/checkboxForDelete"
         android:theme="@style/Theme.AppCompat"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="@dimen/element_contact_view_checkbox_width"
+        android:layout_height="@dimen/element_contact_view_checkbox_height"
+        android:layout_marginStart="@dimen/element_contact_view_checkbox_margin_start"
         android:button="@drawable/checkbox_selector"
         android:visibility="gone"
         android:checked="false"
@@ -26,10 +26,10 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgContactAvatar"
-        android:layout_width="58dp"
-        android:layout_height="58dp"
-        android:layout_marginVertical="8dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="@dimen/element_contact_view_avatar_image_width"
+        android:layout_height="@dimen/element_contact_view_avatar_image_height"
+        android:layout_marginVertical="@dimen/element_contact_view_avatar_image_vertical_margin"
+        android:layout_marginStart="@dimen/element_contact_view_avatar_image_margin_start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/checkboxForDelete"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,9 +37,9 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgContactDelete"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="@dimen/element_contact_view_delete_image_width"
+        android:layout_height="@dimen/element_contact_view_delete_image_height"
+        android:layout_marginEnd="@dimen/element_contact_view_delete_image_margin_end"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imgContactAvatar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,9 +48,9 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgContactInList"
-        android:layout_width="23dp"
-        android:layout_height="23dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="@dimen/element_contact_view_in_list_checkbox_width"
+        android:layout_height="@dimen/element_contact_view_in_list_checkbox_height"
+        android:layout_marginEnd="@dimen/element_contact_view_in_list_checkbox_margin_end"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imgContactAvatar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,9 +59,9 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgContactAddToContacts"
-        android:layout_width="66dp"
-        android:layout_height="23dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="@dimen/element_contact_view_add_to_contacts_image_width"
+        android:layout_height="@dimen/element_contact_view_add_to_contacts_image_height"
+        android:layout_marginEnd="@dimen/element_contact_view_add_to_contacts_image_margin_end"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imgContactAvatar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,12 +72,12 @@
         android:id="@+id/tvContactName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
-        android:lines="1"
+        android:layout_marginStart="@dimen/element_contact_view_contact_name_tv_width"
+        android:layout_marginTop="@dimen/element_contact_view_contact_name_tv_height"
         android:textColor="@color/purple_color"
-        android:textSize="18sp"
+        android:textSize="@dimen/element_contact_view_contact_name_tv_text_size"
         android:textStyle="bold"
+        android:lines="1"
         app:layout_constraintStart_toEndOf="@+id/imgContactAvatar"
         app:layout_constraintTop_toTopOf="@+id/imgContactAvatar"
         tools:text="Contact Name" />

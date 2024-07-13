@@ -31,20 +31,20 @@ interface RetrofitServerApi {
     @GET("users")
     suspend fun getAllUsers(@Header("Authorization") token: String): Response<ExtensionServerResponse>
 
-    // not used now
+    // NOT USED NOW
     @Headers("Content-type: application/json")
     @POST("refresh")
     suspend fun refreshToken(
         @Header("RefreshToken") refreshToken: String
     ): Response<ServerResponse>
 
-    // not used now
+    // NOT USED NOW
     @GET("users/{userId}")
     suspend fun getUserData(
         @Header("Authorization") token: String,
         @Path("userId") userId: Int): ServerResponse
 
-    // not used now
+    // NOT USED NOW
     @Headers("Content-type: application/json")
     @PUT("users/{userId}")
     suspend fun editUserData(

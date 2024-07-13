@@ -68,14 +68,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/toolbar_search_view_background_style"
-            android:paddingVertical="3dp"
-            android:layout_marginStart="16dp"
+            android:paddingVertical="@dimen/custom_toolbar_contacts_vertical_padding"
+            android:layout_marginStart="@dimen/custom_toolbar_contacts_margin_start"
+            android:paddingStart="@dimen/custom_toolbar_contacts_padding_start"
+            android:paddingRight="@dimen/custom_toolbar_contacts_padding_right"
             android:ems="10"
-            android:paddingStart="18dp"
             android:inputType="text"
             android:textColor="@color/white"
             android:drawableEnd="@drawable/ic_toolbar_search_gray"
-            android:paddingRight="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +92,5 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

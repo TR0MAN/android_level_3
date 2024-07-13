@@ -148,9 +148,8 @@
                     android:id="@+id/imgIconF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_f"
+                    android:src="@drawable/ic_facebook"
                     app:layout_constraintEnd_toStartOf="@+id/imgIconIn"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -159,9 +158,8 @@
                     android:id="@+id/imgIconIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_in"
+                    android:src="@drawable/ic_linkedin"
                     app:layout_constraintEnd_toStartOf="@+id/imgIconInst"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/imgIconF"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -169,9 +167,8 @@
                     android:id="@+id/imgIconInst"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_inst"
+                    android:src="@drawable/ic_instagram"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/imgIconIn"
                     app:layout_constraintTop_toTopOf="parent" />
 

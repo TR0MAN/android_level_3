@@ -2,6 +2,7 @@ package com.example.android_level_3.old_classes
 
 import kotlin.random.Random
 
+// NOT USED CLASS
 class ContactListGenerator {
 
     private val firstNameList = listOf(

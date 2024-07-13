@@ -34,7 +34,6 @@ class FragmentProfileInvite : Fragment() {
 
     private fun setButtonListeners() {
 
-        // отслеживание кнопки добавления контакта
         binding.btnDetailProfileAddToContacts.setOnClickListener {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(Const.RESULT_KEY, args.contactInformation.id)
             findNavController().popBackStack()
@@ -46,7 +45,7 @@ class FragmentProfileInvite : Fragment() {
         }
     }
 
-    // вставка полученных данных о пользователе в соответствующие поля
+    // inserting data about user in fields
     private fun setContactDataToUI() {
         with(binding) {
             tvProfileName.text = args.contactInformation.name
