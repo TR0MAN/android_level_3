@@ -1,10 +1,12 @@
 package com.example.android_level_3.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_level_3.constants.RequestConst
+import com.example.android_level_3.data.SharedPreferencesStorage
 import com.example.android_level_3.old_classes.TestContact
 import com.example.android_level_3.retrofit.Retrofit
 import com.example.android_level_3.retrofit.RetrofitServerApi
@@ -21,18 +23,20 @@ import kotlinx.coroutines.withTimeoutOrNull
 import retrofit2.Response
 import java.net.ConnectException
 
-class SharedViewModel: ViewModel() {
-
-    private val contactList = MutableLiveData<List<TestContact>>()
-    val observableContactList: LiveData<List<TestContact>> = contactList
+class SharedViewModel(
+    val dataStorage: SharedPreferencesStorage
+): ViewModel() {
 
     val tabLayoutVisibility = MutableLiveData<Boolean>(true)
 
     var serverApi: RetrofitServerApi
 
     // user data for server requests
-    val token = MutableLiveData<String>()
-    val userId = MutableLiveData<Int>()
+    private val _token = MutableLiveData<String>()
+    val token: LiveData<String> = _token
+
+    private val _userId = MutableLiveData<Int>()
+    val userId: LiveData<Int> = _userId
 
     // state of fields visibility for search mode (list of all users and list of contacts)
     val isActiveSearchAddContact = MutableLiveData<Boolean>(false)
@@ -43,12 +47,23 @@ class SharedViewModel: ViewModel() {
     val filteredUserList = MutableLiveData<MutableList<Contact>>(mutableListOf())
 
     // observed variables, which coming server responses
-    val registrationResult = MutableLiveData<Response<ServerResponse>?>()
-    val authorisationResult = MutableLiveData<Response<ServerResponse>?>()
-    val getUserContactsResult = MutableLiveData<Response<ContactsServerResponse>?>()
-    var getAllUsersResult = MutableLiveData<Response<ExtensionServerResponse>?>()
-    var addToContactListResult = MutableLiveData<Response<ContactsServerResponse>?>()
-    var deleteFromContactsResult = MutableLiveData<Response<ContactsServerResponse>?>()
+    private val _registrationResult = MutableLiveData<Response<ServerResponse>?>()
+    val registrationResult: LiveData<Response<ServerResponse>?> = _registrationResult
+
+    private val _authorisationResult = MutableLiveData<Response<ServerResponse>?>()
+    val authorisationResult: LiveData<Response<ServerResponse>?> = _authorisationResult
+
+    private val _getUserContactsResult = MutableLiveData<Response<ContactsServerResponse>?>()
+    val getUserContactsResult: LiveData<Response<ContactsServerResponse>?> = _getUserContactsResult
+
+    private val _getAllUsersResult = MutableLiveData<Response<ExtensionServerResponse>?>()
+    val getAllUsersResult: LiveData<Response<ExtensionServerResponse>?> = _getAllUsersResult
+
+    private val _addToContactListResult = MutableLiveData<Response<ContactsServerResponse>?>()
+    val addToContactListResult: LiveData<Response<ContactsServerResponse>?> =_addToContactListResult
+
+    private val _deleteFromContactsResult = MutableLiveData<Response<ContactsServerResponse>?>()
+    val deleteFromContactsResult: LiveData<Response<ContactsServerResponse>?> = _deleteFromContactsResult
 
     // list with all user contacts
     val listWithAllContacts = MutableLiveData<List<Contact>>()
@@ -59,16 +74,17 @@ class SharedViewModel: ViewModel() {
     // list of contacts ID for group deleting
     val listSelectedContactsForGroupDelete = MutableLiveData<MutableSet<Int>>(mutableSetOf())
 
-    // variables for show/hide progressbars when a request to the server occurs
+    // variables for show/hide progressbar when a request to the server occurs
     val isVisibleProgressBarInFragmentAddContact = MutableLiveData(false)
     val isVisibleProgressBarInFragmentContactsList = MutableLiveData(false)
     val isVisibleProgressBarInFragmentSettings = MutableLiveData(false)
     val isVisibleProgressBarInAuthorizationActivity = MutableLiveData(false)
     val isVisibleProgressBarInRegistrationActivity = MutableLiveData(false)
 
-
     init {
         serverApi = Retrofit.createRetrofitApi()
+        Log.d("TAG", "--- ViewModel CREATED, $this")
+        Log.d("TAG", "--- ViewModel CREATED, [dataStorage = $dataStorage]\n\n")
     }
 
     fun registerNewUser(newUserData: CreateUserModel, progressBar: MutableLiveData<Boolean>) {
@@ -78,13 +94,13 @@ class SharedViewModel: ViewModel() {
                 try {
                     val serverResponse = serverApi.registerNewUser(newUserData)
                     delay(RequestConst.REQUEST_DELAY)
-                    registrationResult.postValue(serverResponse)
+                    _registrationResult.postValue(serverResponse)
                 } catch (e: ConnectException) {
-                    registrationResult.postValue(null)
+                    _registrationResult.postValue(null)
                 }
             }
             if (job == null) {
-                registrationResult.postValue(null)
+                _registrationResult.postValue(null)
             }
             progressBar.postValue(false)
         }
@@ -98,13 +114,13 @@ class SharedViewModel: ViewModel() {
                     val serverResponse = serverApi.authoriseUser(
                         UserAuthorisationEntity(email = email, password = password))
                     delay(RequestConst.REQUEST_DELAY)
-                    authorisationResult.postValue(serverResponse)
+                    _authorisationResult.postValue(serverResponse)
                 } catch (e: ConnectException) {
-                    authorisationResult.postValue(null)
+                    _authorisationResult.postValue(null)
                 }
             }
             if (job == null) {
-                authorisationResult.postValue(null)
+                _authorisationResult.postValue(null)
             }
             progressBar.postValue(false)
         }
@@ -117,13 +133,13 @@ class SharedViewModel: ViewModel() {
                 try {
                     val serverResponse = serverApi.getUserContacts(userId, token)
                     delay(RequestConst.REQUEST_DELAY)
-                    getUserContactsResult.postValue(serverResponse)
+                    _getUserContactsResult.postValue(serverResponse)
                 } catch (e: ConnectException) {
-                    getUserContactsResult.postValue(null)
+                    _getUserContactsResult.postValue(null)
                 }
             }
             if (job == null) {
-                getUserContactsResult.postValue(null)
+                _getUserContactsResult.postValue(null)
             }
             progressBar.postValue(false)
         }
@@ -136,13 +152,13 @@ class SharedViewModel: ViewModel() {
                 try {
                     val serverResponse = serverApi.getAllUsers(token)
                     delay(RequestConst.REQUEST_DELAY)
-                    getAllUsersResult.postValue(serverResponse)
+                    _getAllUsersResult.postValue(serverResponse)
                 } catch (e: ConnectException) {
-                    getAllUsersResult.postValue(null)
+                    _getAllUsersResult.postValue(null)
                 }
             }
             if (job == null) {
-                getAllUsersResult.postValue(null)
+                _getAllUsersResult.postValue(null)
             }
             progressBar.postValue(false)
         }
@@ -157,13 +173,13 @@ class SharedViewModel: ViewModel() {
                         serverApi.addContactToUserContactList( userId = userId,
                         accessToken = token, contactId = ContactId(contactId))
                     delay(RequestConst.REQUEST_DELAY)
-                    addToContactListResult.postValue(serverResponse)
+                    _addToContactListResult.postValue(serverResponse)
                 } catch (e: ConnectException) {
-                    addToContactListResult.postValue(null)
+                    _addToContactListResult.postValue(null)
                 }
             }
             if (job == null) {
-                addToContactListResult.postValue(null)
+                _addToContactListResult.postValue(null)
             }
             progressBar.postValue(false)
         }
@@ -177,16 +193,21 @@ class SharedViewModel: ViewModel() {
                     val serverResponse = serverApi.deleteContactFromUserList(
                         userId = userId, accessToken = token, contactIdForDelete = idForDelete)
                     delay(RequestConst.REQUEST_DELAY)
-                    deleteFromContactsResult.postValue(serverResponse)
+                    _deleteFromContactsResult.postValue(serverResponse)
                 } catch (e: ConnectException) {
-                    deleteFromContactsResult.postValue(null)
+                    _deleteFromContactsResult.postValue(null)
                 }
             }
             if (job == null) {
-                deleteFromContactsResult.postValue(null)
+                _deleteFromContactsResult.postValue(null)
             }
             progressBar.postValue(false)
         }
+    }
+
+    fun updateTokenAndUserId(accessToken: String?, id: Int?) {
+        accessToken?.let { _token.value = "Bearer $it" }
+        id?.let { _userId.value = it }
     }
 
 }

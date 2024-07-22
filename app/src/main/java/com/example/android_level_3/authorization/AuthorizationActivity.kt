@@ -1,13 +1,11 @@
 package com.example.android_level_3.authorization
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -18,16 +16,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.android_level_3.constants.Const
 import com.example.android_level_3.MainActivity
 import com.example.android_level_3.R
-import com.example.android_level_3.constants.PreferencesConst
 import com.example.android_level_3.databinding.ActivityAuthorizationBinding
 import com.example.android_level_3.retrofit.model.UserData
 import com.example.android_level_3.viewmodel.SharedViewModel
+import com.example.android_level_3.viewmodel.SharedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class AuthorizationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthorizationBinding
-    private var sharedPreferences: SharedPreferences? = null
+
     private lateinit var viewModel: SharedViewModel
 
     private var connectionErrorSnackBar: Snackbar? = null
@@ -37,9 +35,13 @@ class AuthorizationActivity : AppCompatActivity() {
         binding = ActivityAuthorizationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+        viewModel = ViewModelProvider(this, SharedViewModelFactory(this))
+            .get(SharedViewModel::class.java)
 
-        sharedPreferences = getSharedPreferences(PreferencesConst.PREFERENCES_SETTINGS, MODE_PRIVATE)
+        Log.d("TAG", "AuthorizationActivity -> onCreate")
+        Log.d("TAG", "AuthorizationActivity -> USE[$viewModel]")
+        Log.d("TAG", "AuthorizationActivity -> DATA STORAGE -> [${viewModel.dataStorage}]")
+        Log.d("TAG", "AuthorizationActivity [END] -> -----------------------------------")
 
         autoLoginCheck()
         setObservers()
@@ -50,10 +52,12 @@ class AuthorizationActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
+
         viewModel.isVisibleProgressBarInAuthorizationActivity.observe(this) { visibility ->
             if (visibility) binding.progressBar.visibility = View.VISIBLE
             else binding.progressBar.visibility = View.GONE
         }
+
         // message when the Internet is disconnected or the request time is long
         viewModel.authorisationResult.observe(this) { serverResponse ->
             if (serverResponse == null) {
@@ -62,8 +66,9 @@ class AuthorizationActivity : AppCompatActivity() {
             } else if (serverResponse.isSuccessful) {
                 // save data in SharedPreferences for autologin (if checkbox be checked)
                 checkingAutoLoginFunction()
+
                 // save incoming data AccessToken, RefreshToken, UserData
-                saveUserDataToPreferences(serverResponse.body()?.data)
+                viewModel.dataStorage.saveUserDataToPreferences(serverResponse.body()?.data)
 
                 val intent = Intent(this@AuthorizationActivity, MainActivity::class.java)
                 startActivity(intent)
@@ -79,10 +84,7 @@ class AuthorizationActivity : AppCompatActivity() {
     // checking records in SharedPreferences, where key is "email"
     // if find, put a “tag” that autologin is required and go to profile page
     private fun autoLoginCheck() {
-        if (sharedPreferences?.contains(PreferencesConst.PREFERENCES_EMAIL) == true) {
-            sharedPreferences?.edit()?.apply {
-                putBoolean(PreferencesConst.PREFERENCES_AUTOLOGIN, true)
-            }?.apply()
+        if (viewModel.dataStorage.checkingDataForAutoLogin()) {
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
@@ -107,24 +109,14 @@ class AuthorizationActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveUserDataToPreferences(responseData: UserData?) {
-        sharedPreferences?.edit()?.apply {
-            putString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, responseData?.accessToken)
-            putString(PreferencesConst.PREFERENCES_REFRESH_TOKEN, responseData?.refreshToken)
-            putString(PreferencesConst.PREFERENCES_USER_NAME, responseData?.user?.name)
-            putString(PreferencesConst.PREFERENCES_USER_CAREER, responseData?.user?.career)
-            putString(PreferencesConst.PREFERENCES_USER_ADDRESS, responseData?.user?.address)
-            putInt(PreferencesConst.PREFERENCES_USER_ID, responseData?.user?.id!!)
-        }?.apply()
-    }
-
     // if checked checkbox "Remember Me", recording authorization data in SharedPreferences
     private fun checkingAutoLoginFunction() {
         if (binding.checkBoxAuthorizationRememberMe.isChecked) {
-            sharedPreferences?.edit()?.apply {
-                putString(PreferencesConst.PREFERENCES_EMAIL, binding.textInputEmailForm.text.toString())
-                putString(PreferencesConst.PREFERENCES_PASSWORD, binding.textInputPasswordForm.text.toString())
-            }?.apply()
+
+            viewModel.dataStorage.saveDataForAutoLogin(
+                email = binding.textInputEmailForm.text.toString(),
+                password = binding.textInputPasswordForm.text.toString()
+            )
         }
     }
 
@@ -134,22 +126,22 @@ class AuthorizationActivity : AppCompatActivity() {
             setTitle(getString(R.string.authorisation_alert_dialog_title))
             setMessage(getString(R.string.authorisation_alert_dialog_help_message))
             setCancelable(false)
-            setPositiveButton(getString(R.string.authorisation_alert_dialog_positive_button_text)) { dialog, id ->
+            setPositiveButton(getString(R.string.authorisation_alert_dialog_positive_button_text)) { dialog, _ ->
                 val intent = Intent(this@AuthorizationActivity, RegistrationActivity::class.java)
                 // transmit email, password, checkBox status to register a new user
                     intent.putExtra(Const.EMAIL, binding.textInputEmailForm.text.toString())
                     intent.putExtra(Const.PASSWORD, binding.textInputPasswordForm.text.toString())
                 if (binding.checkBoxAuthorizationRememberMe.isChecked) {
-                    intent.putExtra(PreferencesConst.PREFERENCES_CHECKBOX, true)
+                    intent.putExtra(Const.CHECKBOX_STATUS, true)
                 } else {
-                    intent.putExtra(PreferencesConst.PREFERENCES_CHECKBOX, false)
+                    intent.putExtra(Const.CHECKBOX_STATUS, false)
                 }
                 startActivity(intent)
                 dialog.cancel()
                 overridePendingTransition(R.anim.horiz_from_right_to_center,
                     R.anim.horiz_from_center_to_left)
             }
-            setNegativeButton(getString(R.string.authorisation_alert_dialog_negative_button_text)) { dialog, id ->
+            setNegativeButton(getString(R.string.authorisation_alert_dialog_negative_button_text)) { dialog, _ ->
                 dialog.cancel()
             }
         }
@@ -158,7 +150,8 @@ class AuthorizationActivity : AppCompatActivity() {
     // tracking changes in e-mail field, followed by validation
     private fun emailFormObserver() {
         binding.textInputEmailForm.doOnTextChanged { _, _, _, _ ->
-            if (!emailValidator()) { binding.textInputEmailContainer.helperText =
+            if (!emailValidator()) {
+                binding.textInputEmailContainer.helperText =
                 getString(R.string.response_wrong_email)
                 binding.textInputEmailContainer.setHelperTextColor( ColorStateList
                     .valueOf(getColor(R.color.orange_color)) )
@@ -275,6 +268,12 @@ class AuthorizationActivity : AppCompatActivity() {
 
     // TODO - DELETE method after test (in the end)
     private fun fillAuthorisationData() {
+
+//        // new created contact for testing
+//        binding.textInputEmailForm.setText("unit7@email.com")
+//        binding.textInputPasswordForm.setText("2@Qwertyu")
+
+        // old contact for testing
         binding.textInputEmailForm.setText("unit6@email.com")
         binding.textInputPasswordForm.setText("2@Qwertyu")
 

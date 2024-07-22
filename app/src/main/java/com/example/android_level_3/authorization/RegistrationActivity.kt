@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.WindowManager
@@ -13,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.ViewModelProvider
 import com.example.android_level_3.constants.Const
 import com.example.android_level_3.MainActivity
 import com.example.android_level_3.R
@@ -21,12 +23,13 @@ import com.example.android_level_3.databinding.ActivityRegistrationBinding
 import com.example.android_level_3.retrofit.model.CreateUserModel
 import com.example.android_level_3.retrofit.model.UserData
 import com.example.android_level_3.viewmodel.SharedViewModel
+import com.example.android_level_3.viewmodel.SharedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class RegistrationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistrationBinding
-    private val viewModel: SharedViewModel by viewModels()
+    private val viewModel: SharedViewModel by viewModels { SharedViewModelFactory(this) }
     private lateinit var addContactImageResult: ActivityResultLauncher<Intent>
 
     private var email: String? = null
@@ -42,9 +45,14 @@ class RegistrationActivity : AppCompatActivity() {
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        email = intent?.getStringExtra(Const.EMAIL) ?: PreferencesConst.PREFERENCES_EMAIL_DEFAULT_VALUE
-        password = intent?.getStringExtra(Const.PASSWORD) ?: PreferencesConst.PREFERENCES_PASSWORD_DEFAULT_VALUE
-        autoLogin = intent?.getBooleanExtra(PreferencesConst.PREFERENCES_CHECKBOX, false)
+        email = intent?.getStringExtra(Const.EMAIL) ?: Const.EMAIL_DEFAULT_VALUE
+        password = intent?.getStringExtra(Const.PASSWORD) ?: Const.PASSWORD_DEFAULT_VALUE
+        autoLogin = intent?.getBooleanExtra(Const.CHECKBOX_STATUS, false)
+
+        Log.d("TAG", "RegistrationActivity -> onCreate")
+        Log.d("TAG", "RegistrationActivity -> USE[$viewModel]")
+        Log.d("TAG", "RegistrationActivity -> DATA STORAGE -> [${viewModel.dataStorage}]")
+        Log.d("TAG", "RegistrationActivity [END] -> -----------------------------------")
 
         setActivityResultContract()
         setEditTextListeners()
@@ -60,8 +68,12 @@ class RegistrationActivity : AppCompatActivity() {
                 connectionErrorSnackBar = createSnackBar()
                 connectionErrorSnackBar?.show()
             } else if (serverResponse.isSuccessful) {
+
                 // save authorisation data to Preferences
-                saveUserDataToPreferences(serverResponse.body()?.data)
+                viewModel.dataStorage.saveUserDataToPreferences(
+                    responseData = serverResponse.body()?.data,
+                    autoLogin = autoLogin, email = email, password = password)
+
                 // go to USER profile
                 val intent = Intent(this@RegistrationActivity, MainActivity::class.java)
                 startActivity(intent)
@@ -202,22 +214,6 @@ class RegistrationActivity : AppCompatActivity() {
                 etBirthday.setText("2004/10/22")
             }
         }
-    }
-
-    private fun saveUserDataToPreferences(responseData: UserData?) {
-        val sharedPreferences = getSharedPreferences(PreferencesConst.PREFERENCES_SETTINGS, MODE_PRIVATE)
-        sharedPreferences.edit().apply {
-            putString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, responseData?.accessToken)
-            putString(PreferencesConst.PREFERENCES_REFRESH_TOKEN, responseData?.refreshToken)
-            putString(PreferencesConst.PREFERENCES_USER_NAME, responseData?.user?.name)
-            putString(PreferencesConst.PREFERENCES_USER_CAREER, responseData?.user?.career)
-            putString(PreferencesConst.PREFERENCES_USER_ADDRESS, responseData?.user?.address)
-            putInt(PreferencesConst.PREFERENCES_USER_ID, responseData?.user?.id!!)
-            if (autoLogin == true) {
-                putString(PreferencesConst.PREFERENCES_EMAIL, email)
-                putString(PreferencesConst.PREFERENCES_PASSWORD, password)
-            }
-        }.apply()
     }
 
     // information message about connection error

@@ -1,22 +1,7 @@
 package com.example.android_level_3.retrofit.model
 
 import java.io.File
-import java.io.Serializable
 import java.util.Date
-
-data class ExtensionServerResponse (
-    val status: String,
-    val code: Int,
-    val message: String?,
-    val data: AllUsers?
-)
-
-data class ServerResponse (
-    val status: String,
-    val code: Int,
-    val message: String?,
-    val data: UserData?
-)
 
 data class UserAuthorisationEntity (
     val email: String,
@@ -31,37 +16,6 @@ data class UserData(
 
 data class AllUsers (
     val users: List<Contact>
-)
-
-data class ContactInfo(
-    val id: Int,
-    val email: String,
-    val name: String?,
-    val phone: String?,
-    val address: String?,
-    val career: String?,
-    val birthday: Date?,
-    val facebook: String?,
-    val instagram: String?,
-    val twitter: String?,
-    val linkedin: String?,
-    val image: File?
-//    val createdAt: Date?,                                                                         // пока не используется в проекте
-//    val updatedAt: Date?                                                                          // пока не используется в проекте
-)
-
-// NOT USED NOW
-data class EditUserModel(
-    val name: String?,
-    val phone: String?,
-    val address: String?,
-    val career: String?,
-    val birthday: Date?,
-    val facebook: String?,
-    val instagram: String?,
-    val twitter: String?,
-    val linkedin: String?,
-    val image: File?                                                                                // в ДОКе не указанно что приходит, а по факту есть
 )
 
 data class CreateUserModel(
@@ -79,27 +33,19 @@ data class CreateUserModel(
     val image: File?
 )
 
-data class Contact (
-    val id: Int,
+// NOT USED NOW
+// additionally comes the parameter image: File? (not specified in documentation)
+data class EditUserModel(
     val name: String?,
-    val career: String?,
+    val phone: String?,
     val address: String?,
-    val image: File? = null
-): Serializable
-
-// --------- CONTACTS ------------
-
-data class ContactsServerResponse (
-    val status: String,
-    val code: Int,
-    val message: String?,
-    val data: AllContacts?
+    val career: String?,
+    val birthday: Date?,
+    val facebook: String?,
+    val instagram: String?,
+    val twitter: String?,
+    val linkedin: String?,
+    val image: File?
 )
 
-data class AllContacts (
-    val contacts: List<Contact>
-)
 
-data class ContactId (
-    val contactId: Int
-)

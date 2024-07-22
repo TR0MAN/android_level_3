@@ -11,7 +11,7 @@ import com.example.android_level_3.databinding.ElementContactViewBinding
 import com.example.android_level_3.retrofit.model.Contact
 
 class ContactAdapter(
-    private val clickListener: ElementClickListener,
+    private val clickListener: ClickListener,
     private val multiSelectState: Boolean?,
     private val usersInContactList: List<Int>?,
     private val selectedContacts: List<Int>?) :
@@ -72,7 +72,7 @@ class ContactAdapter(
             null -> {
                 binding.imgContactAddToContacts.setOnClickListener {
                     val contact = it.tag as Contact
-                    clickListener.onElementClickAction(contact)
+                    (clickListener as ElementClickListener).onElementClickAction(contact)
                 }
             }
             true -> {
@@ -86,17 +86,17 @@ class ContactAdapter(
                         binding.checkboxForDelete.isChecked = false
                         checkBoxState = false
                     }
-                    clickListener.onElementChecked(checkBoxState, contact.id)
+                    (clickListener as ExtendedElementClickListener).onElementChecked(checkBoxState, contact.id)
                 }
             }
             false -> {
                 binding.imgContactDelete.setOnClickListener {
                     val contact = it.tag as Contact
-                    clickListener.onElementClickAction(contact)
+                    (clickListener as ExtendedElementClickListener).onElementClickAction(contact)
                 }
                 binding.root.setOnClickListener {
                     val contact = it.tag as Contact
-                    clickListener.onElementProfileClick(contact)
+                    (clickListener as ExtendedElementClickListener).onElementProfileClick(contact)
                 }
             }
         }
@@ -106,7 +106,7 @@ class ContactAdapter(
             if (!state) {
                 binding.root.setOnLongClickListener {
                     val contact = it.tag as Contact
-                    clickListener.onElementLongClick(contact.id)
+                    (clickListener as ExtendedElementClickListener).onElementLongClick(contact.id)
                     return@setOnLongClickListener true
                 }
             }

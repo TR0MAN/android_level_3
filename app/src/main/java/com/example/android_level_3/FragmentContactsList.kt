@@ -8,24 +8,33 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android_level_3.adapter.ClickListener
 import com.example.android_level_3.adapter.ContactAdapter
 import com.example.android_level_3.adapter.ElementClickListener
+import com.example.android_level_3.adapter.ExtendedElementClickListener
 import com.example.android_level_3.constants.Const
 import com.example.android_level_3.constants.RequestConst
 import com.example.android_level_3.databinding.FragmentContactsListBinding
 import com.example.android_level_3.retrofit.model.Contact
 import com.example.android_level_3.viewmodel.SharedViewModel
+import com.example.android_level_3.viewmodel.SharedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+
+// TODO - ВСТАВЛЯЮ ДАННЫЕ много где (меняю listWithAllContacts или состояния (переключателей))
 
 class FragmentContactsList : Fragment() {
 
     private lateinit var binding: FragmentContactsListBinding
     private lateinit var recyclerViewAdapter: ContactAdapter
-    private lateinit var actionListener: ElementClickListener
+    private lateinit var actionListener: ClickListener
 
     private val viewModel: SharedViewModel by activityViewModels()
+
+//    private val viewModel: SharedViewModel by viewModels { SharedViewModelFactory(requireContext()) }
+//    private val viewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(requireContext()) }
 
     // Snackbar for restore deleted user
     private var informationSnackbar: Snackbar? = null
@@ -43,6 +52,11 @@ class FragmentContactsList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d("TAG", "FragmentContactsList -> onViewCreated")
+        Log.d("TAG", "FragmentContactsList -> USE[$viewModel]")
+        Log.d("TAG", "FragmentContactsList -> DATA STORAGE -> [${viewModel.dataStorage}]")
+        Log.d("TAG", "FragmentContactsList [END] -> -----------------------------------")
 
         setObservers()
         initElementClickListener()
@@ -84,7 +98,7 @@ class FragmentContactsList : Fragment() {
     // initializing observers
     private fun setObservers() {
 
-        // observer for update List Adapter - (OK)
+        // observer for update List Adapter
         viewModel.listWithAllContacts.observe(viewLifecycleOwner) { list ->
             if (list.isNotEmpty()) {
                 binding.recyclerViewContacts.visibility = View.VISIBLE
@@ -119,7 +133,7 @@ class FragmentContactsList : Fragment() {
         viewModel.listSelectedContactsForGroupDelete.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 createAdapter(multiSelectState = false, selectedContacts = null)
-                viewModel.tabLayoutVisibility.value = true
+                viewModel.tabLayoutVisibility.value = true                                          // TODO - ВСТАВЛЯЮ ДАННЫЕ (меняю состояние)
             }
         }
 
@@ -129,7 +143,7 @@ class FragmentContactsList : Fragment() {
                 connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_GET_CONTACTS)
                 connectionErrorSnackbar?.show()
             } else if (serverResponse.isSuccessful) {
-                viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts
+                viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts         // TODO - ВСТАВЛЯЮ ДАННЫЕ
             } else {
                 connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_GET_CONTACTS)
                 connectionErrorSnackbar?.show()
@@ -160,7 +174,7 @@ class FragmentContactsList : Fragment() {
                     }
                 }
 
-                viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts
+                viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts         // TODO - ВСТАВЛЯЮ ДАННЫЕ
 
             } else {
                 // trying to delete a contact that is not in the contact list
@@ -184,7 +198,7 @@ class FragmentContactsList : Fragment() {
                 connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_RESTORE_CONTACT)
                 connectionErrorSnackbar?.show()
             } else if (serverResponse.isSuccessful) {
-                viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts
+                viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts         // TODO - ВСТАВЛЯЮ ДАННЫЕ
             } else {
                 connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_RESTORE_CONTACT)
                 connectionErrorSnackbar?.show()
@@ -213,7 +227,7 @@ class FragmentContactsList : Fragment() {
     // initializing listeners for clicks on list items
     private fun initElementClickListener() {
 
-        actionListener = object : ElementClickListener {
+        actionListener = object : ExtendedElementClickListener {
 
             // listener for contact deleting
             override fun onElementClickAction(contact: Contact) {
@@ -234,22 +248,22 @@ class FragmentContactsList : Fragment() {
             // listener to switch to group delete mode
             override fun onElementLongClick(contactId: Int) {
                 viewModel.listSelectedContactsForGroupDelete.value =
-                    viewModel.listSelectedContactsForGroupDelete.value?.apply { add(contactId) }
+                    viewModel.listSelectedContactsForGroupDelete.value?.apply { add(contactId) }    // TODO - ВСТАВЛЯЮ ДАННЫЕ
                 createAdapter(multiSelectState = true,
                     selectedContacts = viewModel.listSelectedContactsForGroupDelete.value?.toList())
-                viewModel.tabLayoutVisibility.value = false
+                viewModel.tabLayoutVisibility.value = false                                         // TODO - ВСТАВЛЯЮ ДАННЫЕ (меняю состояние)
             }
 
             // listener for clicks on an element in group deletion mode
             override fun onElementChecked(checkBoxState: Boolean, contactId: Int) {
                 if (checkBoxState) {
                     viewModel.listSelectedContactsForGroupDelete.value =
-                        viewModel.listSelectedContactsForGroupDelete.value?.apply { add(contactId) }
+                        viewModel.listSelectedContactsForGroupDelete.value?.apply { add(contactId) }// TODO - ВСТАВЛЯЮ ДАННЫЕ
                 } else {
                     val status = viewModel.listSelectedContactsForGroupDelete.value?.contains(contactId)!!
                     if (status) {
                         viewModel.listSelectedContactsForGroupDelete.value =
-                            viewModel.listSelectedContactsForGroupDelete.value?.apply { remove(contactId) }
+                            viewModel.listSelectedContactsForGroupDelete.value?.apply { remove(contactId) }     // TODO - ВСТАВЛЯЮ ДАННЫЕ
                     }
                 }
             }
@@ -275,7 +289,7 @@ class FragmentContactsList : Fragment() {
         // group deleting button
         binding.imgDeleteManyContacts.setOnClickListener {
             deleteMultipleContact(viewModel.listSelectedContactsForGroupDelete.value)
-            viewModel.tabLayoutVisibility.value = true
+            viewModel.tabLayoutVisibility.value = true                                              // TODO - ВСТАВЛЯЮ ДАННЫЕ (меняю состояние)
         }
 
         binding.toolbarContactList.edSearchContactList.doOnTextChanged { text, _, _, _ ->
@@ -285,30 +299,27 @@ class FragmentContactsList : Fragment() {
                 viewModel.listWithAllContacts.value?.forEach { contact ->
                     if (contact.name?.contains(text, true) == true) {
                         viewModel.filteredContactsList.value =
-                            viewModel.filteredContactsList.value?.apply { add(contact) }
+                            viewModel.filteredContactsList.value?.apply { add(contact) }            // TODO - ВСТАВЛЯЮ ДАННЫЕ
                     }
                 }
                 actionAfterFiltered()
             } else {
                 if (viewModel.listWithAllContacts.value?.isNotEmpty() == true) {
-                    viewModel.listWithAllContacts.value = viewModel.listWithAllContacts.value
+                    viewModel.listWithAllContacts.value = viewModel.listWithAllContacts.value       // TODO - ВСТАВЛЯЮ ДАННЫЕ
                 }
             }
         }
 
-        binding.toolbarContactList.imgCloseContactList.setOnClickListener {                  // слушатель на кнопку "закрыть панель поиска"
-            viewModel.isActiveSearchUserContacts.value = false
+        // toolbar button "close searching"
+        binding.toolbarContactList.imgCloseContactList.setOnClickListener {
+            viewModel.isActiveSearchUserContacts.value = false                                      // TODO - ВСТАВЛЯЮ ДАННЫЕ (меняю состояние)
         }
 
         // toolbar button "search"
-        binding.toolbarContactList.imgSearchContactList.setOnClickListener {                 // слушатель на кнопку "открыть панель поиска"
-            viewModel.isActiveSearchUserContacts.value = true
+        binding.toolbarContactList.imgSearchContactList.setOnClickListener {
+            viewModel.isActiveSearchUserContacts.value = true                                       // TODO - ВСТАВЛЯЮ ДАННЫЕ (меняю состояние)
         }
 
-        // Возврата на предыдущий фрагмент нет, фрагменты в TabLayout (удалить?)
-//        binding.toolbarContactList.imgBackContactList.setOnClickListener {
-//            findNavController().popBackStack()
-//        }
     }
 
     // displaying the search result after filtering

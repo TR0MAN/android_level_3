@@ -1,21 +1,34 @@
 package com.example.android_level_3
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.android_level_3.adapter.ViewPagerAdapter
 import com.example.android_level_3.databinding.FragmentViewPagerBinding
 import com.example.android_level_3.viewmodel.SharedViewModel
+import com.example.android_level_3.viewmodel.SharedViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ViewPagerFragment : Fragment() {
 
     private lateinit var binding: FragmentViewPagerBinding
+
+//    val viewModel by lazy { ViewModelProvider(requireActivity(),
+//        SharedViewModelFactory(requireContext())).get(SharedViewModel::class.java) }
+
     private val viewModel: SharedViewModel by activityViewModels()
+
+//    private val viewModel: SharedViewModel by viewModels<SharedViewModel> { SharedViewModelFactory(requireActivity(), this.javaClass.toString()) }
+//    private val viewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(requireActivity(), this.javaClass.toString()) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +45,12 @@ class ViewPagerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        Log.d("TAG", "ViewPagerFragment -> onViewCreated")
+        Log.d("TAG", "ViewPagerFragment -> USE[$viewModel]")
+        Log.d("TAG", "ViewPagerFragment -> DATA STORAGE -> [${viewModel.dataStorage}]")
+        Log.d("TAG", "ViewPagerFragment [END] -> -----------------------------------")
 
         initViewPager()
         initTabLayout()

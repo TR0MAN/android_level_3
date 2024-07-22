@@ -49,7 +49,7 @@ class FragmentAddContact : Fragment(), ElementClickListener {
 
     private fun setObservers() {
 
-        viewModel.listOfAllUsers.observe(viewLifecycleOwner) {                         // отслеживание и отображение списка пользователей
+        viewModel.listOfAllUsers.observe(viewLifecycleOwner) {
             if (viewModel.isActiveSearchAddContact.value == true) {
                 createAdapter( multiSelectState = null,
                     usersInContactList = viewModel.userContactsIdList.toList(),
@@ -75,8 +75,8 @@ class FragmentAddContact : Fragment(), ElementClickListener {
                 connectionErrorSnackbar = createConnectionErrorSnackBar(RequestConst.REQUEST_ADD_CONTACT)
                 connectionErrorSnackbar?.show()
             } else if (serverResponse.isSuccessful) {
-                viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts
-            } else {                                                                                // если неудачная авторизации (перезапускаем добавление контакта)
+                viewModel.listWithAllContacts.value = serverResponse.body()?.data?.contacts         // TODO - ВСТАВЛЯЮ ДАННЫЕ
+            } else {
                 connectionErrorSnackbar = createConnectionErrorSnackBar(RequestConst.REQUEST_ADD_CONTACT)
                 connectionErrorSnackbar?.show()
             }
@@ -87,8 +87,8 @@ class FragmentAddContact : Fragment(), ElementClickListener {
                 connectionErrorSnackbar = createConnectionErrorSnackBar(RequestConst.REQUEST_GET_ALL_USERS)
                 connectionErrorSnackbar?.show()
             } else if (serverResponse.isSuccessful) {
-                viewModel.listOfAllUsers.value = serverResponse.body()?.data?.users
-            } else {                                                                                // если неудачная авторизации (перезапускаем)
+                viewModel.listOfAllUsers.value = serverResponse.body()?.data?.users                 // TODO - ВСТАВЛЯЮ ДАННЫЕ
+            } else {
                 connectionErrorSnackbar = createConnectionErrorSnackBar(RequestConst.REQUEST_GET_ALL_USERS)
                 connectionErrorSnackbar?.show()
             }
@@ -145,11 +145,11 @@ class FragmentAddContact : Fragment(), ElementClickListener {
         }
 
         binding.toolbarAddContact.imgSearchAddContact.setOnClickListener {
-            viewModel.isActiveSearchAddContact.value = true
+            viewModel.isActiveSearchAddContact.value = true                                         // TODO - ВСТАВЛЯЮ ДАННЫЕ (меняю состояние)
         }
 
         binding.toolbarAddContact.imgCloseAddContact.setOnClickListener {
-            viewModel.isActiveSearchAddContact.value = false
+            viewModel.isActiveSearchAddContact.value = false                                        // TODO - ВСТАВЛЯЮ ДАННЫЕ (меняю состояние)
         }
 
         binding.toolbarAddContact.edSearchAddContact.doOnTextChanged { text, _, _, _ ->
@@ -159,11 +159,11 @@ class FragmentAddContact : Fragment(), ElementClickListener {
                 val filteredList = viewModel.listOfAllUsers.value?.filter {
                     it.name?.contains(text, true) == true
                 }
-                viewModel.filteredUserList.value = filteredList?.toMutableList()
+                viewModel.filteredUserList.value = filteredList?.toMutableList()                    // TODO - ВСТАВЛЯЮ ДАННЫЕ
                 actionAfterFiltered()
             } else {
                 if (viewModel.listOfAllUsers.value?.isNotEmpty() == true)
-                    viewModel.listOfAllUsers.value = viewModel.listOfAllUsers.value
+                    viewModel.listOfAllUsers.value = viewModel.listOfAllUsers.value                 // TODO - ВСТАВЛЯЮ ДАННЫЕ
             }
         }
     }

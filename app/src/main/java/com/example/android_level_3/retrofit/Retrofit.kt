@@ -1,6 +1,5 @@
 package com.example.android_level_3.retrofit
 
-import com.example.android_level_3.constants.Const
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

@@ -8,9 +8,13 @@ object Const {
     const val PASSWORD = "password"
     const val DOT = '●'
 
+    const val CHECKBOX_STATUS = "checkBox_status"
+    const val EMAIL_DEFAULT_VALUE = "null_email"
+    const val PASSWORD_DEFAULT_VALUE = "null_pass"
     const val STATE_EMAIL_FIELD = "email_field"
     const val STATE_PASSWORD_FIELD = "password_field"
-    const val STATE_CHECKBOX = "checkbox_status"
+    // need for SaveInstanceState and RestoreInstanceState functions
+    const val STATE_CHECKBOX = "checkbox_state"
     const val SNACKBAR_DURATION = 5000
 
 }

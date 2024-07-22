@@ -1,27 +1,28 @@
 package com.example.android_level_3
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.android_level_3.constants.PreferencesConst
 import com.example.android_level_3.databinding.FragmentSettingsBinding
 import com.example.android_level_3.viewmodel.SharedViewModel
+import com.example.android_level_3.viewmodel.SharedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+
+// TODO - Меняю во ViewModel, LiveData, поля token и userId (82,83, 116, 117) - OK
 
 class FragmentSettings : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
 
     private val viewModel: SharedViewModel by activityViewModels()
-    private val sharedPreferences by lazy {
-        requireActivity().getSharedPreferences(
-            PreferencesConst.PREFERENCES_SETTINGS,
-            AppCompatActivity.MODE_PRIVATE)
-    }
 
     private var connectionErrorSnackbar: Snackbar? = null
 
@@ -41,11 +42,20 @@ class FragmentSettings : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("TAG", "FragmentSettings -> onViewCreated")
+        Log.d("TAG", "FragmentSettings -> USE[$viewModel]")
+        Log.d("TAG", "FragmentSettings -> DATA STORAGE -> [${viewModel.dataStorage}]")
+        Log.d("TAG", "FragmentSettings [END] -> -----------------------------------")
+
         setUserDataToUI()
         setObservers()
         setButtonListener()
 
-        if (sharedPreferences?.getBoolean(PreferencesConst.PREFERENCES_AUTOLOGIN, false) == true) {
+        checkingAutoLogin()
+    }
+
+    private fun checkingAutoLogin() {
+        if (viewModel.dataStorage.checkingAuthorizationNeed()) {
             refreshUserDataAfterAutoLogin()
         }
     }
@@ -64,13 +74,17 @@ class FragmentSettings : Fragment() {
             } else if (serverResponse.isSuccessful) {
 
                 // save updated data AccessToken and RefreshToken (after authorisation)
-                sharedPreferences.edit().apply {
-                    putString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, serverResponse.body()?.data?.accessToken.toString())
-                    putString(PreferencesConst.PREFERENCES_REFRESH_TOKEN, serverResponse.body()?.data?.refreshToken.toString())
-                }.apply()
+                viewModel.dataStorage.updateTokens(
+                    accessToken = serverResponse.body()?.data?.accessToken.toString(),
+                    refreshToken = serverResponse.body()?.data?.refreshToken.toString()
+                )
 
-                viewModel.token.value = "Bearer ${serverResponse.body()?.data?.accessToken}"
-                viewModel.userId.value = serverResponse.body()?.data?.user?.id
+                viewModel.updateTokenAndUserId(
+                    accessToken = serverResponse.body()?.data?.accessToken,
+                    id = serverResponse.body()?.data?.user?.id )
+
+//                viewModel.token.value = "Bearer ${serverResponse.body()?.data?.accessToken}"
+//                viewModel.userId.value = serverResponse.body()?.data?.user?.id
 
             } else {
                 // TODO - возможно вместо авторизации делать REFRESH TOKEN (на какой ответ ориентироваться?)
@@ -83,8 +97,8 @@ class FragmentSettings : Fragment() {
     // make authorisation if autologin be checked
     private fun refreshUserDataAfterAutoLogin() {
         viewModel.getAuthorisation(
-            email = sharedPreferences?.getString(PreferencesConst.PREFERENCES_EMAIL, null).toString(),
-            password = sharedPreferences.getString(PreferencesConst.PREFERENCES_PASSWORD, null).toString(),
+            email = viewModel.dataStorage.getUserEmailFromStorage(),
+            password = viewModel.dataStorage.getUserPasswordFromStorage(),
             progressBar = viewModel.isVisibleProgressBarInFragmentSettings)
     }
 
@@ -100,21 +114,24 @@ class FragmentSettings : Fragment() {
     // insert user data in fields (when be checked autologin)
     private fun setUserDataToUI() {
         with(binding) {
-            sharedPreferences.getString(PreferencesConst.PREFERENCES_USER_NAME, null)?.let {tvProfileName.text = it}
-            sharedPreferences.getString(PreferencesConst.PREFERENCES_USER_CAREER, null)?.let { tvProfileProfession.text = it }
-            sharedPreferences.getString(PreferencesConst.PREFERENCES_USER_ADDRESS, null)?.let { tvProfileAddress.text = it }
-            viewModel.token.value = "Bearer ${sharedPreferences.getString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, "")}"
-            viewModel.userId.value = sharedPreferences.getInt(PreferencesConst.PREFERENCES_USER_ID, 0)
+            tvProfileName.text = viewModel.dataStorage.getUserNameFromStorage()
+            tvProfileProfession.text = viewModel.dataStorage.getUserCareerFromStorage()
+            tvProfileAddress.text = viewModel.dataStorage.getUserAddressFromStorage()
+            viewModel.updateTokenAndUserId(
+                accessToken = viewModel.dataStorage.getUserAccessTokenFromStorage(),
+                id = viewModel.dataStorage.getUserIdFromStorage()
+            )
+
+//            viewModel.token.value = viewModel.dataStorage.getUserAccessTokenFromStorage()
+//            viewModel.userId.value = viewModel.dataStorage.getUserIdFromStorage()
         }
     }
 
-    private fun setButtonListener() {
 
+    private fun setButtonListener() {
         // logout from account and clearing "autologin" data
         binding.btnMyProfileLogOut.setOnClickListener {
-            sharedPreferences.edit()?.apply {
-                clear()
-            }?.apply()
+            viewModel.dataStorage.clearSharedPreferencesData()
             requireActivity().finish()
         }
     }
