@@ -7,13 +7,13 @@
     android:layout_width="match_parent"
     android:fillViewport="true"
     android:scrollbars="none"
-    tools:context="com.example.android_level_3.FragmentSettings">
+    tools:context="com.example.android_level_3.presentation.ui.FragmentProfileSettings">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constLayoutMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".presentation.ui.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constLayoutTop"

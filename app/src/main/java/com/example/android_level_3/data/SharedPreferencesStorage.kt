@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.util.Log
-import com.example.android_level_3.MainActivity
-import com.example.android_level_3.constants.PreferencesConst
-import com.example.android_level_3.retrofit.model.UserData
+import com.example.android_level_3.presentation.ui.MainActivity
+import com.example.android_level_3.domain.constants.PreferencesConst
+import com.example.android_level_3.data.retrofit.model.UserData
 
 class SharedPreferencesStorage(context: Context) {
 

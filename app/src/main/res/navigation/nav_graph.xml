@@ -6,7 +6,7 @@
     app:startDestination="@id/viewPagerFragment">
     <fragment
         android:id="@+id/fragmentSettings"
-        android:name="com.example.android_level_3.FragmentSettings"
+        android:name="com.example.android_level_3.presentation.ui.FragmentProfileSettings"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -15,17 +15,17 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentContactsList"
-        android:name="com.example.android_level_3.FragmentContactsList"
+        android:name="com.example.android_level_3.presentation.ui.FragmentContactsList"
         android:label="fragment_contacts_list"
         tools:layout="@layout/fragment_contacts_list" />
     <fragment
         android:id="@+id/fragmentContactProfile"
-        android:name="com.example.android_level_3.FragmentContactProfile"
+        android:name="com.example.android_level_3.presentation.ui.FragmentContactProfile"
         android:label="fragment_contact_profile"
         tools:layout="@layout/fragment_contact_profile" >
         <argument
             android:name="currentUserProfile"
-            app:argType="com.example.android_level_3.retrofit.model.Contact" />
+            app:argType="com.example.android_level_3.data.retrofit.model.Contact" />
     </fragment>
     <dialog
         android:id="@+id/customDialog"
@@ -34,7 +34,7 @@
         tools:layout="@layout/activity_add_contact" />
     <fragment
         android:id="@+id/viewPagerFragment"
-        android:name="com.example.android_level_3.ViewPagerFragment"
+        android:name="com.example.android_level_3.presentation.ui.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" >
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentAddContact"
-        android:name="com.example.android_level_3.FragmentAddContact"
+        android:name="com.example.android_level_3.presentation.ui.FragmentAddContact"
         android:label="fragment_add_contact"
         tools:layout="@layout/fragment_add_contact" >
         <action
@@ -58,11 +58,11 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentProfileInvite"
-        android:name="com.example.android_level_3.FragmentProfileInvite"
+        android:name="com.example.android_level_3.presentation.ui.FragmentProfileInvite"
         android:label="fragment_profile_invite"
         tools:layout="@layout/fragment_profile_invite" >
         <argument
             android:name="contactInformation"
-            app:argType="com.example.android_level_3.retrofit.model.Contact" />
+            app:argType="com.example.android_level_3.data.retrofit.model.Contact" />
     </fragment>
 </navigation>
