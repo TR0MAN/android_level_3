@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android_level_3.data.SharedPreferencesStorage
+import com.example.android_level_3.viewmodel.SharedViewModel
 
 class SharedViewModelFactory(context: Context): ViewModelProvider.Factory {
 

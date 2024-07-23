@@ -1,4 +1,4 @@
-package com.example.android_level_3.authorization
+package com.example.android_level_3.presentation.ui.authorization
 
 import android.content.Intent
 import android.graphics.Color
@@ -13,18 +13,19 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.example.android_level_3.R
 import com.example.android_level_3.data.retrofit.model.CreateUserModel
 import com.example.android_level_3.databinding.ActivityRegistrationBinding
 import com.example.android_level_3.domain.constants.Const
 import com.example.android_level_3.presentation.ui.MainActivity
-import com.example.android_level_3.presentation.ui.viewmodel.SharedViewModel
+import com.example.android_level_3.presentation.ui.authorization.Helper
 import com.example.android_level_3.presentation.ui.viewmodel.SharedViewModelFactory
 import com.example.android_level_3.presentation.utils.ext.gone
 import com.example.android_level_3.presentation.utils.ext.invisible
+import com.example.android_level_3.presentation.utils.ext.invisibleIf
 import com.example.android_level_3.presentation.utils.ext.visible
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class RegistrationActivity : AppCompatActivity() {
@@ -46,9 +47,7 @@ class RegistrationActivity : AppCompatActivity() {
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        email = intent?.getStringExtra(Const.EMAIL) ?: Const.EMAIL_DEFAULT_VALUE
-        password = intent?.getStringExtra(Const.PASSWORD) ?: Const.PASSWORD_DEFAULT_VALUE
-        autoLogin = intent?.getBooleanExtra(Const.CHECKBOX_STATUS, false)
+        intent?.let { getDataFromIntent(it) }
 
         setActivityResultContract()
         setEditTextListeners()
@@ -56,6 +55,13 @@ class RegistrationActivity : AppCompatActivity() {
 
         // hide the automatically pop-up keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    }
+
+    private fun getDataFromIntent(intent: Intent) {
+        email = intent.getStringExtra(Const.EMAIL) ?: Const.EMAIL_DEFAULT_VALUE
+        password = intent.getStringExtra(Const.PASSWORD) ?: Const.PASSWORD_DEFAULT_VALUE
+        autoLogin = intent.getBooleanExtra(Const.CHECKBOX_STATUS, false)
+
     }
 
     private fun setObservers() {
@@ -80,8 +86,7 @@ class RegistrationActivity : AppCompatActivity() {
         }
 
         viewModel.isVisibleProgressBarInRegistrationActivity.observe(this) { visibility ->
-            if (visibility) binding.registrationProgressBar.visible()
-            else binding.registrationProgressBar.gone()
+            binding.registrationProgressBar.invisibleIf(visibility)
         }
     }
 

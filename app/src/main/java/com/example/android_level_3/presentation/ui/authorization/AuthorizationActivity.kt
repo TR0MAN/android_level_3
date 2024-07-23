@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -17,11 +16,11 @@ import com.example.android_level_3.domain.constants.Const
 import com.example.android_level_3.presentation.ui.MainActivity
 import com.example.android_level_3.R
 import com.example.android_level_3.databinding.ActivityAuthorizationBinding
-import com.example.android_level_3.data.retrofit.model.UserData
-import com.example.android_level_3.presentation.ui.viewmodel.SharedViewModel
 import com.example.android_level_3.presentation.ui.viewmodel.SharedViewModelFactory
 import com.example.android_level_3.presentation.utils.ext.gone
+import com.example.android_level_3.presentation.utils.ext.invisibleIf
 import com.example.android_level_3.presentation.utils.ext.visible
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class AuthorizationActivity : AppCompatActivity() {
@@ -49,8 +48,7 @@ class AuthorizationActivity : AppCompatActivity() {
     private fun setObservers() {
 
         viewModel.isVisibleProgressBarInAuthorizationActivity.observe(this) { visibility ->
-            if (visibility) binding.progressBar.visible()
-            else binding.progressBar.gone()
+            binding.progressBar.invisibleIf(visibility)
         }
 
         // message when the Internet is disconnected or the request time is long

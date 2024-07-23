@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.android_level_3.FragmentProfileSettings
 import com.example.android_level_3.R
 import com.example.android_level_3.presentation.ui.adapter.ViewPagerAdapter
 import com.example.android_level_3.databinding.FragmentViewPagerBinding
-import com.example.android_level_3.presentation.ui.viewmodel.SharedViewModel
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -39,11 +40,11 @@ class ViewPagerFragment : Fragment() {
     private fun initTabLayout() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                tab.icon?.alpha = 250
-            } //todo write a comment or move to a constant with a sensible name
+                tab.icon?.alpha = SELECTED_TAB_TRANSPARENCY_LEVEL
+            }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.icon?.alpha = 70
+                tab.icon?.alpha = UNSELECTED_TAB_TRANSPARENCY_LEVEL
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {}
@@ -66,6 +67,10 @@ class ViewPagerFragment : Fragment() {
         viewModel.tabLayoutVisibility.observe(viewLifecycleOwner) { visibility ->
             binding.tabLayout.visibility = if (visibility) View.VISIBLE else View.GONE
         }
+    }
+    companion object {
+        const val SELECTED_TAB_TRANSPARENCY_LEVEL = 250
+        const val UNSELECTED_TAB_TRANSPARENCY_LEVEL = 70
     }
 }
 

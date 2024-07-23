@@ -16,9 +16,10 @@ import com.example.android_level_3.domain.constants.Const
 import com.example.android_level_3.domain.constants.RequestConst
 import com.example.android_level_3.databinding.FragmentAddContactBinding
 import com.example.android_level_3.data.retrofit.model.Contact
-import com.example.android_level_3.presentation.ui.viewmodel.SharedViewModel
 import com.example.android_level_3.presentation.utils.ext.gone
+import com.example.android_level_3.presentation.utils.ext.invisibleIf
 import com.example.android_level_3.presentation.utils.ext.visible
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentAddContact : Fragment(), ElementClickListener {
@@ -94,8 +95,7 @@ class FragmentAddContact : Fragment(), ElementClickListener {
         }
 
         viewModel.isVisibleProgressBarInFragmentAddContact.observe(viewLifecycleOwner) { visibility ->
-            if (visibility) binding.progressBar.visible()
-            else binding.progressBar.gone()
+            binding.progressBar.invisibleIf(visibility)
         }
 
         // show/hide search panel (when rotate screen)

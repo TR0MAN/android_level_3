@@ -206,5 +206,4 @@ class SharedViewModel(
         accessToken?.let { _token.value = "Bearer $it" }
         id?.let { _userId.value = it }
     }
-
 }

@@ -1,7 +1,6 @@
 package com.example.android_level_3.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +17,10 @@ import com.example.android_level_3.domain.constants.Const
 import com.example.android_level_3.domain.constants.RequestConst
 import com.example.android_level_3.databinding.FragmentContactsListBinding
 import com.example.android_level_3.data.retrofit.model.Contact
-import com.example.android_level_3.presentation.ui.viewmodel.SharedViewModel
 import com.example.android_level_3.presentation.utils.ext.gone
+import com.example.android_level_3.presentation.utils.ext.invisibleIf
 import com.example.android_level_3.presentation.utils.ext.visible
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentContactsList : Fragment() {
@@ -197,8 +197,7 @@ class FragmentContactsList : Fragment() {
         }
 
         viewModel.isVisibleProgressBarInFragmentContactsList.observe(viewLifecycleOwner) { visibility ->
-            if (visibility) binding.progressBar.visible()
-            else binding.progressBar.gone()
+            binding.progressBar.invisibleIf(visibility)
         }
 
         viewModel.isActiveSearchUserContacts.observe(viewLifecycleOwner) { visible ->

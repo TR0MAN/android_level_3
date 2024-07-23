@@ -82,7 +82,7 @@ class SharedPreferencesStorage(context: Context) {
     }
 
     fun getUserAccessTokenFromStorage(): String {
-        return "Bearer ${sharedPreferences.getString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, "")}"
+        return sharedPreferences.getString(PreferencesConst.PREFERENCES_ACCESS_TOKEN, "").toString()
     }
 
     fun getUserEmailFromStorage(): String {

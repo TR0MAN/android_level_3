@@ -6,13 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.android_level_3.R
 import com.example.android_level_3.databinding.FragmentSettingsBinding
-import com.example.android_level_3.presentation.ui.viewmodel.SharedViewModel
 import com.example.android_level_3.presentation.utils.ext.gone
+import com.example.android_level_3.presentation.utils.ext.invisibleIf
 import com.example.android_level_3.presentation.utils.ext.visible
+import com.example.android_level_3.viewmodel.SharedViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentProfileSettings : Fragment() {
@@ -37,7 +36,6 @@ class FragmentProfileSettings : Fragment() {
         setUserDataToUI()
         setObservers()
         setButtonListener()
-
         checkingAutoLogin()
     }
 
@@ -50,8 +48,7 @@ class FragmentProfileSettings : Fragment() {
     private fun setObservers() {
 
         viewModel.isVisibleProgressBarInFragmentSettings.observe(viewLifecycleOwner) { visibility ->
-            if (visibility) binding.progressBar.visible()
-            else binding.progressBar.gone()
+            binding.progressBar.invisibleIf(visibility)
         }
 
         viewModel.authorisationResult.observe(viewLifecycleOwner) { serverResponse ->
