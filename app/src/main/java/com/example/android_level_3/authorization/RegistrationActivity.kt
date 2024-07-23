@@ -14,14 +14,11 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import com.example.android_level_3.constants.Const
 import com.example.android_level_3.MainActivity
 import com.example.android_level_3.R
-import com.example.android_level_3.constants.PreferencesConst
 import com.example.android_level_3.databinding.ActivityRegistrationBinding
 import com.example.android_level_3.retrofit.model.CreateUserModel
-import com.example.android_level_3.retrofit.model.UserData
 import com.example.android_level_3.viewmodel.SharedViewModel
 import com.example.android_level_3.viewmodel.SharedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
@@ -48,11 +45,6 @@ class RegistrationActivity : AppCompatActivity() {
         email = intent?.getStringExtra(Const.EMAIL) ?: Const.EMAIL_DEFAULT_VALUE
         password = intent?.getStringExtra(Const.PASSWORD) ?: Const.PASSWORD_DEFAULT_VALUE
         autoLogin = intent?.getBooleanExtra(Const.CHECKBOX_STATUS, false)
-
-        Log.d("TAG", "RegistrationActivity -> onCreate")
-        Log.d("TAG", "RegistrationActivity -> USE[$viewModel]")
-        Log.d("TAG", "RegistrationActivity -> DATA STORAGE -> [${viewModel.dataStorage}]")
-        Log.d("TAG", "RegistrationActivity [END] -> -----------------------------------")
 
         setActivityResultContract()
         setEditTextListeners()
@@ -89,10 +81,9 @@ class RegistrationActivity : AppCompatActivity() {
         }
     }
 
-
+    // registration (execution) of the “contract” after executing startActivityForResult
+    // with receiving data (picture selected from the gallery)
     private fun setActivityResultContract() {
-        // registration (execution) of the “contract” after executing startActivityForResult
-        // with receiving data (picture selected from the gallery)
         addContactImageResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
             ActivityResultCallback {
@@ -197,10 +188,8 @@ class RegistrationActivity : AppCompatActivity() {
                     image = null)
 
                 // make request to register a new user
-                viewModel.registerNewUser(
-                    newUserData = newUser!!,
-                    progressBar = viewModel.isVisibleProgressBarInRegistrationActivity
-                )
+                viewModel.registerNewUser(newUserData = newUser!!,
+                    progressBar = viewModel.isVisibleProgressBarInRegistrationActivity)
             }
         }
 
@@ -222,10 +211,8 @@ class RegistrationActivity : AppCompatActivity() {
             getString(R.string.connection_error_snackbar_message), Snackbar.LENGTH_INDEFINITE)
             .setActionTextColor(getColor(R.color.orange_color))
             .setAction(getString(R.string.connection_error_snackbar_action_button_text)) {
-                viewModel.registerNewUser(
-                    newUserData = newUser!!,
-                    progressBar = viewModel.isVisibleProgressBarInRegistrationActivity
-                )
+                viewModel.registerNewUser( newUserData = newUser!!,
+                    progressBar = viewModel.isVisibleProgressBarInRegistrationActivity)
             }
     }
 

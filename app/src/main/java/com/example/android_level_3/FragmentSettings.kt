@@ -16,8 +16,6 @@ import com.example.android_level_3.viewmodel.SharedViewModel
 import com.example.android_level_3.viewmodel.SharedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
-// TODO - Меняю во ViewModel, LiveData, поля token и userId (82,83, 116, 117) - OK
-
 class FragmentSettings : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
@@ -32,20 +30,10 @@ class FragmentSettings : Fragment() {
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
-
-//      стало не нужным (в задании уроаня 4) ввиду использования TabLayout (пока оставить)
-//        binding.btnSettingsViewContacts.setOnClickListener {
-//            findNavController().navigate(R.id.action_fragmentSettings_to_fragmentContactsList)
-//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.d("TAG", "FragmentSettings -> onViewCreated")
-        Log.d("TAG", "FragmentSettings -> USE[$viewModel]")
-        Log.d("TAG", "FragmentSettings -> DATA STORAGE -> [${viewModel.dataStorage}]")
-        Log.d("TAG", "FragmentSettings [END] -> -----------------------------------")
 
         setUserDataToUI()
         setObservers()
@@ -83,9 +71,6 @@ class FragmentSettings : Fragment() {
                     accessToken = serverResponse.body()?.data?.accessToken,
                     id = serverResponse.body()?.data?.user?.id )
 
-//                viewModel.token.value = "Bearer ${serverResponse.body()?.data?.accessToken}"
-//                viewModel.userId.value = serverResponse.body()?.data?.user?.id
-
             } else {
                 // TODO - возможно вместо авторизации делать REFRESH TOKEN (на какой ответ ориентироваться?)
                 connectionErrorSnackbar = createErrorConnectionSnackBar()
@@ -121,9 +106,6 @@ class FragmentSettings : Fragment() {
                 accessToken = viewModel.dataStorage.getUserAccessTokenFromStorage(),
                 id = viewModel.dataStorage.getUserIdFromStorage()
             )
-
-//            viewModel.token.value = viewModel.dataStorage.getUserAccessTokenFromStorage()
-//            viewModel.userId.value = viewModel.dataStorage.getUserIdFromStorage()
         }
     }
 

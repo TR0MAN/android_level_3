@@ -25,8 +25,6 @@ class FragmentAddContact : Fragment(), ElementClickListener {
     private lateinit var recyclerViewAdapter: ContactAdapter
     private val viewModel: SharedViewModel by activityViewModels()
 
-//    private val recyclerViewAdapter by lazy { ContactAdapter(this,false, null, null) }
-
     private var connectionErrorSnackbar: Snackbar? = null
     private var contactId: Int? = null
 
@@ -35,7 +33,6 @@ class FragmentAddContact : Fragment(), ElementClickListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAddContactBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 

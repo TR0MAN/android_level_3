@@ -91,6 +91,7 @@
     <string name="connection_error_snackbar_message">Problem with connection...</string>
     <string name="connection_error_snackbar_action_button_text">RETRY</string>
     <string name="date_filed_correct_input_message">( Ok )</string>
+    <string name="text_message_contact_not_found">Contact not found</string>
 
 
 </resources>

@@ -25,9 +25,7 @@ import com.google.android.material.snackbar.Snackbar
 class AuthorizationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthorizationBinding
-
     private lateinit var viewModel: SharedViewModel
-
     private var connectionErrorSnackBar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,11 +35,6 @@ class AuthorizationActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, SharedViewModelFactory(this))
             .get(SharedViewModel::class.java)
-
-        Log.d("TAG", "AuthorizationActivity -> onCreate")
-        Log.d("TAG", "AuthorizationActivity -> USE[$viewModel]")
-        Log.d("TAG", "AuthorizationActivity -> DATA STORAGE -> [${viewModel.dataStorage}]")
-        Log.d("TAG", "AuthorizationActivity [END] -> -----------------------------------")
 
         autoLoginCheck()
         setObservers()
@@ -94,7 +87,7 @@ class AuthorizationActivity : AppCompatActivity() {
         binding.btnAuthorizationRegister.setOnClickListener {
             if (emailValidator() && passwordValidator() == getString(R.string.response_ok)) {
 
-                viewModel.getAuthorisation( email = binding.textInputEmailForm.text.toString(),
+                viewModel.getAuthorisation(email = binding.textInputEmailForm.text.toString(),
                     password = binding.textInputPasswordForm.text.toString(),
                     progressBar = viewModel.isVisibleProgressBarInAuthorizationActivity)
             } else {

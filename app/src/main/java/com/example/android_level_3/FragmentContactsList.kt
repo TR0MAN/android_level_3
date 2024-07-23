@@ -33,9 +33,6 @@ class FragmentContactsList : Fragment() {
 
     private val viewModel: SharedViewModel by activityViewModels()
 
-//    private val viewModel: SharedViewModel by viewModels { SharedViewModelFactory(requireContext()) }
-//    private val viewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(requireContext()) }
-
     // Snackbar for restore deleted user
     private var informationSnackbar: Snackbar? = null
     // Snackbar for showing message about connection problem
@@ -53,11 +50,6 @@ class FragmentContactsList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("TAG", "FragmentContactsList -> onViewCreated")
-        Log.d("TAG", "FragmentContactsList -> USE[$viewModel]")
-        Log.d("TAG", "FragmentContactsList -> DATA STORAGE -> [${viewModel.dataStorage}]")
-        Log.d("TAG", "FragmentContactsList [END] -> -----------------------------------")
-
         setObservers()
         initElementClickListener()
         setFragmentButtonsListeners()
@@ -69,7 +61,8 @@ class FragmentContactsList : Fragment() {
 
     // request for getting list of contacts
     private fun requestGetUserContacts() {
-        viewModel.getUserContacts(userId = viewModel.userId.value!!, token = viewModel.token.value!!,
+        viewModel.getUserContacts(userId = viewModel.userId.value!!,
+            token = viewModel.token.value!!,
             progressBar = viewModel.isVisibleProgressBarInFragmentContactsList)
     }
 
@@ -139,7 +132,7 @@ class FragmentContactsList : Fragment() {
 
         // observing result of a contact list request
         viewModel.getUserContactsResult.observe(viewLifecycleOwner) { serverResponse ->
-            if (serverResponse == null) {                                                           // показываем Snackbar с ошибкой + можно перезапустить запрос
+            if (serverResponse == null) {
                 connectionErrorSnackbar = createConnectionSnackBar(RequestConst.REQUEST_GET_CONTACTS)
                 connectionErrorSnackbar?.show()
             } else if (serverResponse.isSuccessful) {
@@ -178,7 +171,7 @@ class FragmentContactsList : Fragment() {
 
             } else {
                 // trying to delete a contact that is not in the contact list
-                if (serverResponse.body()?.message.equals("Contact not found")) {
+                if (serverResponse.body()?.message.equals(getString(R.string.text_message_contact_not_found))) {
                     requestGetUserContacts()
                 }
                 // case with group deletion

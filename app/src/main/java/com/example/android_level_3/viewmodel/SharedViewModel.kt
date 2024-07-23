@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_level_3.constants.RequestConst
 import com.example.android_level_3.data.SharedPreferencesStorage
-import com.example.android_level_3.old_classes.TestContact
 import com.example.android_level_3.retrofit.Retrofit
 import com.example.android_level_3.retrofit.RetrofitServerApi
 import com.example.android_level_3.retrofit.model.Contact
@@ -83,8 +82,6 @@ class SharedViewModel(
 
     init {
         serverApi = Retrofit.createRetrofitApi()
-        Log.d("TAG", "--- ViewModel CREATED, $this")
-        Log.d("TAG", "--- ViewModel CREATED, [dataStorage = $dataStorage]\n\n")
     }
 
     fun registerNewUser(newUserData: CreateUserModel, progressBar: MutableLiveData<Boolean>) {
