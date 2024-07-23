@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/clFragmentMainBasicLayout"
-    tools:context="com.example.android_level_3.FragmentContactsList">
+    tools:context="com.example.android_level_3.presentation.ui.FragmentContactsList">
 
     <include
         android:id="@+id/toolbarContactList"
