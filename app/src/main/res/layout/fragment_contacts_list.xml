@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/clFragmentMainBasicLayout"
-    tools:context="com.example.android_level_3.FragmentContactsList">
+    tools:context="com.example.android_level_3.presentation.ui.FragmentContactsList">
 
     <include
         android:id="@+id/toolbarContactList"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbarContactList"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/rvContacts">
+        >
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvAddNewContact"
@@ -43,12 +43,68 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvContacts"
+        android:id="@+id/recyclerViewContacts"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/imgDeleteManyContacts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newContactContainer" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/noContactsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/fragment_contacts_list_contact_container_padding"
+        android:gravity="center_horizontal|center_vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/imgDeleteManyContacts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newContactContainer">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgNoContacts"
+            android:layout_width="@dimen/fragment_contacts_list_image_no_contacts_width"
+            android:layout_height="@dimen/fragment_contacts_list_image_no_contacts_height"
+            android:visibility="visible"
+            android:src="@drawable/contacts_is_empty"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoContacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/contact_list_no_contact_found_text_size"
+            android:textStyle="bold"
+            android:text="@string/contact_list_no_contact_found_text"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgDeleteManyContacts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fragment_contacts_list_image_group_delete_margin_end"
+        android:paddingTop="@dimen/fragment_contacts_list_image_group_delete_padding_top"
+        android:layout_marginBottom="@dimen/fragment_contacts_list_image_group_delete_margin_bottom"
+        android:src="@drawable/basket_icon"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/progressbar_padding"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/edit_profile_button_style_unpressed"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

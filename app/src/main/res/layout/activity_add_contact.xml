@@ -6,7 +6,7 @@
     android:id="@+id/rootLayoutAddContact"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android_level_3.CustomDialog">
+    tools:context="com.example.android_level_3.old_classes.CustomDialog">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbarContainer"

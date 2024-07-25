@@ -15,12 +15,18 @@
     </style>
 
     <style name="AddContactEditTextViewStyle">
-        <item name="android:textColor">@color/purple_color</item>
+        <item name="android:textColor">@color/white_color</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:paddingLeft">4dp</item>
         <item name="android:maxLines">1</item>
         <item name="android:backgroundTint">@color/gray_color</item>
+    </style>
+
+    <style name="checkBoxMultiSelectStyle" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/transparent</item>
+        <item name="colorControlActivated">@color/transparent</item>
+        <item name="controlBackground">@color/transparent</item>
     </style>
 
 </resources>

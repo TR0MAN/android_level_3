@@ -2,6 +2,33 @@
     <string name="app_name">Android_level_3</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--    authorization activity text -->
+    <string name="authorization_question_text">Already have an account?</string>
+    <string name="authorization_sing_in_text">Sing in</string>
+    <string name="authorization_register_button_text">R E G I S T E R</string>
+    <string name="authorization_text_or">or</string>
+    <string name="authorization_button_google_text" translatable="false">G O O G L E</string>
+    <string name="authorization_remember_me_text">Remember me</string>
+    <string name="authorization_password_text">Password</string>
+    <string name="authorization_email_text">E-mail</string>
+    <string name="authorization_helper_text">Fill out the profile and go to the application</string>
+    <string name="authorization_greetings_text">Let\'s get acquainted</string>
+    <string name="authorization_additional_text">By clicking Register you agree to our Terms\n and Conditions</string>
+    <string name="authorization_email_and_password_helper_text">required</string>
+
+    <!--    password ans email check status -->
+    <string name="error_min_8_symbols_password">Minimum 8 symbols password</string>
+    <string name="error_upper_case_symbol">Must contain 1 upper-case symbol</string>
+    <string name="error_lower_case_symbol">Must contain 1 lower-case symbol</string>
+    <string name="error_contain_number">Must contain 1 number (0-9)</string>
+    <string name="error_contain_special_symbol"><![CDATA[Must contain 1 special symbol (!@#$%^&*)]]></string>
+    <string name="error_include_wrong_spec_symbols"><![CDATA[Must not include symbols (~`()_+|?/.{}[],<>=-)]]></string>
+    <string name="error_include_white_space">Must not include a white space</string>
+    <string name="unknown_user">Unknown User</string>
+    <string name="empty_password_or_email_fields">Password or E-mail fields have errors</string>
+    <string name="response_ok">All fine</string>
+    <string name="response_wrong_email">Incorrect E-mail Address</string>
+
     <!--    settings fragment text -->
     <string name="tv_main_profile_settings_text">Settings</string>
     <string name="log_out">Log out</string>
@@ -11,6 +38,13 @@
     <string name="my_contacts_button_text">"""V i e w   m y   c o n t a c t s"""</string>
     <string name="edit_profile_button_text">Edit profile</string>
     <string name="bottom_text_message_text">Go to settings and fill out the profile</string>
+
+    <!--    profile (add contact) fragment text -->
+    <string name="profile_name_text">Jon Carpenter</string>
+    <string name="profile_profession_text">Dentist</string>
+    <string name="profile_address_text">521 Westminster Avenue APT D5 Brooklyn, NY, 11090</string>
+    <string name="profile_button_message_text">Message</string>
+    <string name="profile_button_add_to_contacts_text">ADD TO MY CONTACTS</string>
 
     <!--    fragment contacts list parameters  -->
     <string name="tv_add_new_contact_text">Add contacts</string>
@@ -25,6 +59,8 @@
     <string name="tv_toolbar_add_contact_text">Add contact</string>
     <string name="tv_toolbar_contact_list_text">Contacts</string>
     <string name="tv_toolbar_profile_text">Profile</string>
+    <string name="tv_toolbar_fragment_add_contact_text">Users</string>
+
 
     <!--    custom dialog window parameters  -->
     <string name="dialog_add_contact_tv_inscription_user_name_text">Username</string>
@@ -34,11 +70,28 @@
     <string name="dialog_add_contact_tv_inscription_address_text">Address</string>
     <string name="dialog_add_contact_tv_inscription_birthday_text">Date of birth</string>
     <string name="dialog_add_contact_email_hint">name@gmail.com</string>
-    <string name="dialog_add_contact_phone_hint">(099)-456-78-90</string>
-    <string name="dialog_add_contact_birthday_hint">12.05.1995</string>
+    <string name="dialog_add_contact_phone_hint">example 099-456-78-90</string>
+    <string name="dialog_add_contact_birthday_hint">example 2000/05/23</string>
+    <string name="dialog_add_contact_birthday_help">( for example 2000/05/25 )</string>
     <string name="dialog_add_contact_btn_save_text">S A V E</string>
+
+    <!--    registration activity parameters  -->
+    <string name="registration_wrong_birthday_format">Date of birth must be correct or empty</string>
+    <string name="registration_empty_field_username">Username field must not be empty</string>
 
     <string name="snackbar_button_text">RESTORE</string>
     <string name="toolbar_contact_list_search_button_toast_message">Development in progress...</string>
+    <string name="snackbar_button_message">Contact was deleted</string>
+    <string name="authorisation_alert_dialog_title">Something wrong!</string>
+    <string name="authorisation_alert_dialog_help_message">User with such data is not registered.\nWould you like to register a new user?</string>
+    <string name="authorisation_alert_dialog_positive_button_text">REGISTER</string>
+    <string name="authorisation_alert_dialog_negative_button_text">CANCEL</string>
+    <string name="contact_list_no_contact_found_text">No contacts found</string>
+
+    <string name="connection_error_snackbar_message">Problem with connection...</string>
+    <string name="connection_error_snackbar_action_button_text">RETRY</string>
+    <string name="date_filed_correct_input_message">( Ok )</string>
+    <string name="text_message_contact_not_found">Contact not found</string>
+
 
 </resources>

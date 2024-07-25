@@ -56,4 +56,14 @@ dependencies {
     // NavGraph
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
+
+    // Library Retrofit and JSON converter
+    val retrofit_version = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+
+    // Library OkHttp и OkHttp-interceptor
+    val okHttp_version = "4.7.2"
+    implementation("com.squareup.okhttp3:logging-interceptor:$okHttp_version")
+    implementation("com.squareup.okhttp3:okhttp:$okHttp_version")
 }

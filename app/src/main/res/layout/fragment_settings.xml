@@ -7,13 +7,13 @@
     android:layout_width="match_parent"
     android:fillViewport="true"
     android:scrollbars="none"
-    tools:context="com.example.android_level_3.FragmentSettings">
+    tools:context="com.example.android_level_3.presentation.ui.FragmentProfileSettings">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constLayoutMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".presentation.ui.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constLayoutTop"
@@ -60,7 +60,6 @@
                 android:layout_height="@dimen/image_view_height"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.380"
@@ -150,6 +149,7 @@
                 android:background="@drawable/my_contacts_button_style"
                 android:text="@string/my_contacts_button_text"
                 android:textColor="@color/white_color"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -158,34 +158,35 @@
                 android:id="@+id/btnMyProfileEditProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/edit_profile_button_margin_bot"
+                android:layout_marginHorizontal="@dimen/edit_profile_button_horizontal_margin"
+                android:layout_marginTop="@dimen/edit_profile_button_horizontal_margin_top"
                 android:background="@drawable/edit_profile_button_background"
                 android:text="@string/edit_profile_button_text"
                 android:textAllCaps="false"
                 android:textColor="@color/edit_button_custom_text_color"
                 android:textSize="@dimen/edit_profile_button_text_size"
-                app:layout_constraintBottom_toTopOf="@+id/btnSettingsViewContacts"
-                app:layout_constraintEnd_toEndOf="@+id/btnSettingsViewContacts"
-                app:layout_constraintStart_toStartOf="@+id/btnSettingsViewContacts" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvMyProfileBottomMessage" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvMyProfileBottomMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/bottom_text_message_margin_bot"
+                android:layout_marginTop="@dimen/bottom_text_message_margin_top"
                 android:fontFamily="@font/patuaone_regular"
                 android:text="@string/bottom_text_message_text"
                 android:textSize="@dimen/bottom_text_message_text_size"
-                app:layout_constraintBottom_toTopOf="@+id/btnMyProfileEditProfile"
                 app:layout_constraintEnd_toEndOf="@+id/btnMyProfileEditProfile"
-                app:layout_constraintStart_toStartOf="@+id/btnMyProfileEditProfile"/>
+                app:layout_constraintStart_toStartOf="@+id/btnMyProfileEditProfile"
+                app:layout_constraintTop_toBottomOf="@+id/layoutIconContainer" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutIconContainer"
-                android:layout_width="244dp"
+                android:layout_width="@dimen/fragment_settings_icon_container_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="@dimen/fragment_settings_icon_container_margin_top"
+                android:layout_marginHorizontal="@dimen/fragment_settings_icon_container_horizontal_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -194,9 +195,8 @@
                     android:id="@+id/imgIconF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_f"
+                    android:src="@drawable/ic_facebook"
                     app:layout_constraintEnd_toStartOf="@+id/imgIconIn"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -205,9 +205,8 @@
                     android:id="@+id/imgIconIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_in"
+                    android:src="@drawable/ic_linkedin"
                     app:layout_constraintEnd_toStartOf="@+id/imgIconInst"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/imgIconF"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -215,15 +214,26 @@
                     android:id="@+id/imgIconInst"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_inst"
+                    android:src="@drawable/ic_instagram"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/imgIconIn"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/progressbar_padding"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/edit_profile_button_style_unpressed"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

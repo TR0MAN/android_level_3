@@ -1,5 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--    authorization activity parameters  -->
+    <dimen name="AuthorizationQuestionTextMarginBottom">10dp</dimen>
+    <dimen name="AuthorizationQuestionTextSize">16sp</dimen>
+
+    <dimen name="AuthorizationSingInTextMarginStart">16dp</dimen>
+    <dimen name="AuthorizationSingInTextSize">16sp</dimen>
+
+    <dimen name="AuthorizationAdditionalTextMarginBottom">4dp</dimen>
+    <dimen name="AuthorizationAdditionalTextSize">14sp</dimen>
+
+    <dimen name="AuthorizationRegisterButtonHeight">63dp</dimen>
+    <dimen name="AuthorizationRegisterButtonMarginStart">8dp</dimen>
+    <dimen name="AuthorizationRegisterButtonMarginEnd">8dp</dimen>
+    <dimen name="AuthorizationRegisterButtonMarginBottom">14dp</dimen>
+    <dimen name="AuthorizationRegisterButtonTextSize">18sp</dimen>
+
+    <dimen name="AuthorizationTextOrMarginBottom">4dp</dimen>
+    <dimen name="AuthorizationTextOrTextSize">20sp</dimen>
+
+    <dimen name="ButtonImitatorHeight">48dp</dimen>
+    <dimen name="ButtonImitatorMarginStart">8dp</dimen>
+    <dimen name="ButtonImitatorMarginEnd">8dp</dimen>
+    <dimen name="ButtonImitatorMarginBottom">4dp</dimen>
+
+    <dimen name="AuthorizationButtonGoogleTextSize">20sp</dimen>
+    <dimen name="AuthorizationButtonGoogleTextPaddingLeft">16dp</dimen>
+
+    <dimen name="AuthorizationRememberMeMarginBottom">36dp</dimen>
+    <dimen name="AuthorizationRememberMeTextSize">16sp</dimen>
+
+    <dimen name="InputPasswordContainerMarginHorizontal">12dp</dimen>
+    <dimen name="InputPasswordContainerMarginTop">16dp</dimen>
+    <dimen name="InputPasswordContainerСounterMaxLength">16</dimen>
+
+    <dimen name="InputPasswordFormPaddingStart">8dp</dimen>
+    <dimen name="InputPasswordFormTextSize">20sp</dimen>
+    <dimen name="InputPasswordFormMaxLength">16</dimen>
+
+
+    <dimen name="AuthorizationPasswordTextMarginStart">12dp</dimen>
+    <dimen name="AuthorizationPasswordTextSize">14sp</dimen>
+
+    <dimen name="InputEmailContainerMarginHorizontal">12dp</dimen>
+    <dimen name="InputEmailContainerMarginTop">16dp</dimen>
+
+    <dimen name="InputEmailFormPaddingStart">22dp</dimen>
+    <dimen name="InputEmailFormTextSize">20sp</dimen>
+
+    <dimen name="AuthorizationTextEmailTextSize">14sp</dimen>
+
+    <dimen name="AuthorizationHelperTextMarginBottom">28dp</dimen>
+    <dimen name="AuthorizationGreetingsTextMarginBottom">12dp</dimen>
+    <dimen name="AuthorizationGreetingsTextSize">28sp</dimen>
+
+
     <!--    fragment settings parameters  -->
     <dimen name="constraint_layout_top_min_height">330dp</dimen>
     <dimen name="constraint_layout_bottom_min_height">330dp</dimen>
@@ -75,24 +131,88 @@
     <dimen name="dialog_add_contact_avatar_width">113dp</dimen>
     <dimen name="dialog_add_contact_avatar_height">113dp</dimen>
 
-    <dimen name="dialog_add_contact_icon_add_new_image_width">55dp</dimen>
-    <dimen name="dialog_add_contact_icon_add_new_image_height">55dp</dimen>
+    <dimen name="dialog_add_contact_icon_add_new_image_width">40dp</dimen>
+    <dimen name="dialog_add_contact_icon_add_new_image_height">40dp</dimen>
     <dimen name="dialog_add_contact_icon_add_new_image_margin_start">24dp</dimen>
 
     <dimen name="dialog_add_contact_input_fields_container_horizontal_margin">16dp</dimen>
     <dimen name="dialog_add_contact_input_fields_container_margin_top">24dp</dimen>
-
+    <dimen name="dialog_add_contact_btn_save_margin_bottom">8dp</dimen>
     <dimen name="dialog_add_contact_career_container_margin_top">8dp</dimen>
     <dimen name="dialog_add_contact_email_container_margin_top">8dp</dimen>
     <dimen name="dialog_add_contact_phone_container_margin_top">8dp</dimen>
     <dimen name="dialog_add_contact_address_container_margin_top">8dp</dimen>
     <dimen name="dialog_add_contact_birthday_container_margin_top">8dp</dimen>
-    <dimen name="dialog_add_contact_et_add_contact_margin_bottom">24dp</dimen>
+    <dimen name="dialog_add_contact_et_add_contact_margin_bottom">10dp</dimen>
 
-    <dimen name="dialog_add_contact_btn_save_margin_bottom">66dp</dimen>
+    <dimen name="dialog_add_contact_btn_save_margin_vertical">8dp</dimen>
     <dimen name="dialog_add_contact_btn_save_height">55dp</dimen>
     <dimen name="dialog_add_contact_btn_save_horizontal_margin">16dp</dimen>
     <dimen name="dialog_add_contact_btn_save_text_size">18sp</dimen>
+    <dimen name="contact_list_no_contact_found_text_size">22dp</dimen>
+
+    <dimen name="progressbar_padding">12dp</dimen>
+
+    <!--    unnecessary parameters of additional view elements -->
+    <dimen name="fill_authorisation_data_image_width">40dp</dimen>
+    <dimen name="fill_authorisation_data_image_height">40dp</dimen>
+    <dimen name="registration_activity_fill_all_data_fields_margin_end">24dp</dimen>
+
+    <!--    registration activity screen parameters  -->
+    <dimen name="registration_activity_scroll_view_container_height">0dp</dimen>
+    <dimen name="registration_activity_birthday_help_field_text_size">12sp</dimen>
+
+
+    <dimen name="custom_toolbar_contacts_vertical_padding">3dp</dimen>
+    <dimen name="custom_toolbar_contacts_margin_start">16dp</dimen>
+    <dimen name="custom_toolbar_contacts_padding_start">18dp</dimen>
+    <dimen name="custom_toolbar_contacts_padding_right">8dp</dimen>
+    <dimen name="add_fragment_search_toolbar_padding_vertical">3dp</dimen>
+    <dimen name="add_fragment_search_toolbar_margin_start">16dp</dimen>
+    <dimen name="add_fragment_search_toolbar_padding_start">18dp</dimen>
+    <dimen name="add_fragment_search_toolbar_padding_right">8dp</dimen>
+
+    <!--    element contact view parameters  -->
+    <dimen name="element_contact_view_checkbox_width">20dp</dimen>
+    <dimen name="element_contact_view_checkbox_height">20dp</dimen>
+    <dimen name="element_contact_view_checkbox_margin_start">8dp</dimen>
+    <dimen name="element_contact_view_avatar_image_width">58dp</dimen>
+    <dimen name="element_contact_view_avatar_image_height">58dp</dimen>
+    <dimen name="element_contact_view_avatar_image_vertical_margin">8dp</dimen>
+    <dimen name="element_contact_view_avatar_image_margin_start">12dp</dimen>
+    <dimen name="element_contact_view_delete_image_width">32dp</dimen>
+    <dimen name="element_contact_view_delete_image_height">32dp</dimen>
+    <dimen name="element_contact_view_delete_image_margin_end">16dp</dimen>
+    <dimen name="element_contact_view_in_list_checkbox_width">23dp</dimen>
+    <dimen name="element_contact_view_in_list_checkbox_height">23dp</dimen>
+    <dimen name="element_contact_view_in_list_checkbox_margin_end">12dp</dimen>
+    <dimen name="element_contact_view_add_to_contacts_image_width">66dp</dimen>
+    <dimen name="element_contact_view_add_to_contacts_image_height">23dp</dimen>
+    <dimen name="element_contact_view_add_to_contacts_image_margin_end">12dp</dimen>
+    <dimen name="element_contact_view_contact_name_tv_width">16dp</dimen>
+    <dimen name="element_contact_view_contact_name_tv_height">6dp</dimen>
+    <dimen name="element_contact_view_contact_name_tv_text_size">18sp</dimen>
+
+    <!--    fragment add contacts parameters  -->
+    <dimen name="fragment_add_contact_contacts_container_padding">4dp</dimen>
+    <dimen name="fragment_add_contact_image_no_image_width">150dp</dimen>
+    <dimen name="fragment_add_contact_image_no_image_height">150dp</dimen>
+
+    <dimen name="fragment_contacts_list_contact_container_padding">4dp</dimen>
+    <dimen name="fragment_contacts_list_image_no_contacts_width">150dp</dimen>
+    <dimen name="fragment_contacts_list_image_no_contacts_height">150dp</dimen>
+    <dimen name="fragment_contacts_list_image_group_delete_margin_end">16dp</dimen>
+    <dimen name="fragment_contacts_list_image_group_delete_padding_top">16dp</dimen>
+    <dimen name="fragment_contacts_list_image_group_delete_margin_bottom">26dp</dimen>
+
+    <dimen name="edit_profile_button_horizontal_margin">8dp</dimen>
+    <dimen name="edit_profile_button_horizontal_margin_top">8dp</dimen>
+
+    <dimen name="bottom_text_message_margin_top">60dp</dimen>
+
+    <dimen name="fragment_settings_icon_container_width">244dp</dimen>
+    <dimen name="fragment_settings_icon_container_margin_top">60dp</dimen>
+    <dimen name="fragment_settings_icon_container_horizontal_margin">32dp</dimen>
 
 
 </resources>
